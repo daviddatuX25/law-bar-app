@@ -107,6 +107,16 @@ test('Express Server API routes', async (t) => {
     assert.strictEqual(body[0].name, 'Real Property');
   });
 
+  await t.test('GET /deck.html serves the study deck page', async () => {
+    const res = await fetch('http://localhost:3001/deck.html');
+    assert.strictEqual(res.statusCode || res.status, 200);
+    const text = await res.text();
+    assert.ok(text.includes('Retrieval Deck — Study Mode'));
+    assert.ok(text.includes('id="subject-study-dropdown"'));
+    assert.ok(text.includes('id="standard-card"'));
+    assert.ok(text.includes('id="decoy-container"'));
+  });
+
   await t.test('GET /api/subjects/:id/deck returns flashcards and decoy pairs', async () => {
     const res = await fetch('http://localhost:3001/api/subjects/subject-1/deck');
     assert.strictEqual(res.statusCode || res.status, 200);
