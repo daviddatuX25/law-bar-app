@@ -13,6 +13,17 @@ class DbAdapter {
     this.db.exec("PRAGMA foreign_keys = ON;");
     const migration = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
     this.db.exec(migration);
+
+    // Dynamic migration for existing databases
+    try {
+      const info = this.db.prepare("PRAGMA table_info(flashcards)").all();
+      const hasCol = info.some(col => col.name === 'source_paragraph_id');
+      if (!hasCol) {
+        this.db.exec("ALTER TABLE flashcards ADD COLUMN source_paragraph_id TEXT REFERENCES source_paragraphs(id);");
+      }
+    } catch (err) {
+      console.error("Migration error on flashcards:", err.message);
+    }
   }
 
   getSubjects() {
@@ -23,6 +34,7 @@ class DbAdapter {
   getFlashcards(subjectId) {
     const query = `
       SELECT f.id, f.subject_id, s.shape_text as front_shape, f.source_citation,
+             f.source_paragraph_id, sp_ref.content_text as source_paragraph_text,
              (SELECT json_group_array(word) FROM trigger_words WHERE shape_id = s.id) as front_triggers,
              p.citation || ' (' || p.short_title || ')' as back_provision,
              p.elements_checklist as back_elements,
@@ -33,6 +45,7 @@ class DbAdapter {
       JOIN shapes s ON f.shape_id = s.id
       JOIN shape_provisions sp ON s.id = sp.shape_id AND sp.is_primary = 1
       JOIN provisions p ON sp.provision_id = p.id
+      LEFT JOIN source_paragraphs sp_ref ON f.source_paragraph_id = sp_ref.id
       WHERE f.subject_id = ?
     `;
     const stmt = this.db.prepare(query);
@@ -268,7 +281,8 @@ class DbAdapter {
       flashcards.push({
         id: card.id,
         shape_id: shapeId,
-        source_citation: card.source
+        source_citation: card.source,
+        source_paragraph_id: card.source_paragraph_id || null
       });
     }
 
@@ -382,13 +396,14 @@ class DbAdapter {
 
       // 8. Insert flashcards
       if (data.flashcards) {
-        const stmtFlashcard = this.db.prepare('INSERT OR REPLACE INTO flashcards (id, subject_id, shape_id, source_citation) VALUES (?, ?, ?, ?)');
+        const stmtFlashcard = this.db.prepare('INSERT OR REPLACE INTO flashcards (id, subject_id, shape_id, source_citation, source_paragraph_id) VALUES (?, ?, ?, ?, ?)');
         for (const fc of data.flashcards) {
           stmtFlashcard.run(
             fc.id,
             subjectId,
             fc.shape_id,
-            fc.source_citation
+            fc.source_citation,
+            fc.source_paragraph_id || null
           );
         }
       }
@@ -398,6 +413,68 @@ class DbAdapter {
       this.db.exec('ROLLBACK');
       throw e;
     }
+  }
+
+  /**
+   * Seed a source document + its paragraphs for a subject.
+   * Called by POST /api/import-source.
+   * Strips HTML tags, splits on Article/Section/Chapter headings or blank lines.
+   * Returns { count, replaced } — replaced is true if the source already existed.
+   */
+  importSource(subjectId, subjectName, sourceId, title, rawText) {
+    // Check if source already exists (for re-import feedback)
+    const existing = this.db.prepare('SELECT id FROM sources WHERE id = ?').get(sourceId);
+    const replaced = !!existing;
+
+    // Ensure subject row exists with proper display name
+    this.db.prepare('INSERT OR REPLACE INTO subjects (id, name) VALUES (?, ?)').run(subjectId, subjectName);
+
+    // Delete existing source rows for this sourceId (re-import is safe)
+    this.db.prepare('DELETE FROM source_paragraphs WHERE source_id = ?').run(sourceId);
+    this.db.prepare('DELETE FROM sources WHERE id = ?').run(sourceId);
+
+    this.db.prepare('INSERT INTO sources (id, title, subject_id) VALUES (?, ?, ?)').run(sourceId, title, subjectId);
+
+    // Strip HTML tags to get clean text
+    const cleanText = rawText
+      .replace(/<[^>]*>/g, ' ')       // strip all HTML tags
+      .replace(/&nbsp;/g, ' ')
+      .replace(/&amp;/g, '&')
+      .replace(/&lt;/g, '<')
+      .replace(/&gt;/g, '>')
+      .replace(/&quot;/g, '"')
+      .replace(/&#039;/g, "'")
+      .replace(/&[a-z]+;/gi, ' ')     // remaining HTML entities → space
+      .replace(/\r\n/g, '\n')
+      .replace(/\r/g, '\n')
+      .replace(/\t/g, ' ')
+      .replace(/ {2,}/g, ' ')          // collapse multiple spaces
+      .replace(/\n{3,}/g, '\n\n');     // collapse 3+ newlines to 2
+
+    // Split into paragraphs: blank lines OR Article/Section/Chapter headings
+    const rawParagraphs = cleanText
+      .split(/\n{2,}|(?=\b(?:Art(?:icle)?|Sec(?:tion)?|Chapter|Rule|BOOK|TITLE|PRELIMINARY)\b[.\s]*\d)/i)
+      .map(p => p.trim())
+      .filter(p => p.length > 20);
+
+    const stmtPara = this.db.prepare(
+      'INSERT INTO source_paragraphs (id, source_id, anchor_id, content_text) VALUES (?, ?, ?, ?)'
+    );
+
+    this.db.exec('BEGIN');
+    try {
+      rawParagraphs.forEach((text, idx) => {
+        const anchorId = `${sourceId}-p${idx + 1}`;
+        const paraId = `${sourceId}:${anchorId}`;
+        stmtPara.run(paraId, sourceId, anchorId, text);
+      });
+      this.db.exec('COMMIT');
+    } catch (e) {
+      this.db.exec('ROLLBACK');
+      throw e;
+    }
+
+    return { count: rawParagraphs.length, replaced };
   }
 }
 

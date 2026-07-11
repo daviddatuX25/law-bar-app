@@ -89,6 +89,143 @@ test('Database Sync & Retrieval', () => {
     ]
   });
 
+  db.insertSubjectData('subject-1', {
+    subjectName: 'Real Property',
+    sources: [
+      {
+        id: 'source-1',
+        title: 'Restatement of Property',
+        paragraphs: [
+          {
+            id: 'p1',
+            text: 'A fee simple absolute is the largest estate known to the law.'
+          }
+        ]
+      }
+    ],
+    provisions: [
+      {
+        id: 'prov-1',
+        citation: 'Restatement § 1',
+        short_title: 'Fee Simple Absolute',
+        elements_checklist: ['Intent to convey'],
+        common_confusion: 'Confused with Fee Tail',
+        distinguishing_fact: 'Fee simple is devisable.'
+      }
+    ],
+    shapes: [
+      {
+        id: 'shape-1',
+        shape_text: 'Conveyance to A and his heirs',
+        frequency: 5,
+        provisions: [{ id: 'prov-1', is_primary: 1 }]
+      }
+    ],
+    trigger_words: [
+      {
+        shape_id: 'shape-1',
+        word: 'heirs',
+        is_ambiguous: 0,
+        distinguishing_fact: null
+      }
+    ],
+    decoy_pairs: [],
+    flashcards: [
+      {
+        id: 'fc-1',
+        shape_id: 'shape-1',
+        source_citation: 'Restatement § 1',
+        source_paragraph_id: 'source-1:p1'
+      }
+    ]
+  });
+  const testFc = db.getFlashcards('subject-1');
+  assert.strictEqual(testFc[0].source_paragraph_id, 'source-1:p1');
+  assert.strictEqual(testFc[0].source_paragraph_text, 'A fee simple absolute is the largest estate known to the law.');
+
+  // Restore initial subject data
+  db.insertSubjectData('subject-1', {
+    subjectName: 'Real Property',
+    sources: [
+      {
+        id: 'source-1',
+        title: 'Restatement of Property',
+        paragraphs: [
+          {
+            id: 'p1',
+            text: 'A fee simple absolute is the largest estate known to the law.'
+          }
+        ]
+      }
+    ],
+    provisions: [
+      {
+        id: 'prov-1',
+        citation: 'Restatement § 1',
+        short_title: 'Fee Simple Absolute',
+        elements_checklist: ['Intent to convey', 'No words of limitation'],
+        common_confusion: 'Confused with Fee Tail',
+        distinguishing_fact: 'Fee simple is devisable and descendible.'
+      },
+      {
+        id: 'prov-2',
+        citation: 'Restatement § 2',
+        short_title: 'Life Estate',
+        elements_checklist: ['Duration for life', 'Reversion or remainder'],
+        common_confusion: 'Confused with Fee Simple',
+        distinguishing_fact: 'Life estate terminates at death.'
+      }
+    ],
+    shapes: [
+      {
+        id: 'shape-1',
+        shape_text: 'Conveyance to A and his heirs',
+        frequency: 5,
+        provisions: [
+          { id: 'prov-1', is_primary: 1 }
+        ]
+      },
+      {
+        id: 'shape-2',
+        shape_text: 'Conveyance to A for life',
+        frequency: 3,
+        provisions: [
+          { id: 'prov-2', is_primary: 1 }
+        ]
+      }
+    ],
+    trigger_words: [
+      {
+        shape_id: 'shape-1',
+        word: 'heirs',
+        is_ambiguous: 0,
+        distinguishing_fact: null
+      },
+      {
+        shape_id: 'shape-2',
+        word: 'life',
+        is_ambiguous: 0,
+        distinguishing_fact: null
+      }
+    ],
+    decoy_pairs: [
+      {
+        id: 'decoy-1',
+        shape_a_id: 'shape-1',
+        shape_b_id: 'shape-2',
+        shared_trigger: 'A and heirs/life',
+        distinguishing_fact: 'Heirs indicates fee simple; life indicates life estate'
+      }
+    ],
+    flashcards: [
+      {
+        id: 'fc-1',
+        shape_id: 'shape-1',
+        source_citation: 'Restatement § 1'
+      }
+    ]
+  });
+
   const subjects = db.getSubjects();
   assert.ok(Array.isArray(subjects), 'Subjects should return an array');
   assert.strictEqual(subjects.length, 1);
