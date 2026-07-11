@@ -131,3 +131,18 @@ SOURCE: Civil Code Art. 1544
   assert.strictEqual(result.errors.length, 1);
   assert.ok(result.errors[0].includes('Missing trigger words'));
 });
+
+test('Parser Ingestion Validation - Parse SOURCE_PARAGRAPH', () => {
+  const md = `CARD civil-10
+FRONT (shape): Double buyers.
+FRONT (trigger words): double, buy
+BACK (provision): Art. 1544 - Double Sale
+BACK (elements):
+1. Element 1
+BACK (common confusion): Confusion :: Fact
+SOURCE: Civil Code Art. 1544
+SOURCE_PARAGRAPH: civil-code-p1544`;
+  const res = parseMarkdown(md);
+  assert.strictEqual(res.success, true);
+  assert.strictEqual(res.data[0].source_paragraph_id, 'civil-code-p1544');
+});

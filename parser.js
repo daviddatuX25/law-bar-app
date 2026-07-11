@@ -29,7 +29,8 @@ function parseMarkdown(mdContent) {
         provision: '',
         elements: [],
         confusion: '',
-        source: ''
+        source: '',
+        source_paragraph_id: null
       };
       cardLineNum = i + 1;
     } else if (currentCard) {
@@ -52,6 +53,8 @@ function parseMarkdown(mdContent) {
         i = j - 1;
       } else if (line.startsWith('BACK (common confusion):')) {
         currentCard.confusion = line.replace('BACK (common confusion):', '').trim();
+      } else if (line.startsWith('SOURCE_PARAGRAPH:')) {
+        currentCard.source_paragraph_id = line.replace('SOURCE_PARAGRAPH:', '').trim();
       } else if (line.startsWith('SOURCE:')) {
         currentCard.source = line.replace('SOURCE:', '').trim();
       }
