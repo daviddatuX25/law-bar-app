@@ -15,6 +15,7 @@
         <a href="deck.html">Study Deck</a>
         <a href="reader.html">Codal Reader</a>
         <a href="studio.html">Studio</a>
+        <a href="alac.html">ALAC Practice</a>
       </nav>
     </header>
 
@@ -25,7 +26,12 @@
           <option value="">-- Choose subject --</option>
         </select>
       </div>
-      <button id="toggle-decoy-btn" class="btn-premium">Toggle Decoy Drill</button>
+      <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+        <span id="mode-indicator" class="mode-pill mode-pill-standard">📖 Standard Review</span>
+        <span id="card-count-label" class="card-count-label" style="display: none;"></span>
+        <span id="decoy-count-label" class="decoy-count-label"></span>
+        <button id="toggle-decoy-btn" class="btn-premium">⚔️ Decoy Drill</button>
+      </div>
     </div>
 
     <div class="deck-layout">
@@ -33,7 +39,10 @@
       <div id="standard-card" class="study-card">
         <div class="card-front">
           <h3 id="card-shape-text">Select a subject to begin reviewing shapes.</h3>
-          <div id="card-trigger-list" class="card-triggers" style="display: none;"></div>
+          <div id="trigger-hint-area" style="margin-top: 16px; display: none;">
+            <button id="hint-btn" class="btn-hint">Show Hint (0/0)</button>
+            <div id="trigger-chips" style="margin-top: 10px; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;"></div>
+          </div>
         </div>
         <div class="card-back" id="card-back-contents">
           <h2 id="card-back-provision"></h2>
@@ -47,7 +56,7 @@
       </div>
 
       <!-- Decoy Cards View -->
-      <div id="decoy-container" class="decoy-split">
+      <div id="decoy-container" class="decoy-split" style="display: none;">
         <div class="decoy-subcard">
           <h3>Shape A</h3>
           <p id="decoy-shape-a"></p>
