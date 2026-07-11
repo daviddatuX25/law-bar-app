@@ -47,6 +47,27 @@ function startServer(db, port = process.env.PORT || 3000) {
     }
   });
 
+  app.get('/api/subjects/:id/sources', (req, res) => {
+    try {
+      const sources = db.getSourcesForSubject(req.params.id);
+      res.json(sources);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.get('/api/paragraphs/:id', (req, res) => {
+    try {
+      const mapping = db.getParagraphMapping(req.params.id);
+      if (!mapping) {
+        return res.status(404).json({ error: 'Paragraph not found' });
+      }
+      res.json(mapping);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   app.post('/api/import', (req, res) => {
     const { subjectId, markdown } = req.body;
     if (!subjectId || !markdown) {

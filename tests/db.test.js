@@ -195,5 +195,21 @@ test('Database Sync & Retrieval', () => {
   assert.strictEqual(updatedSource.paragraphs[1].id, 'p2');
   // p2 text contains "Conveyance to A for life" which matches shape-2
   assert.deepStrictEqual(updatedSource.paragraphs[1].shapes, ['Conveyance to A for life']);
+
+  // Test getSourcesForSubject
+  const sourcesForSub = db.getSourcesForSubject('subject-1');
+  assert.strictEqual(sourcesForSub.length, 1);
+  assert.strictEqual(sourcesForSub[0].id, 'source-1');
+  assert.strictEqual(sourcesForSub[0].title, 'Restatement of Property');
+
+  // Test getParagraphMapping
+  const mapping = db.getParagraphMapping('p2');
+  assert.ok(mapping);
+  assert.strictEqual(mapping.paragraph.anchor_id, 'p2');
+  assert.strictEqual(mapping.paragraph.content_text, 'If there is a Conveyance to A for life, it is a life estate.');
+  assert.strictEqual(mapping.shapes.length, 1);
+  assert.strictEqual(mapping.shapes[0].id, 'shape-2');
+  assert.strictEqual(mapping.shapes[0].triggers.length, 1);
+  assert.strictEqual(mapping.shapes[0].triggers[0].word, 'life');
 });
 

@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Linked Codal Reader</title>
+  <link rel="stylesheet" href="app.css">
+  <style>
+    .reader-control-panel {
+      display: flex;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 12px rgba(27, 33, 29, 0.05);
+      flex-wrap: wrap;
+      gap: 20px;
+      align-items: center;
+    }
+    
+    .dropdown-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .reader-split {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 30px;
+      margin-top: 10px;
+    }
+
+    .pane {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: 16px;
+      padding: 28px;
+      height: 72vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      transition: border-color 0.25s ease;
+    }
+
+    .pane h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      margin-top: 0;
+      margin-bottom: 10px;
+      border-bottom: 1px solid var(--rule);
+      padding-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pane h3 span.badge {
+      font-size: 11px;
+      margin-top: 0;
+    }
+
+    .paragraphs-container {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .codal-para {
+      background: rgba(255, 255, 255, 0.45);
+      border: 1px solid rgba(27, 33, 29, 0.08);
+      border-radius: 10px;
+      padding: 20px;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .codal-para:hover {
+      background: rgba(169, 117, 47, 0.04);
+      border-color: rgba(169, 117, 47, 0.2);
+      transform: translateY(-1px);
+    }
+
+    .codal-para.active {
+      background: rgba(169, 117, 47, 0.12);
+      border-color: var(--gold);
+      border-left: 5px solid var(--gold);
+      box-shadow: 0 4px 12px rgba(169, 117, 47, 0.08);
+    }
+
+    .codal-para-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: var(--ink);
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .codal-para-text {
+      font-size: 14.5px;
+      line-height: 1.6;
+      color: #3a3f38;
+      margin: 0;
+    }
+
+    .placeholder-text {
+      color: #8a8d80;
+      font-style: italic;
+      text-align: center;
+      margin-top: 40px;
+      font-size: 14.5px;
+    }
+
+    /* Inspector Elements */
+    .inspector-section {
+      background: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(27, 33, 29, 0.06);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .inspector-section h4 {
+      font-family: 'Fraunces', serif;
+      font-size: 18px;
+      margin-top: 0;
+      margin-bottom: 12px;
+      color: var(--green-deep);
+    }
+
+    .inspector-section-label {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-deep);
+      margin-bottom: 8px;
+    }
+
+    .inspector-list {
+      margin: 10px 0;
+      padding-left: 18px;
+      border-left: 2px solid var(--rule);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .inspector-list-item {
+      font-size: 14px;
+      line-height: 1.5;
+      color: #3a3f38;
+    }
+
+    .inspector-list-item::before {
+      content: "✓";
+      color: var(--green);
+      font-weight: bold;
+      margin-right: 8px;
+    }
+
+    .confusion-alert {
+      background: rgba(161, 61, 43, 0.05);
+      border: 1px solid rgba(161, 61, 43, 0.15);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-top: 12px;
+      color: var(--red);
+      font-size: 13.5px;
+      line-height: 1.5;
+    }
+
+    .distinguishing-card {
+      background: linear-gradient(135deg, rgba(169, 117, 47, 0.04), rgba(169, 117, 47, 0.08));
+      border: 1px solid rgba(169, 117, 47, 0.25);
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.5;
+      font-style: italic;
+      color: var(--ink);
+    }
+
+    .shape-card {
+      background: rgba(255, 255, 255, 0.7);
+      border: 1px solid var(--rule);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 12px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+    }
+
+    .shape-card:last-child {
+      margin-bottom: 0;
+    }
+
+    .shape-title {
+      font-family: 'Fraunces', serif;
+      font-weight: 600;
+      font-size: 15px;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .shape-frequency {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 10px;
+      color: #7a7e74;
+      background: rgba(0,0,0,0.04);
+      padding: 1px 6px;
+      border-radius: 10px;
+    }
+
+    .decoy-item {
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px dashed var(--rule);
+      border-radius: 8px;
+      padding: 12px;
+      margin-top: 10px;
+    }
+
+    .decoy-item h5 {
+      margin: 0 0 6px 0;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 11px;
+      text-transform: uppercase;
+      color: var(--red);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @media (max-width: 900px) {
+      .reader-split {
+        grid-template-columns: 1fr;
+      }
+      .pane {
+        height: auto;
+        max-height: 60vh;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav-header">
+      <h1>Codal <em>Reader</em></h1>
+      <nav class="nav-links">
+        <a href="index.html">Dashboard</a>
+        <a href="deck.html">Study Deck</a>
+        <a href="reader.html">Codal Reader</a>
+        <a href="studio.html">Studio</a>
+      </nav>
+    </header>
+
+    <div class="reader-control-panel">
+      <div class="dropdown-container">
+        <label for="subject-reader-dropdown" style="font-weight: 600; font-size: 14px; color: var(--gold-deep);">Subject:</label>
+        <select id="subject-reader-dropdown" class="select-box">
+          <option value="">-- Choose subject --</option>
+        </select>
+      </div>
+
+      <div class="dropdown-container" id="source-dropdown-wrapper" style="display: none;">
+        <label for="source-reader-dropdown" style="font-weight: 600; font-size: 14px; color: var(--green-deep);">Source Document:</label>
+        <select id="source-reader-dropdown" class="select-box">
+          <option value="">-- Choose source --</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="reader-split">
+      <!-- Source Pane -->
+      <div class="pane" id="source-pane">
+        <h3>Source Provisions</h3>
+        <div id="source-paragraphs-content" class="paragraphs-container">
+          <div class="placeholder-text">Select a subject and source document to load paragraphs.</div>
+        </div>
+      </div>
+
+      <!-- Mapped Inspector Panel -->
+      <div class="pane" id="side-inspector">
+        <h3>Retrieved Inspector</h3>
+        <div id="inspector-content">
+          <div class="placeholder-text">Hover or click a paragraph in the left pane to view its elements checklist and common confusion rules.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const subjectDropdown = document.getElementById('subject-reader-dropdown');
+      const sourceDropdown = document.getElementById('source-reader-dropdown');
+      const sourceDropdownWrapper = document.getElementById('source-dropdown-wrapper');
+      const paragraphsContent = document.getElementById('source-paragraphs-content');
+      const inspectorContent = document.getElementById('inspector-content');
+
+      // 1. Fetch subjects
+      fetch('/api/subjects')
+        .then(res => res.json())
+        .then(subjects => {
+          subjectDropdown.innerHTML = '<option value="">-- Select Subject --</option>';
+          subjects.forEach(sub => {
+            const opt = document.createElement('option');
+            opt.value = sub.id;
+            opt.textContent = sub.name;
+            subjectDropdown.appendChild(opt);
+          });
+        })
+        .catch(err => {
+          console.error('Error loading subjects:', err);
+          subjectDropdown.innerHTML = '<option value="">Failed to load subjects</option>';
+        });
+
+      // 2. Subject change handler
+      subjectDropdown.addEventListener('change', () => {
+        const subId = subjectDropdown.value;
+        sourceDropdown.innerHTML = '<option value="">-- Choose source --</option>';
+        sourceDropdownWrapper.style.display = 'none';
+        paragraphsContent.innerHTML = '<div class="placeholder-text">Select a subject and source document to load paragraphs.</div>';
+        resetInspector();
+
+        if (!subId) return;
+
+        fetch(`/api/subjects/${subId}/sources`)
+          .then(res => res.json())
+          .then(sources => {
+            if (sources.length === 0) {
+              sourceDropdown.innerHTML = '<option value="">No sources found</option>';
+              sourceDropdownWrapper.style.display = 'flex';
+              return;
+            }
+            sourceDropdown.innerHTML = '<option value="">-- Select Source --</option>';
+            sources.forEach(src => {
+              const opt = document.createElement('option');
+              opt.value = src.id;
+              opt.textContent = src.title;
+              sourceDropdown.appendChild(opt);
+            });
+            sourceDropdownWrapper.style.display = 'flex';
+          })
+          .catch(err => {
+            console.error('Error fetching sources:', err);
+          });
+      });
+
+      // 3. Source change handler
+      sourceDropdown.addEventListener('change', () => {
+        const srcId = sourceDropdown.value;
+        paragraphsContent.innerHTML = '<div class="placeholder-text">Select a subject and source document to load paragraphs.</div>';
+        resetInspector();
+
+        if (!srcId) return;
+
+        fetch(`/api/sources/${srcId}`)
+          .then(res => res.json())
+          .then(source => {
+            if (!source.paragraphs || source.paragraphs.length === 0) {
+              paragraphsContent.innerHTML = '<div class="placeholder-text">No paragraphs found in this source.</div>';
+              return;
+            }
+
+            paragraphsContent.innerHTML = source.paragraphs.map(p => {
+              const isArt = p.text.toLowerCase().startsWith('article') || p.text.toLowerCase().startsWith('art.');
+              const titleText = isArt ? p.text.split('.')[0] + '.' : 'Paragraph ' + p.id;
+              const bodyText = isArt ? p.text.substring(titleText.length).trim() : p.text;
+              
+              return `
+                <div class="codal-para" data-id="${p.id}" data-anchor="${p.id}">
+                  <div class="codal-para-title">
+                    <span>${escapeHtml(titleText)}</span>
+                  </div>
+                  <p class="codal-para-text">${escapeHtml(bodyText)}</p>
+                </div>
+              `;
+            }).join('');
+
+            // Attach click & hover events
+            document.querySelectorAll('.codal-para').forEach(para => {
+              const paraId = para.dataset.id;
+              
+              const activate = () => {
+                document.querySelectorAll('.codal-para').forEach(p => p.classList.remove('active'));
+                para.classList.add('active');
+                inspectParagraph(paraId);
+              };
+
+              para.addEventListener('click', activate);
+              para.addEventListener('mouseenter', activate);
+            });
+          })
+          .catch(err => {
+            console.error('Error fetching source details:', err);
+            paragraphsContent.innerHTML = '<div class="placeholder-text" style="color: var(--red);">Error loading paragraphs.</div>';
+          });
+      });
+
+      function resetInspector() {
+        inspectorContent.innerHTML = '<div class="placeholder-text">Hover or click a paragraph in the left pane to view its elements checklist and common confusion rules.</div>';
+      }
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function inspectParagraph(paraId) {
+        inspectorContent.innerHTML = '<div class="placeholder-text">Loading mapping details...</div>';
+        
+        fetch(`/api/paragraphs/${paraId}`)
+          .then(res => {
+            if (!res.ok) throw new Error('Not found');
+            return res.json();
+          })
+          .then(data => {
+            let html = '';
+
+            // 1. Provision Section
+            if (data.provision) {
+              const p = data.provision;
+              const elementsHtml = p.elements_checklist && p.elements_checklist.length > 0
+                ? `<div class="inspector-list">
+                    ${p.elements_checklist.map(el => `<div class="inspector-list-item">${escapeHtml(el)}</div>`).join('')}
+                   </div>`
+                : '<div class="placeholder-text" style="margin-top:10px;">No elements checklist defined.</div>';
+
+              const confusionHtml = p.common_confusion
+                ? `<div class="confusion-alert">
+                    <strong>Common Confusion:</strong> ${escapeHtml(p.common_confusion)}
+                   </div>`
+                : '';
+
+              const distFactHtml = p.distinguishing_fact
+                ? `<div class="distinguishing-card">
+                    <strong>Distinguishing Fact:</strong> ${escapeHtml(p.distinguishing_fact)}
+                   </div>`
+                : '';
+
+              html += `
+                <div class="inspector-section">
+                  <div class="inspector-section-label">Mapped Provision</div>
+                  <h4>${escapeHtml(p.citation)} — ${escapeHtml(p.short_title)}</h4>
+                  <div style="font-weight: 600; font-size: 13.5px; margin-top: 10px; color: var(--green-deep);">Elements Checklist:</div>
+                  ${elementsHtml}
+                  ${confusionHtml}
+                  ${distFactHtml}
+                </div>
+              `;
+            }
+
+            // 2. Shapes Section
+            if (data.shapes && data.shapes.length > 0) {
+              let shapesHtml = '';
+              data.shapes.forEach(s => {
+                const triggerBadges = s.triggers && s.triggers.length > 0
+                  ? s.triggers.map(t => {
+                      const ambiguity = t.is_ambiguous ? ' <span style="font-size:8px; opacity:0.75;">(ambiguous)</span>' : '';
+                      return `<span class="badge badge-green">${escapeHtml(t.word)}${ambiguity}</span>`;
+                    }).join('')
+                  : '<span style="font-size:12px; color:#888;">None</span>';
+
+                let decoysHtml = '';
+                if (s.decoys && s.decoys.length > 0) {
+                  decoysHtml = s.decoys.map(d => `
+                    <div class="decoy-item">
+                      <h5>Decoy Pair Target</h5>
+                      <div style="font-size:12.5px; margin-bottom: 6px;">
+                        <strong>Shape A:</strong> ${escapeHtml(d.shape_a_text)}
+                      </div>
+                      <div style="font-size:12.5px; margin-bottom: 6px;">
+                        <strong>Shape B:</strong> ${escapeHtml(d.shape_b_text)}
+                      </div>
+                      <div style="font-size:12.5px; color: var(--red); font-style: italic; border-top: 1px dashed var(--rule); padding-top:6px; margin-top:6px;">
+                        <strong>Distinguishing Fact:</strong> ${escapeHtml(d.distinguishing_fact)}
+                      </div>
+                    </div>
+                  `).join('');
+                }
+
+                // If shape has its own provision list (mapped dynamically in fallback)
+                let shapeProvsHtml = '';
+                if (s.provisions && s.provisions.length > 0) {
+                  shapeProvsHtml = s.provisions.map(sp => `
+                    <div style="font-size: 13px; margin-top: 8px; font-weight:600; color: var(--blue);">
+                      Primary Provision: ${escapeHtml(sp.citation)} (${escapeHtml(sp.short_title)})
+                    </div>
+                  `).join('');
+                }
+
+                shapesHtml += `
+                  <div class="shape-card">
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                      <div class="shape-title">${escapeHtml(s.shape_text)}</div>
+                      <span class="shape-frequency">Freq: ${s.frequency || 1}</span>
+                    </div>
+                    <div style="margin-top: 10px;">
+                      <strong style="font-size:12px; color:var(--gold-deep);">Triggers: </strong>
+                      ${triggerBadges}
+                    </div>
+                    ${shapeProvsHtml}
+                    ${decoysHtml}
+                  </div>
+                `;
+              });
+
+              html += `
+                <div class="inspector-section">
+                  <div class="inspector-section-label">Case Signatures / Shapes</div>
+                  ${shapesHtml}
+                </div>
+              `;
+            }
+
+            if (!data.provision && (!data.shapes || data.shapes.length === 0)) {
+              html = `
+                <div class="placeholder-text">
+                  This paragraph has no direct provisions or mapped case signatures in the retrieval system database.
+                </div>
+              `;
+            }
+
+            inspectorContent.innerHTML = html;
+          })
+          .catch(err => {
+            console.error('Error inspecting paragraph:', err);
+            inspectorContent.innerHTML = '<div class="placeholder-text" style="color: var(--red);">Could not load paragraph mapping details.</div>';
+          });
+      }
+    });
+  </script>
+</body>
+</html>

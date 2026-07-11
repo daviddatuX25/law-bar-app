@@ -153,6 +153,31 @@ test('Express Server API routes', async (t) => {
     assert.strictEqual(res404.statusCode || res404.status, 404);
   });
 
+  await t.test('GET /api/subjects/:id/sources returns sources list', async () => {
+    const res = await fetch('http://localhost:3001/api/subjects/subject-1/sources');
+    assert.strictEqual(res.statusCode || res.status, 200);
+    const body = await res.json();
+    assert.ok(Array.isArray(body));
+    assert.strictEqual(body.length, 1);
+    assert.strictEqual(body[0].id, 'source-1');
+  });
+
+  await t.test('GET /api/paragraphs/:id returns paragraph mapping and provisions', async () => {
+    // Valid paragraph mapping
+    const res = await fetch('http://localhost:3001/api/paragraphs/p2');
+    assert.strictEqual(res.statusCode || res.status, 200);
+    const body = await res.json();
+    assert.ok(body.paragraph);
+    assert.strictEqual(body.paragraph.anchor_id, 'p2');
+    assert.ok(Array.isArray(body.shapes));
+    assert.strictEqual(body.shapes.length, 1);
+    assert.strictEqual(body.shapes[0].id, 'shape-2');
+
+    // Non-existent paragraph mapping
+    const res404 = await fetch('http://localhost:3001/api/paragraphs/non-existent');
+    assert.strictEqual(res404.statusCode || res404.status, 404);
+  });
+
   await t.test('POST /api/import validations and execution', async () => {
     // Missing subjectId
     const resMissing = await fetch('http://localhost:3001/api/import', {

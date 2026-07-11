@@ -104,6 +104,127 @@ class DbAdapter {
     };
   }
 
+  getSourcesForSubject(subjectId) {
+    const stmt = this.db.prepare('SELECT * FROM sources WHERE subject_id = ?');
+    return stmt.all(subjectId);
+  }
+
+  getParagraphMapping(paragraphIdOrAnchor) {
+    const paraStmt = this.db.prepare(`
+      SELECT * FROM source_paragraphs 
+      WHERE id = ? OR anchor_id = ?
+      LIMIT 1
+    `);
+    const para = paraStmt.get(paragraphIdOrAnchor, paragraphIdOrAnchor);
+    if (!para) return null;
+
+    const provStmt = this.db.prepare(`
+      SELECT * FROM provisions 
+      WHERE id = ? OR id = ? OR citation LIKE ?
+      LIMIT 1
+    `);
+    const prov = provStmt.get(para.id, para.anchor_id, `%${para.anchor_id}%`);
+
+    let provisionData = null;
+    let shapes = [];
+
+    if (prov) {
+      provisionData = {
+        ...prov,
+        elements_checklist: JSON.parse(prov.elements_checklist)
+      };
+
+      const shapesStmt = this.db.prepare(`
+        SELECT s.*, sp.is_primary 
+        FROM shapes s
+        JOIN shape_provisions sp ON s.id = sp.shape_id
+        WHERE sp.provision_id = ?
+      `);
+      const mappedShapes = shapesStmt.all(prov.id);
+
+      for (const shape of mappedShapes) {
+        const triggersStmt = this.db.prepare('SELECT * FROM trigger_words WHERE shape_id = ?');
+        const triggers = triggersStmt.all(shape.id).map(t => ({
+          ...t,
+          is_ambiguous: t.is_ambiguous === 1
+        }));
+
+        const decoyStmt = this.db.prepare(`
+          SELECT d.*, 
+                 sa.shape_text as shape_a_text, 
+                 sb.shape_text as shape_b_text
+          FROM decoy_pairs d
+          JOIN shapes sa ON d.shape_a_id = sa.id
+          JOIN shapes sb ON d.shape_b_id = sb.id
+          WHERE d.shape_a_id = ? OR d.shape_b_id = ?
+        `);
+        const decoys = decoyStmt.all(shape.id, shape.id);
+
+        shapes.push({
+          ...shape,
+          triggers,
+          decoys
+        });
+      }
+    } else {
+      const sourceStmt = this.db.prepare('SELECT subject_id FROM sources WHERE id = ?');
+      const srcObj = sourceStmt.get(para.source_id);
+      if (srcObj) {
+        const shapesStmt = this.db.prepare('SELECT id, shape_text FROM shapes WHERE subject_id = ?');
+        const subjectShapes = shapesStmt.all(srcObj.subject_id);
+        const matchingShapes = subjectShapes.filter(s => 
+          para.content_text.toLowerCase().includes(s.shape_text.toLowerCase())
+        );
+
+        for (const shape of matchingShapes) {
+          const triggersStmt = this.db.prepare('SELECT * FROM trigger_words WHERE shape_id = ?');
+          const triggers = triggersStmt.all(shape.id).map(t => ({
+            ...t,
+            is_ambiguous: t.is_ambiguous === 1
+          }));
+
+          const decoyStmt = this.db.prepare(`
+            SELECT d.*, 
+                   sa.shape_text as shape_a_text, 
+                   sb.shape_text as shape_b_text
+            FROM decoy_pairs d
+            JOIN shapes sa ON d.shape_a_id = sa.id
+            JOIN shapes sb ON d.shape_b_id = sb.id
+            WHERE d.shape_a_id = ? OR d.shape_b_id = ?
+          `);
+          const decoys = decoyStmt.all(shape.id, shape.id);
+
+          const provsForShapeStmt = this.db.prepare(`
+            SELECT p.* FROM provisions p
+            JOIN shape_provisions sp ON p.id = sp.provision_id
+            WHERE sp.shape_id = ? AND sp.is_primary = 1
+          `);
+          const provsForShape = provsForShapeStmt.all(shape.id).map(pr => ({
+            ...pr,
+            elements_checklist: JSON.parse(pr.elements_checklist)
+          }));
+
+          shapes.push({
+            ...shape,
+            triggers,
+            decoys,
+            provisions: provsForShape
+          });
+        }
+      }
+    }
+
+    return {
+      paragraph: {
+        id: para.id,
+        anchor_id: para.anchor_id,
+        content_text: para.content_text
+      },
+      provision: provisionData,
+      shapes: shapes
+    };
+  }
+
   runWriteQuery(sql, params = []) {
     const stmt = this.db.prepare(sql);
     return stmt.run(...params);
