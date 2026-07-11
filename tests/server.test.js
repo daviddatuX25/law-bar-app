@@ -261,9 +261,9 @@ SOURCE: Restatement § 3
 
   await t.test('POST /api/generate/flashcards returns generated markdown text', async () => {
     const payload = {
-      subjectId: 'civil-law',
-      sourceId: 'civil-code',
-      paragraphIds: ['civil-code-p1'],
+      subjectId: 'subject-1',
+      sourceId: 'source-1',
+      paragraphIds: ['source-1:p1'],
       prompt: 'double sale'
     };
     const res = await fetch('http://localhost:3001/api/generate/flashcards', {
