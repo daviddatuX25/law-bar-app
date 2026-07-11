@@ -1,6 +1,6 @@
 # Progress Ledger
 
-- [ ] Task 1: Database Adapter and Normalized SQLite Schema
+- [x] Task 1: Database Adapter and Normalized SQLite Schema
 - [ ] Task 2: AST Markdown Parser & Data Ingestion Validator
 - [ ] Task 3: Seed Pipeline and Relational Verification
 - [ ] Task 4: Express API Routing
