@@ -10,6 +10,7 @@ class DbAdapter {
 
   initialize() {
     this.db = new DatabaseSync(this.dbPath);
+    this.db.exec("PRAGMA foreign_keys = ON;");
     const migration = fs.readFileSync(path.join(__dirname, 'schema.sql'), 'utf8');
     this.db.exec(migration);
   }
@@ -84,21 +85,12 @@ class DbAdapter {
     const paraStmt = this.db.prepare('SELECT * FROM source_paragraphs WHERE source_id = ?');
     const paragraphs = paraStmt.all(sourceId);
 
-    // Fetch shapes for the source's subject
-    const shapesStmt = this.db.prepare('SELECT id, shape_text FROM shapes WHERE subject_id = ?');
-    const subjectShapes = shapesStmt.all(source.subject_id);
-
     return {
       ...source,
       paragraphs: paragraphs.map(p => {
-        // Match shapes that appear inside the paragraph text
-        const matchingShapes = subjectShapes
-          .filter(s => p.content_text.toLowerCase().includes(s.shape_text.toLowerCase()))
-          .map(s => s.shape_text);
         return {
           id: p.anchor_id,
-          text: p.content_text,
-          shapes: matchingShapes
+          text: p.content_text
         };
       })
     };

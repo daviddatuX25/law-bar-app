@@ -157,7 +157,6 @@ test('Express Server API routes', async (t) => {
     const body = await res.json();
     assert.strictEqual(body.id, 'source-1');
     assert.strictEqual(body.paragraphs.length, 2);
-    assert.deepStrictEqual(body.paragraphs[1].shapes, ['Conveyance to A for life']);
 
     // Non-existent source
     const res404 = await fetch('http://localhost:3001/api/sources/non-existent');

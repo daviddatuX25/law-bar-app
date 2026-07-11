@@ -126,8 +126,6 @@ test('Database Sync & Retrieval', () => {
   assert.strictEqual(source.paragraphs.length, 1);
   assert.strictEqual(source.paragraphs[0].id, 'p1');
   assert.strictEqual(source.paragraphs[0].text, 'A fee simple absolute is the largest estate known to the law.');
-  // Since the paragraph text does not mention the shapes, shapes should be empty
-  assert.deepStrictEqual(source.paragraphs[0].shapes, []);
 
   // Update subject data with paragraph matching shape
   db.insertSubjectData('subject-1', {
@@ -193,8 +191,6 @@ test('Database Sync & Retrieval', () => {
   const updatedSource = db.getSource('source-1');
   assert.strictEqual(updatedSource.paragraphs.length, 2);
   assert.strictEqual(updatedSource.paragraphs[1].id, 'p2');
-  // p2 text contains "Conveyance to A for life" which matches shape-2
-  assert.deepStrictEqual(updatedSource.paragraphs[1].shapes, ['Conveyance to A for life']);
 
   // Test getSourcesForSubject
   const sourcesForSub = db.getSourcesForSubject('subject-1');
@@ -212,4 +208,14 @@ test('Database Sync & Retrieval', () => {
   assert.strictEqual(mapping.shapes[0].triggers.length, 1);
   assert.strictEqual(mapping.shapes[0].triggers[0].word, 'life');
 });
+
+test('SQLite Foreign Key Enforcement', () => {
+  const db = new DbAdapter(':memory:');
+  db.initialize();
+  
+  assert.throws(() => {
+    db.runWriteQuery("INSERT INTO sources (id, title, subject_id) VALUES ('source-orphan', 'Title', 'non-existent-subject')");
+  }, /FOREIGN KEY constraint failed/);
+});
+
 
