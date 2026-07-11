@@ -632,7 +632,14 @@ SOURCE: Civil Code Art. 1544`;
 
       genSelectAllBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        paragraphsData.forEach(p => p.checked = true);
+        const query = genParaSearch.value.toLowerCase();
+        paragraphsData.forEach(p => {
+          const anchor = p.anchor_id || '';
+          const text = p.content_text || '';
+          if (anchor.toLowerCase().includes(query) || text.toLowerCase().includes(query)) {
+            p.checked = true;
+          }
+        });
         renderParagraphs();
         updateSelectionCount();
       });
