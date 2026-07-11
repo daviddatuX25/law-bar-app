@@ -101,7 +101,8 @@ function startServer(db, port = process.env.PORT || 3005) {
       const paragraphs = (source.paragraphs || []).map(p => ({
         id: `${req.params.id}:${p.id}`,
         anchor_id: p.id,
-        content_text: p.text
+        content_text: p.text,
+        cardCount: p.cardCount
       }));
       res.json(paragraphs);
     } catch (err) {

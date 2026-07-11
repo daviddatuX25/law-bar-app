@@ -97,13 +97,16 @@ class DbAdapter {
 
     const paraStmt = this.db.prepare('SELECT * FROM source_paragraphs WHERE source_id = ?');
     const paragraphs = paraStmt.all(sourceId);
+    const countStmt = this.db.prepare('SELECT COUNT(*) as count FROM flashcards WHERE source_paragraph_id = ? OR source_paragraph_id = ?');
 
     return {
       ...source,
       paragraphs: paragraphs.map(p => {
+        const cardCount = countStmt.get(p.id, p.anchor_id).count;
         return {
           id: p.anchor_id,
-          text: p.content_text
+          text: p.content_text,
+          cardCount: cardCount
         };
       })
     };
@@ -219,6 +222,14 @@ class DbAdapter {
       }
     }
 
+    const flashcardsStmt = this.db.prepare(`
+      SELECT f.id, s.shape_text
+      FROM flashcards f
+      JOIN shapes s ON f.shape_id = s.id
+      WHERE f.source_paragraph_id = ? OR f.source_paragraph_id = ?
+    `);
+    const relatedCards = flashcardsStmt.all(para.id, para.anchor_id);
+
     return {
       paragraph: {
         id: para.id,
@@ -226,7 +237,8 @@ class DbAdapter {
         content_text: para.content_text
       },
       provision: provisionData,
-      shapes: shapes
+      shapes: shapes,
+      flashcards: relatedCards
     };
   }
 

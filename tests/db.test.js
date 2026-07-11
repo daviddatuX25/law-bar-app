@@ -344,6 +344,26 @@ test('Database Sync & Retrieval', () => {
   assert.strictEqual(mapping.shapes[0].id, 'shape-2');
   assert.strictEqual(mapping.shapes[0].triggers.length, 1);
   assert.strictEqual(mapping.shapes[0].triggers[0].word, 'life');
+
+  // Test getParagraphMapping with linked flashcards and getSource cardCount
+  // 1. Manually insert a flashcard linked to 'source-1:p2'
+  db.runWriteQuery(
+    "INSERT INTO flashcards (id, subject_id, shape_id, source_citation, source_paragraph_id) VALUES (?, ?, ?, ?, ?)",
+    ['fc-test-p2', 'subject-1', 'shape-2', 'Restatement § 2', 'source-1:p2']
+  );
+
+  // 2. Query getSource and verify cardCount
+  const sourceWithCount = db.getSource('source-1');
+  assert.strictEqual(sourceWithCount.paragraphs[1].cardCount, 1);
+  assert.strictEqual(sourceWithCount.paragraphs[0].cardCount, 0);
+
+  // 3. Query getParagraphMapping and verify related flashcards
+  const mappingWithCards = db.getParagraphMapping('source-1:p2');
+  assert.ok(mappingWithCards);
+  assert.ok(Array.isArray(mappingWithCards.flashcards));
+  assert.strictEqual(mappingWithCards.flashcards.length, 1);
+  assert.strictEqual(mappingWithCards.flashcards[0].id, 'fc-test-p2');
+  assert.strictEqual(mappingWithCards.flashcards[0].shape_text, 'Conveyance to A for life');
 });
 
 test('SQLite Foreign Key Enforcement', () => {

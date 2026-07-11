@@ -164,6 +164,12 @@ test('Express Server API routes', async (t) => {
   });
 
   await t.test('GET /api/sources/:id/paragraphs returns list of paragraphs or 404', async () => {
+    // Manually insert a flashcard linked to 'source-1:p1' for testing
+    db.runWriteQuery(
+      "INSERT OR REPLACE INTO flashcards (id, subject_id, shape_id, source_citation, source_paragraph_id) VALUES (?, ?, ?, ?, ?)",
+      ['fc-test-api-p1', 'subject-1', 'shape-1', 'Restatement § 1', 'source-1:p1']
+    );
+
     // Valid source
     const res = await fetch('http://localhost:3001/api/sources/source-1/paragraphs');
     assert.strictEqual(res.statusCode || res.status, 200);
@@ -173,6 +179,8 @@ test('Express Server API routes', async (t) => {
     assert.strictEqual(data[0].id, 'source-1:p1');
     assert.strictEqual(data[0].anchor_id, 'p1');
     assert.strictEqual(data[0].content_text, 'A fee simple absolute is the largest estate known to the law.');
+    assert.strictEqual(data[0].cardCount, 1);
+    assert.strictEqual(data[1].cardCount, 0);
 
     // Non-existent source
     const res404 = await fetch('http://localhost:3001/api/sources/non-existent-source/paragraphs');
@@ -198,6 +206,16 @@ test('Express Server API routes', async (t) => {
     assert.ok(Array.isArray(body.shapes));
     assert.strictEqual(body.shapes.length, 1);
     assert.strictEqual(body.shapes[0].id, 'shape-2');
+    assert.ok(Array.isArray(body.flashcards));
+
+    // Valid paragraph mapping with linked flashcards (for p1 / source-1:p1)
+    const resP1 = await fetch('http://localhost:3001/api/paragraphs/source-1:p1');
+    assert.strictEqual(resP1.statusCode || resP1.status, 200);
+    const bodyP1 = await resP1.json();
+    assert.ok(bodyP1.flashcards);
+    assert.strictEqual(bodyP1.flashcards.length, 1);
+    assert.strictEqual(bodyP1.flashcards[0].id, 'fc-test-api-p1');
+    assert.strictEqual(bodyP1.flashcards[0].shape_text, 'Conveyance to A and his heirs');
 
     // Non-existent paragraph mapping
     const res404 = await fetch('http://localhost:3001/api/paragraphs/non-existent');
