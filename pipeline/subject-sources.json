@@ -1,0 +1,129 @@
+[
+  {
+    "id": "civil-law",
+    "name": "Civil Law",
+    "codals": [
+      {
+        "title": "Civil Code of the Philippines (RA 386)",
+        "url": "https://lawphil.net/statutes/repacts/ra1949/ra_386_1949.html",
+        "articles": 2270
+      },
+      {
+        "title": "Family Code of the Philippines (EO 209)",
+        "url": "https://www.officialgazette.gov.ph/1987/07/06/executive-order-no-209-s-1987/",
+        "articles": 256
+      },
+      {
+        "title": "Property Registration Decree (PD 1529)",
+        "url": "https://lawphil.net/statutes/presdecs/pd1978/pd_1529_1978.html",
+        "sections": 120
+      }
+    ],
+    "textbooks": ["Arturo M. Tolentino (Vols. I-V)", "Eduardo L. Paras (Vols. I-V)", "Elmer T. Rabuya (Reviewer)"]
+  },
+  {
+    "id": "criminal-law",
+    "name": "Criminal Law",
+    "codals": [
+      {
+        "title": "Revised Penal Code (Act 3815)",
+        "url": "https://lawphil.net/statutes/acts/act_3815_1930.html",
+        "articles": 367
+      },
+      {
+        "title": "Dangerous Drugs Act of 2002 (RA 9165)",
+        "url": "https://www.officialgazette.gov.ph/2002/06/07/republic-act-no-9165/",
+        "sections": 102
+      }
+    ],
+    "textbooks": ["Luis B. Reyes (Books 1 & 2)", "Justice Florenz D. Regalado (Conspectus)", "Campanilla/Ortega (Reviewer)"]
+  },
+  {
+    "id": "political-law",
+    "name": "Political Law",
+    "codals": [
+      {
+        "title": "1987 Constitution of the Philippines",
+        "url": "https://www.officialgazette.gov.ph/constitutions/1987-constitution/",
+        "sections": 321
+      },
+      {
+        "title": "Local Government Code of 1991 (RA 7160)",
+        "url": "https://www.officialgazette.gov.ph/1991/10/10/republic-act-no-7160/",
+        "sections": 536
+      }
+    ],
+    "textbooks": ["Joaquin G. Bernas, S.J. (Commentary)", "Isagani A. Cruz (Constitutional)", "Antonio E.B. Nachura (Outline)"]
+  },
+  {
+    "id": "remedial-law",
+    "name": "Remedial Law",
+    "codals": [
+      {
+        "title": "Rules of Civil Procedure (Rules 1-71, AM 19-10-20-SC)",
+        "url": "https://sc.judiciary.gov.ph/",
+        "rules": 71
+      },
+      {
+        "title": "Rules on Evidence (Rules 128-134, AM 19-08-15-SC)",
+        "url": "https://sc.judiciary.gov.ph/",
+        "rules": 7
+      }
+    ],
+    "textbooks": ["Willard B. Riano (Civil/Crim/Evidence Series)", "Florenz D. Regalado (Compendium)", "Ferdinand A Tan"]
+  },
+  {
+    "id": "commercial-law",
+    "name": "Commercial Law",
+    "codals": [
+      {
+        "title": "Revised Corporation Code (RA 11232)",
+        "url": "https://www.officialgazette.gov.ph/2019/02/20/republic-act-no-11232/",
+        "sections": 144
+      },
+      {
+        "title": "Insurance Code (RA 10607)",
+        "url": "https://www.officialgazette.gov.ph/2013/08/15/republic-act-no-10607/",
+        "sections": 389
+      }
+    ],
+    "textbooks": ["Sundiang & Aquino (Reviewer)", "Nilo T. Divina (Divina on Comm)", "Cesar L. Villanueva"]
+  },
+  {
+    "id": "labor-law",
+    "name": "Labor Law",
+    "codals": [
+      {
+        "title": "Labor Code of the Philippines (PD 442)",
+        "url": "https://www.dole.gov.ph/labor-code-of-the-philippines/",
+        "articles": 302
+      }
+    ],
+    "textbooks": ["Cesario A. Azucena Jr. (Vols. I & II)", "Joselito Guianan Chan (Reviewer)", "Atty. Duano"]
+  },
+  {
+    "id": "taxation",
+    "name": "Taxation",
+    "codals": [
+      {
+        "title": "National Internal Revenue Code (NIRC / RA 8424)",
+        "url": "https://www.bir.gov.ph/",
+        "sections": 14
+      }
+    ],
+    "textbooks": ["Justice Japar B. Dimaampao (Principles & Remedies)", "E.P. Ingles (Tax Made Less Taxing)"]
+  },
+  {
+    "id": "legal-ethics",
+    "name": "Legal Ethics",
+    "codals": [
+      {
+        "title": "Code of Professional Responsibility and Accountability (CPRA, AM 22-09-01-SC)",
+        "url": "https://sc.judiciary.gov.ph/sp-files/CPRA-AM-No.-22-09-01-SC.pdf",
+        "canons": 6,
+        "sections": 82
+      }
+    ],
+    "textbooks": ["Ruben E. Agpalo (Legal & Judicial Ethics)", "Atty. Funa / Pineda"]
+  }
+]
