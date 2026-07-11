@@ -5,12 +5,104 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ingestion Studio — Memory Engineering</title>
   <link rel="stylesheet" href="app.css">
+  <style>
+    /* Tab navigation */
+    .studio-tabs {
+      display: flex;
+      gap: 0;
+      border-bottom: 2px solid var(--rule, #d4d4c8);
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+    .studio-tab-btn {
+      background: none;
+      border: none;
+      padding: 10px 24px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 14px;
+      font-weight: 600;
+      color: #7a7e74;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      margin-bottom: -2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .studio-tab-btn:hover {
+      color: var(--gold-deep, #8b6914);
+    }
+    .studio-tab-btn.active {
+      color: var(--gold-deep, #8b6914);
+      border-bottom-color: var(--gold-deep, #8b6914);
+    }
+    .studio-tab-panel {
+      display: none;
+    }
+    .studio-tab-panel.active {
+      display: block;
+    }
+
+    /* Source import form */
+    .source-import-form {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .source-import-form .form-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      align-items: flex-end;
+    }
+    .source-import-form .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      min-width: 200px;
+    }
+    .source-import-form label {
+      font-weight: 600;
+      font-size: 13px;
+      color: var(--green-deep, #5b6e4b);
+    }
+    .source-import-form input,
+    .source-import-form select,
+    .source-import-form textarea {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      padding: 8px 12px;
+      border: 1px solid var(--rule, #d4d4c8);
+      border-radius: 4px;
+      background: #fafaf7;
+      color: #3a3a34;
+    }
+    .source-import-form textarea {
+      min-height: 300px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    /* AI Generator layout */
+    .ai-generator-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .ai-generator-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
   <div class="wrap">
     <header class="nav-header">
       <h1>Ingestion <em>Studio</em></h1>
-      <nav class="nav-links">
+      <button class="nav-hamburger" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-links" id="nav-links">
         <a href="index.html">Dashboard</a>
         <a href="deck.html">Study Deck</a>
         <a href="reader.html">Codal Reader</a>
@@ -19,33 +111,132 @@
       </nav>
     </header>
 
-    <div class="studio-control-panel">
-      <div class="dropdown-container">
-        <label for="import-subject-select" style="font-weight: 600; font-size: 14px; color: var(--gold-deep);">Subject Ingestion Target:</label>
-        <select id="import-subject-select" class="select-box">
-          <option value="civil-law">Civil Law</option>
-        </select>
+    <!-- Tab Navigation -->
+    <nav class="studio-tabs" id="studio-tabs">
+      <button class="studio-tab-btn active" data-tab="flashcards">Import Flashcards</button>
+      <button class="studio-tab-btn" data-tab="sources">Import Sources</button>
+      <button class="studio-tab-btn" data-tab="generator">AI Generator</button>
+    </nav>
+
+    <!-- ============================================= -->
+    <!-- Tab 1: Import Flashcards                      -->
+    <!-- ============================================= -->
+    <div class="studio-tab-panel active" id="tab-flashcards">
+      <div class="studio-control-panel">
+        <div class="dropdown-container">
+          <label for="import-subject-select" style="font-weight: 600; font-size: 14px; color: var(--gold-deep);">Subject Ingestion Target:</label>
+          <select id="import-subject-select" class="select-box">
+            <option value="civil-law">Civil Law</option>
+          </select>
+        </div>
+        <div>
+          <button id="insert-template-btn" class="btn-premium btn-secondary">Insert Example Template</button>
+        </div>
       </div>
-      <div>
-        <button id="insert-template-btn" class="btn-premium btn-secondary">Insert Example Template</button>
+
+      <div class="studio-grid">
+        <div class="pane-card">
+          <h3>Paste Markdown Content</h3>
+          <div class="pane-card-subtitle">Input pipeline-generated Markdown text complying with the card specification.</div>
+          <textarea id="import-text" placeholder="CARD subject-1&#13;FRONT (shape): Abstracted fact pattern...&#13;FRONT (trigger words): triggers...&#13;BACK (provision): citation - Title...&#13;BACK (elements):&#13;1. Element 1...&#13;SOURCE: Source Citation..."></textarea>
+          <div class="action-row">
+            <button id="submit-import-btn" class="btn-premium btn-primary" disabled>Import Cards</button>
+          </div>
+        </div>
+        
+        <div class="pane-card">
+          <h3>Parser Log Stream</h3>
+          <div class="pane-card-subtitle">Real-time compilation logs and ingestion response output.</div>
+          <div class="log-box" id="studio-logs">
+            <span class="system">[System Idle] Waiting for ingestion payload...</span>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="studio-grid">
-      <div class="pane-card">
-        <h3>Paste Markdown Content</h3>
-        <div class="pane-card-subtitle">Input pipeline-generated Markdown text complying with the card specification.</div>
-        <textarea id="import-text" placeholder="CARD subject-1&#13;FRONT (shape): Abstracted fact pattern...&#13;FRONT (trigger words): triggers...&#13;BACK (provision): citation - Title...&#13;BACK (elements):&#13;1. Element 1...&#13;SOURCE: Source Citation..."></textarea>
-        <div class="action-row">
-          <button id="submit-import-btn" class="btn-premium btn-primary" disabled>Import Cards</button>
+    <!-- ============================================= -->
+    <!-- Tab 2: Import Sources                         -->
+    <!-- ============================================= -->
+    <div class="studio-tab-panel" id="tab-sources">
+      <div class="source-import-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="source-subject-select">Subject:</label>
+            <select id="source-subject-select" class="select-box">
+              <option value="">-- Select Subject --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="source-name-input">Source Name (e.g. "Civil Code of the Philippines"):</label>
+            <input type="text" id="source-name-input" placeholder="Civil Code of the Philippines (RA 386)" />
+          </div>
+          <div class="form-group">
+            <label for="source-id-input">Source ID (slug, e.g. "civil-code"):</label>
+            <input type="text" id="source-id-input" placeholder="civil-code" />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="source-text-input">Raw Codal Text (paste full articles/sections):</label>
+          <textarea id="source-text-input" placeholder="Art. 1. This Act shall be known as the &quot;Civil Code of the Philippines.&quot;
+
+Art. 2. Laws shall take effect after fifteen days following the completion of their publication...
+
+Art. 3. Ignorance of the law excuses no one from compliance therewith..."></textarea>
+        </div>
+        <div class="action-row" style="margin-top: 0;">
+          <button id="source-submit-btn" class="btn-premium btn-primary">Import Source</button>
+          <button id="seed-all-btn" class="btn-premium btn-secondary" style="margin-left: 12px;">⚡ Seed All Sources (Batch)</button>
+        </div>
+        <div class="log-box" id="source-logs" style="margin-top: 0;">
+          <span class="system">[System Idle] Paste raw codal text and click "Import Source" to seed the sources table. This unlocks the Codal Reader.</span>
         </div>
       </div>
-      
-      <div class="pane-card">
-        <h3>Parser Log Stream</h3>
-        <div class="pane-card-subtitle">Real-time compilation logs and ingestion response output.</div>
-        <div class="log-box" id="studio-logs">
-          <span class="system">[System Idle] Waiting for ingestion payload...</span>
+    </div>
+
+    <!-- ============================================= -->
+    <!-- Tab 3: AI Generator                           -->
+    <!-- ============================================= -->
+    <div class="studio-tab-panel" id="tab-generator">
+      <div class="source-import-form">
+        <div class="form-row">
+          <div class="form-group">
+            <label for="gen-subject-select">Subject:</label>
+            <select id="gen-subject-select" class="select-box">
+              <option value="">-- Select Subject --</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="gen-source-select">Attach Source (for grounding):</label>
+            <select id="gen-source-select" class="select-box">
+              <option value="">-- Select source (optional) --</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- New Checklist Container -->
+        <div id="gen-paragraphs-container" class="form-group" style="display: none;">
+          <label>Select Grounding Paragraphs (UI Selection):</label>
+          <div class="form-row" style="margin-bottom: 8px;">
+            <input type="text" id="gen-para-search" placeholder="Search articles/paragraphs..." class="input-box" style="flex: 1; margin-right: 8px;" />
+            <button id="gen-para-select-all" class="btn-secondary" style="margin-right: 8px; padding: 6px 12px; font-size: 13px;">Select All</button>
+            <button id="gen-para-clear" class="btn-secondary" style="padding: 6px 12px; font-size: 13px;">Clear Selection</button>
+          </div>
+          <div id="gen-paragraphs-list" style="max-height: 250px; overflow-y: auto; border: 1px solid var(--border-color); border-radius: 6px; padding: 10px; background: rgba(255, 255, 255, 0.03);">
+            <!-- Rendered dynamically -->
+          </div>
+          <div id="gen-selection-summary" style="font-size: 12px; margin-top: 6px; opacity: 0.8;">0 paragraphs selected</div>
+        </div>
+
+        <div class="form-group">
+          <label for="gen-prompt-input">Generation Prompt:</label>
+          <textarea id="gen-prompt-input" placeholder="Generate 5 flashcards about double sales..." style="min-height: 120px;"></textarea>
+        </div>
+        <div class="action-row" style="margin-top: 0; display: flex; gap: 10px;">
+          <button id="gen-submit-btn" class="btn-premium btn-primary" style="flex: 1;">Generate</button>
+          <button id="gen-import-btn" class="btn-premium" style="flex: 1; display: none; background: linear-gradient(135deg, #10b981 0%, #059669 100%);">Import Cards</button>
+        </div>
+        <div class="log-box" id="gen-logs" style="margin-top: 0; min-height: 120px;">
+          <span class="system">[AI Generator Ready] Attach a source document above to select grounding paragraphs.</span>
         </div>
       </div>
     </div>
@@ -53,31 +244,109 @@
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const subjectSelect = document.getElementById('import-subject-select');
-      const textarea = document.getElementById('import-text');
-      const logBox = document.getElementById('studio-logs');
-      const submitBtn = document.getElementById('submit-import-btn');
-      const insertTemplateBtn = document.getElementById('insert-template-btn');
+      // ====================================================================
+      // Tab Switching
+      // ====================================================================
+      const tabButtons = document.querySelectorAll('.studio-tab-btn');
+      const tabPanels = document.querySelectorAll('.studio-tab-panel');
 
-      // Load subjects dynamically
+      tabButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.dataset.tab;
+          tabButtons.forEach(b => b.classList.remove('active'));
+          tabPanels.forEach(p => p.classList.remove('active'));
+          btn.classList.add('active');
+          document.getElementById('tab-' + target).classList.add('active');
+        });
+      });
+
+      // ====================================================================
+      // Shared: load subjects for all three tabs' dropdowns
+      // ====================================================================
+      let allSubjects = [];
+
+      function populateSubjectDropdown(selectEl, autoSelect = true) {
+        selectEl.innerHTML = '<option value="">-- Select Subject --</option>';
+        allSubjects.forEach(sub => {
+          const opt = document.createElement('option');
+          opt.value = sub.id;
+          opt.textContent = sub.name;
+          selectEl.appendChild(opt);
+        });
+        if (autoSelect && allSubjects.length > 0) {
+          selectEl.value = allSubjects[0].id;
+        }
+      }
+
       fetch('/api/subjects')
         .then(res => res.json())
         .then(subjects => {
+          allSubjects = subjects;
           if (subjects.length > 0) {
-            subjectSelect.innerHTML = '';
+            // Tab 1: Import Flashcards subject select
+            const flashcardsSelect = document.getElementById('import-subject-select');
+            flashcardsSelect.innerHTML = '';
             subjects.forEach(sub => {
               const opt = document.createElement('option');
               opt.value = sub.id;
               opt.textContent = sub.name;
-              subjectSelect.appendChild(opt);
+              flashcardsSelect.appendChild(opt);
             });
+            flashcardsSelect.value = subjects[0].id;
+
+            // Tab 2: Import Sources subject select
+            populateSubjectDropdown(document.getElementById('source-subject-select'));
+
+            // Tab 3: AI Generator subject select
+            populateSubjectDropdown(document.getElementById('gen-subject-select'));
           }
         })
         .catch(err => {
           console.error('Error loading subjects:', err);
         });
 
-      // Insert example template helper
+      // ====================================================================
+      // Tab 2: Source subject change → populate source dropdown in Tab 3
+      // ====================================================================
+      const genSubjectSelect = document.getElementById('gen-subject-select');
+      const genSourceSelect = document.getElementById('gen-source-select');
+
+      if (genSubjectSelect) {
+        genSubjectSelect.addEventListener('change', () => {
+          const subId = genSubjectSelect.value;
+          genSourceSelect.innerHTML = '<option value="">-- Select source (optional) --</option>';
+          if (genSourceSelect) {
+            genSourceSelect.dispatchEvent(new Event('change'));
+          }
+          if (!subId) return;
+
+          fetch('/api/subjects/' + subId + '/sources')
+            .then(res => res.json())
+            .then(sources => {
+              if (sources.length === 0) {
+                genSourceSelect.innerHTML = '<option value="">No sources imported yet</option>';
+                return;
+              }
+              sources.forEach(src => {
+                const opt = document.createElement('option');
+                opt.value = src.id;
+                opt.textContent = src.title;
+                genSourceSelect.appendChild(opt);
+              });
+            })
+            .catch(err => console.error('Error fetching sources:', err));
+        });
+      }
+
+      // ====================================================================
+      // Tab 1: Import Flashcards (existing logic)
+      // ====================================================================
+      const flashcardsSelect = document.getElementById('import-subject-select');
+      const textarea = document.getElementById('import-text');
+      const logBox = document.getElementById('studio-logs');
+      const submitBtn = document.getElementById('submit-import-btn');
+      const insertTemplateBtn = document.getElementById('insert-template-btn');
+
       const exampleTemplate = `CARD civil-1
 FRONT (shape): Two buyers, one immovable, one registered.
 FRONT (trigger words): double sale, registered first
@@ -93,7 +362,6 @@ SOURCE: Civil Code Art. 1544`;
         handleValidation();
       });
 
-      // Real-time validation handler
       textarea.addEventListener('input', handleValidation);
 
       function handleValidation() {
@@ -109,7 +377,7 @@ SOURCE: Civil Code Art. 1544`;
 
       submitBtn.addEventListener('click', () => {
         const text = textarea.value;
-        const subjectId = subjectSelect.value;
+        const subjectId = flashcardsSelect.value;
 
         logBox.innerHTML = '<span class="system">[Network] Sending payload to ingestion parser...</span>';
         submitBtn.disabled = true;
@@ -141,6 +409,316 @@ SOURCE: Civil Code Art. 1544`;
         });
       });
 
+      // ====================================================================
+      // Tab 2: Import Sources
+      // ====================================================================
+      const sourceSubjectSelect = document.getElementById('source-subject-select');
+      const sourceNameInput = document.getElementById('source-name-input');
+      const sourceIdInput = document.getElementById('source-id-input');
+      const sourceTextInput = document.getElementById('source-text-input');
+      const sourceSubmitBtn = document.getElementById('source-submit-btn');
+      const sourceLogs = document.getElementById('source-logs');
+
+      // Auto-fill source ID from name
+      sourceNameInput.addEventListener('input', () => {
+        const slug = sourceNameInput.value
+          .toLowerCase()
+          .replace(/[^a-z0-9\s-]/g, '')
+          .replace(/\s+/g, '-')
+          .replace(/-+/g, '-')
+          .replace(/^-|-$/g, '');
+        if (!sourceIdInput.dataset.manual || sourceIdInput.value === '') {
+          sourceIdInput.value = slug;
+        }
+      });
+      sourceIdInput.addEventListener('input', () => {
+        sourceIdInput.dataset.manual = 'true';
+      });
+
+      sourceSubmitBtn.addEventListener('click', () => {
+        const subjectId = sourceSubjectSelect.value;
+        const subjectName = sourceSubjectSelect.options[sourceSubjectSelect.selectedIndex]?.textContent || subjectId;
+        const sourceId = sourceIdInput.value.trim();
+        const title = sourceNameInput.value.trim();
+        const text = sourceTextInput.value.trim();
+
+        if (!subjectId) {
+          sourceLogs.innerHTML = '<span class="err"><strong>Error:</strong> Please select a subject.</span>';
+          return;
+        }
+        if (!sourceId) {
+          sourceLogs.innerHTML = '<span class="err"><strong>Error:</strong> Please enter a source ID (slug).</span>';
+          return;
+        }
+        if (!title) {
+          sourceLogs.innerHTML = '<span class="err"><strong>Error:</strong> Please enter a source name.</span>';
+          return;
+        }
+        if (!text || text.length < 50) {
+          sourceLogs.innerHTML = '<span class="err"><strong>Error:</strong> Please paste at least 50 characters of codal text.</span>';
+          return;
+        }
+
+        sourceLogs.innerHTML = '<span class="system">[Network] Sending source text to ingestion pipeline...</span>';
+        sourceSubmitBtn.disabled = true;
+
+        fetch('/api/import-source', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subjectId, subjectName, sourceId, title, text })
+        })
+        .then(res => {
+          if (!res.ok) return res.json().then(errData => { throw errData; });
+          return res.json();
+        })
+        .then(res => {
+          const reimportNote = res.replaced
+            ? ` (Replaced previous import of "${escapeHtml(title)}")`
+            : '';
+          sourceLogs.innerHTML = `<span class="ok"><strong>Source Imported!</strong> Created ${res.paragraphs} paragraphs from "${escapeHtml(title)}" under subject "${escapeHtml(subjectId)}".${reimportNote} The Codal Reader is now populated for this subject.</span>`;
+          sourceTextInput.value = '';
+          sourceSubmitBtn.disabled = false;
+        })
+        .catch(err => {
+          const errorMsg = err.error || err.message || 'Unknown Error';
+          sourceLogs.innerHTML = `<span class="err"><strong>Import Failed:</strong> ${escapeHtml(errorMsg)}</span>`;
+          sourceSubmitBtn.disabled = false;
+        });
+      });
+
+      // ====================================================================
+      // Tab 2: Seed All Sources (batch import all pipeline files)
+      // ====================================================================
+      const seedAllBtn = document.getElementById('seed-all-btn');
+
+      seedAllBtn.addEventListener('click', () => {
+        if (!confirm('This will import all 12 bar subject codal sources from the pipeline/sources/ directory (Civil Code, RPC, Constitution, etc.). This may take a moment. Continue?')) {
+          return;
+        }
+        sourceLogs.innerHTML = '<span class="system">[Batch] Seeding all pipeline sources... reading subject-sources.json manifest...</span>';
+        seedAllBtn.disabled = true;
+        sourceSubmitBtn.disabled = true;
+
+        fetch('/api/seed-sources', { method: 'POST', headers: { 'Content-Type': 'application/json' } })
+          .then(res => {
+            if (!res.ok) return res.json().then(errData => { throw errData; });
+            return res.json();
+          })
+          .then(res => {
+            let log = `<span class="ok"><strong>Batch Seed Complete!</strong></span><br><br>`;
+            const results = res.results || [];
+            results.forEach(r => {
+              const icon = r.status === 'ok' ? '✅' : '❌';
+              log += `<span class="${r.status === 'ok' ? 'ok' : 'err'}">${icon} ${r.subject}: ${r.title} — ${r.paragraphs || 0} paragraphs${r.reimported ? ' (replaced)' : ''}</span><br>`;
+            });
+            log += `<br><span class="system">${res.summary}</span>`;
+            sourceLogs.innerHTML = log;
+            seedAllBtn.disabled = false;
+            sourceSubmitBtn.disabled = false;
+          })
+          .catch(err => {
+            sourceLogs.innerHTML = `<span class="err"><strong>Batch Seed Failed:</strong> ${escapeHtml(err.error || err.message || 'Unknown error')}</span>`;
+            seedAllBtn.disabled = false;
+            sourceSubmitBtn.disabled = false;
+          });
+      });
+
+      // ====================================================================
+      // Tab 3: AI Generator (wired)
+      // ====================================================================
+      const genParagraphsContainer = document.getElementById('gen-paragraphs-container');
+      const genParagraphsList = document.getElementById('gen-paragraphs-list');
+      const genParaSearch = document.getElementById('gen-para-search');
+      const genSelectionSummary = document.getElementById('gen-selection-summary');
+      const genSelectAllBtn = document.getElementById('gen-para-select-all');
+      const genClearBtn = document.getElementById('gen-para-clear');
+      
+      const genSubmitBtn = document.getElementById('gen-submit-btn');
+      const genImportBtn = document.getElementById('gen-import-btn');
+      const genLogs = document.getElementById('gen-logs');
+      const genPromptInput = document.getElementById('gen-prompt-input');
+
+      let paragraphsData = [];
+      let generatedMarkdown = '';
+
+      if (genSourceSelect) {
+        genSourceSelect.addEventListener('change', () => {
+          const sourceId = genSourceSelect.value;
+          paragraphsData = [];
+          genParagraphsList.innerHTML = '';
+          genParagraphsContainer.style.display = 'none';
+          genSelectionSummary.textContent = '0 paragraphs selected';
+          genImportBtn.style.display = 'none';
+
+          if (!sourceId) return;
+
+          genLogs.innerHTML = '<span class="system">[Loading] Fetching source paragraphs...</span>';
+          fetch(`/api/sources/${sourceId}/paragraphs`)
+            .then(res => res.json())
+            .then(paras => {
+              paragraphsData = paras;
+              genParagraphsContainer.style.display = 'block';
+              renderParagraphs();
+              genLogs.innerHTML = `<span class="system">[Loaded] ${paras.length} paragraphs loaded from source. Select the ones you wish to ground generation.</span>`;
+            })
+            .catch(err => {
+              genLogs.innerHTML = `<span class="err">Error loading paragraphs: ${err.message}</span>`;
+            });
+        });
+      }
+
+      function renderParagraphs() {
+        const query = genParaSearch.value.toLowerCase();
+        genParagraphsList.innerHTML = '';
+
+        const filtered = paragraphsData.filter(p => 
+          p.anchor_id.toLowerCase().includes(query) || 
+          p.content_text.toLowerCase().includes(query)
+        );
+
+        if (filtered.length === 0) {
+          genParagraphsList.innerHTML = '<div style="opacity: 0.6; font-size: 13px; text-align: center; padding: 20px;">No matching paragraphs found.</div>';
+          return;
+        }
+
+        filtered.forEach(p => {
+          const item = document.createElement('div');
+          item.style.display = 'flex';
+          item.style.alignItems = 'flex-start';
+          item.style.gap = '8px';
+          item.style.marginBottom = '6px';
+          item.style.fontSize = '13px';
+          item.style.cursor = 'pointer';
+
+          const cb = document.createElement('input');
+          cb.type = 'checkbox';
+          cb.value = p.id;
+          cb.dataset.anchor = p.anchor_id;
+          cb.style.marginTop = '3px';
+          cb.checked = p.checked || false;
+
+          cb.addEventListener('change', () => {
+            p.checked = cb.checked;
+            updateSelectionCount();
+          });
+
+          item.addEventListener('click', (e) => {
+            if (e.target !== cb) {
+              cb.checked = !cb.checked;
+              p.checked = cb.checked;
+              updateSelectionCount();
+            }
+          });
+
+          const label = document.createElement('div');
+          label.innerHTML = `<strong>${escapeHtml(p.anchor_id)}</strong>: ${escapeHtml(p.content_text.substring(0, 120))}${p.content_text.length > 120 ? '...' : ''}`;
+          
+          item.appendChild(cb);
+          item.appendChild(label);
+          genParagraphsList.appendChild(item);
+        });
+      }
+
+      function updateSelectionCount() {
+        const count = paragraphsData.filter(p => p.checked).length;
+        genSelectionSummary.textContent = `${count} paragraphs selected`;
+      }
+
+      genParaSearch.addEventListener('input', renderParagraphs);
+
+      genSelectAllBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        paragraphsData.forEach(p => p.checked = true);
+        renderParagraphs();
+        updateSelectionCount();
+      });
+
+      genClearBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        paragraphsData.forEach(p => p.checked = false);
+        renderParagraphs();
+        updateSelectionCount();
+      });
+
+      genSubmitBtn.addEventListener('click', () => {
+        const subjectId = genSubjectSelect.value;
+        const sourceId = genSourceSelect.value;
+        const prompt = genPromptInput.value.trim();
+        const selectedParaIds = paragraphsData.filter(p => p.checked).map(p => p.id);
+
+        if (!subjectId) {
+          genLogs.innerHTML = '<span class="err"><strong>Error:</strong> Please select a subject.</span>';
+          return;
+        }
+        if (!prompt) {
+          genLogs.innerHTML = '<span class="err"><strong>Error:</strong> Please enter a generation prompt.</span>';
+          return;
+        }
+
+        genLogs.innerHTML = '<span class="system">[AI Generator] Sending prompt to LiteLLM gateway... (this may take 15-30 seconds)</span>';
+        genSubmitBtn.disabled = true;
+        genImportBtn.style.display = 'none';
+
+        fetch('/api/generate/flashcards', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subjectId,
+            sourceId: sourceId || null,
+            paragraphIds: selectedParaIds,
+            prompt
+          })
+        })
+        .then(res => {
+          if (!res.ok) return res.json().then(e => { throw e; });
+          return res.json();
+        })
+        .then(res => {
+          generatedMarkdown = res.markdown;
+          genLogs.innerHTML = `<span class="ok"><strong>Generation Complete!</strong> Review the markdown below:</span><br><br><pre style="white-space: pre-wrap; font-family: monospace; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; font-size: 13px;">${escapeHtml(generatedMarkdown)}</pre>`;
+          genSubmitBtn.disabled = false;
+          genImportBtn.style.display = 'block';
+        })
+        .catch(err => {
+          genLogs.innerHTML = `<span class="err"><strong>Generation Failed:</strong> ${escapeHtml(err.error || err.message || 'Unknown error')}</span>`;
+          genSubmitBtn.disabled = false;
+        });
+      });
+
+      genImportBtn.addEventListener('click', () => {
+        const subjectId = genSubjectSelect.value;
+        if (!generatedMarkdown) return;
+
+        genLogs.innerHTML = '<span class="system">[Inbound Ingestion] Ingesting generated cards into the database...</span>';
+        genImportBtn.disabled = true;
+
+        fetch('/api/import', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subjectId,
+            markdown: generatedMarkdown
+          })
+        })
+        .then(res => {
+          if (!res.ok) return res.json().then(e => { throw e; });
+          return res.json();
+        })
+        .then(res => {
+          genLogs.innerHTML = `<span class="ok"><strong>Import Success!</strong> Ingested ${res.count} shapes and flashcards into the database.</span><br><br><pre style="white-space: pre-wrap; font-family: monospace; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 4px; font-size: 13px;">${escapeHtml(generatedMarkdown)}</pre>`;
+          genImportBtn.disabled = false;
+          genImportBtn.style.display = 'none';
+          generatedMarkdown = '';
+        })
+        .catch(err => {
+          genLogs.innerHTML = `<span class="err"><strong>Import Failed:</strong> ${escapeHtml(err.error || err.message)}</span>`;
+          genImportBtn.disabled = false;
+        });
+      });
+
+      // ====================================================================
+      // Helpers
+      // ====================================================================
       function escapeHtml(str) {
         if (!str) return '';
         return str
@@ -151,6 +729,19 @@ SOURCE: Civil Code Art. 1544`;
           .replace(/'/g, '&#039;');
       }
     });
+  </script>
+  <script>
+    (function() {
+      var btn = document.getElementById('nav-toggle');
+      var nav = document.getElementById('nav-links');
+      if (btn && nav) {
+        btn.addEventListener('click', function() {
+          var open = nav.classList.toggle('open');
+          btn.classList.toggle('open', open);
+          btn.setAttribute('aria-expanded', open);
+        });
+      }
+    })();
   </script>
 </body>
 </html>
