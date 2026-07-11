@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ALAC Practice — Bar Exam Answer Builder</title>
+  <meta name="description" content="Practice ALAC (Answer, Law, Application, Conclusion) bar exam answer writing with real fact patterns from the retrieval funnel.">
+  <link rel="stylesheet" href="app.css">
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav-header">
+      <h1>ALAC <em>Practice</em></h1>
+      <nav class="nav-links">
+        <a href="index.html">Dashboard</a>
+        <a href="deck.html">Study Deck</a>
+        <a href="reader.html">Codal Reader</a>
+        <a href="studio.html">Studio</a>
+        <a href="alac.html">ALAC Practice</a>
+      </nav>
+    </header>
+
+    <section style="margin-bottom: 24px;">
+      <p class="description-text">
+        Practice structured bar exam answers using the <strong>ALAC</strong> framework: <strong>A</strong>nswer → <strong>L</strong>aw → <strong>A</strong>pplication → <strong>C</strong>onclusion. Select a subject to load a fact pattern, write your answer, then reveal the model answer key.
+      </p>
+      <div style="display: flex; align-items: center; gap: 16px; flex-wrap: wrap;">
+        <div class="dropdown-container">
+          <label for="alac-subject-dropdown" style="font-weight: 600; font-size: 14px; color: var(--gold-deep);">Subject:</label>
+          <select id="alac-subject-dropdown" class="select-box">
+            <option value="">-- Choose subject --</option>
+          </select>
+        </div>
+        <span id="alac-progress" style="font-family: 'IBM Plex Mono', monospace; font-size: 13px; color: #7a7e74;"></span>
+      </div>
+    </section>
+
+    <div class="alac-layout">
+      <!-- Left: Fact Pattern Panel -->
+      <div class="alac-fact-panel">
+        <div class="alac-fact-header">
+          <span class="alac-label-badge">📋 Fact Pattern</span>
+        </div>
+        <div id="alac-fact-display" class="alac-fact-text">
+          Select a subject above to load a question.
+        </div>
+        <div style="margin-top: 24px; display: flex; gap: 12px; flex-wrap: wrap;">
+          <button id="alac-reveal-btn" class="alac-reveal-btn">🔑 Reveal Answer Key</button>
+          <button id="alac-next-btn" class="btn-premium">Next Question →</button>
+        </div>
+      </div>
+
+      <!-- Right: Answer Builder Panel -->
+      <div class="alac-answer-panel">
+        <div class="alac-section alac-section-a">
+          <div class="alac-section-header">
+            <span class="alac-letter">A</span>
+            <span class="alac-section-title">Answer</span>
+            <span class="alac-section-hint">What is your direct answer? (1–2 sentences)</span>
+          </div>
+          <textarea id="alac-answer-text" class="alac-textarea" placeholder="State your direct answer to the question raised..."></textarea>
+        </div>
+
+        <div class="alac-section alac-section-l">
+          <div class="alac-section-header">
+            <span class="alac-letter">L</span>
+            <span class="alac-section-title">Law</span>
+            <span class="alac-section-hint">What provision applies? (Article/Section, elements)</span>
+          </div>
+          <textarea id="alac-law-text" class="alac-textarea" placeholder="Cite the applicable provision and enumerate its elements..."></textarea>
+        </div>
+
+        <div class="alac-section alac-section-app">
+          <div class="alac-section-header">
+            <span class="alac-letter">A</span>
+            <span class="alac-section-title">Application</span>
+            <span class="alac-section-hint">Apply the elements to the specific facts.</span>
+          </div>
+          <textarea id="alac-application-text" class="alac-textarea" placeholder="Apply each element of the law to the facts given..."></textarea>
+        </div>
+
+        <div class="alac-section alac-section-c">
+          <div class="alac-section-header">
+            <span class="alac-letter">C</span>
+            <span class="alac-section-title">Conclusion</span>
+            <span class="alac-section-hint">Restate your answer.</span>
+          </div>
+          <textarea id="alac-conclusion-text" class="alac-textarea" placeholder="Therefore, [restate your direct answer]..."></textarea>
+        </div>
+      </div>
+    </div>
+
+    <!-- Answer Key Panel (hidden until revealed) -->
+    <div id="answer-key-panel" class="answer-key-panel">
+      <div class="answer-key-header">
+        <span>🔑 Model Answer Key</span>
+        <span style="font-size: 12px; opacity: 0.7; font-family: 'IBM Plex Mono', monospace;">Compare your answer against the model below</span>
+      </div>
+      <div class="answer-key-body">
+        <div class="answer-key-section">
+          <div class="answer-key-label">Applicable Provision</div>
+          <div id="alac-key-provision" class="answer-key-provision"></div>
+        </div>
+        <div class="answer-key-section">
+          <div class="answer-key-label">Elements Checklist</div>
+          <ol id="alac-key-elements" class="answer-key-elements"></ol>
+        </div>
+        <div class="answer-key-section" id="alac-key-confusion-section">
+          <div class="answer-key-label">⚠️ Common Confusion</div>
+          <div id="alac-key-confusion" class="answer-key-confusion"></div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      Memory Engineering Pipeline &copy; 2026. ALAC Practice — Answer · Law · Application · Conclusion
+    </footer>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
