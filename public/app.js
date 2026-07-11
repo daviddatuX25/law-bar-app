@@ -8,67 +8,61 @@ document.addEventListener('DOMContentLoaded', () => {
   const tier3Content = document.getElementById('tier-3-content');
   const funnelTiers = document.querySelectorAll('.funnel-tier');
 
-  if (!dropdown) return;
+  if (dropdown) {
+    // Initialize tier expand/collapse toggles
+    funnelTiers.forEach(tier => {
+      tier.addEventListener('click', (e) => {
+        if (e.target.closest('.tier-body')) {
+          return;
+        }
+        const isOpen = tier.classList.contains('open');
+        if (!isOpen) {
+          funnelTiers.forEach(t => t.classList.remove('open'));
+          tier.classList.add('open');
+        } else {
+          tier.classList.remove('open');
+        }
+      });
+    });
 
-  // Initialize tier expand/collapse toggles
-  funnelTiers.forEach(tier => {
-    tier.addEventListener('click', (e) => {
-      // Don't close/toggle when clicking inside the expanded body text or dropdowns
-      if (e.target.closest('.tier-body')) {
+    // Load all subjects on startup
+    fetch('/api/subjects')
+      .then(res => res.json())
+      .then(subjects => {
+        dropdown.innerHTML = '<option value="">-- Select Subject --</option>';
+        subjects.forEach(sub => {
+          const opt = document.createElement('option');
+          opt.value = sub.id;
+          opt.textContent = sub.name;
+          dropdown.appendChild(opt);
+        });
+      })
+      .catch(err => {
+        console.error('Error loading subjects:', err);
+        dropdown.innerHTML = '<option value="">Failed to load subjects</option>';
+      });
+
+    // Handle subject change
+    dropdown.addEventListener('change', () => {
+      const subjectId = dropdown.value;
+      if (!subjectId) {
+        resetDashboard();
         return;
       }
-      
-      // Toggle class
-      const isOpen = tier.classList.contains('open');
-      
-      // Option: Close other tiers on open (accordion style)
-      if (!isOpen) {
-        funnelTiers.forEach(t => t.classList.remove('open'));
-        tier.classList.add('open');
-      } else {
-        tier.classList.remove('open');
-      }
-    });
-  });
 
-  // Load all subjects on startup
-  fetch('/api/subjects')
-    .then(res => res.json())
-    .then(subjects => {
-      dropdown.innerHTML = '<option value="">-- Select Subject --</option>';
-      subjects.forEach(sub => {
-        const opt = document.createElement('option');
-        opt.value = sub.id;
-        opt.textContent = sub.name;
-        dropdown.appendChild(opt);
+      Promise.all([
+        fetch(`/api/subjects/${subjectId}/deck`).then(res => res.json()),
+        fetch(`/api/subjects/${subjectId}/triggers`).then(res => res.json())
+      ])
+      .then(([deckData, triggersData]) => {
+        updateDashboard(deckData, triggersData);
+      })
+      .catch(err => {
+        console.error('Error loading subject details:', err);
+        showErrorState();
       });
-    })
-    .catch(err => {
-      console.error('Error loading subjects:', err);
-      dropdown.innerHTML = '<option value="">Failed to load subjects</option>';
     });
-
-  // Handle subject change
-  dropdown.addEventListener('change', () => {
-    const subjectId = dropdown.value;
-    if (!subjectId) {
-      resetDashboard();
-      return;
-    }
-
-    // Load data from endpoints
-    Promise.all([
-      fetch(`/api/subjects/${subjectId}/deck`).then(res => res.json()),
-      fetch(`/api/subjects/${subjectId}/triggers`).then(res => res.json())
-    ])
-    .then(([deckData, triggersData]) => {
-      updateDashboard(deckData, triggersData);
-    })
-    .catch(err => {
-      console.error('Error loading subject details:', err);
-      showErrorState();
-    });
-  });
+  }
 
   function resetDashboard() {
     tier1Badge.textContent = '0 provisions';
