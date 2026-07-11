@@ -2,7 +2,7 @@ const express = require('express');
 const path = require('path');
 const { parseMarkdown } = require('./parser');
 
-function startServer(db, port = process.env.PORT || 3000) {
+function startServer(db, port = process.env.PORT || 3005) {
   const app = express();
   app.use(express.json());
   app.use(express.static(path.join(__dirname, 'public')));
