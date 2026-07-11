@@ -5,7 +5,7 @@
 - [x] Task 3: Seed Pipeline and Relational Verification
 - [x] Task 4: Express API Routing
 - [x] Task 5: Premium CSS Design Tokens & Funnel Dashboard
-- [ ] Task 6: Interactive Study Deck & Decoy Cards Drill
+- [x] Task 6: Interactive Study Deck & Decoy Cards Drill
 - [ ] Task 7: Split-Screen Document Reader & Connector
 - [ ] Task 8: Creator and Importer Studio
 - [ ] Task 9: MCP Server Framework Integration
