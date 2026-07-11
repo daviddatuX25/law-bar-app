@@ -163,7 +163,8 @@ test('Express Server API routes', async (t) => {
     assert.strictEqual(res404.statusCode || res404.status, 404);
   });
 
-  await t.test('GET /api/sources/:id/paragraphs returns list of paragraphs', async () => {
+  await t.test('GET /api/sources/:id/paragraphs returns list of paragraphs or 404', async () => {
+    // Valid source
     const res = await fetch('http://localhost:3001/api/sources/source-1/paragraphs');
     assert.strictEqual(res.statusCode || res.status, 200);
     const data = await res.json();
@@ -172,6 +173,10 @@ test('Express Server API routes', async (t) => {
     assert.strictEqual(data[0].id, 'source-1:p1');
     assert.strictEqual(data[0].anchor_id, 'p1');
     assert.strictEqual(data[0].content_text, 'A fee simple absolute is the largest estate known to the law.');
+
+    // Non-existent source
+    const res404 = await fetch('http://localhost:3001/api/sources/non-existent-source/paragraphs');
+    assert.strictEqual(res404.statusCode || res404.status, 404);
   });
 
   await t.test('GET /api/subjects/:id/sources returns sources list', async () => {

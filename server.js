@@ -285,7 +285,7 @@ function startServer(db, port = process.env.PORT || 3005) {
       }
       
       const subName = SUBJECT_NAMES[subjectId] || subjectId;
-      systemPrompt = systemPrompt.replace('{{SUBJECT}}', subName);
+      systemPrompt = systemPrompt.replaceAll('{{SUBJECT}}', subName);
 
       // 2. Load grounding paragraphs if any
       let groundingContext = '';
