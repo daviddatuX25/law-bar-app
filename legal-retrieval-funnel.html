@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>The Retrieval Funnel — Legal Memory Engineering</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --ink:#1b211d;
+    --paper:#f6f2e9;
+    --panel:#efe8d8;
+    --rule:#cabf9f;
+    --line:rgba(27,33,29,.13);
+    --gold:#a9752f;
+    --gold-deep:#7d5620;
+    --green:#3f5d43;
+    --green-deep:#29402c;
+    --red:#a13d2b;
+    --blue:#2f4d63;
+    --shadow:0 10px 28px rgba(27,33,29,.13);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1100px 700px at 8% -8%, rgba(169,117,47,.08), transparent 58%),
+      radial-gradient(900px 600px at 100% 4%, rgba(63,93,67,.07), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:1160px; margin:0 auto; padding:30px 18px 90px;}
+
+  header{border-bottom:1px solid var(--line); padding-bottom:24px; margin-bottom:8px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:.14em;
+    text-transform:uppercase; color:var(--gold-deep);
+    display:flex; align-items:center; gap:10px; margin-bottom:14px;
+  }
+  .eyebrow::before{content:""; width:22px; height:1px; background:var(--gold-deep);}
+  h1{
+    font-family:'Fraunces', serif; font-weight:600; font-size:clamp(26px,4.6vw,42px);
+    line-height:1.06; margin:0 0 12px; letter-spacing:-.01em;
+  }
+  h1 em{font-style:italic; font-weight:500; color:var(--green-deep);}
+  .sub{font-size:15px; line-height:1.6; color:#4a5049; max-width:680px; margin:0;}
+
+  /* ---------- FUNNEL ---------- */
+  .funnel{
+    margin-top:36px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:0;
+  }
+  .tier{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:20px 22px;
+    box-shadow:var(--shadow);
+    position:relative;
+    cursor:pointer;
+    transition: transform .25s ease, box-shadow .25s ease;
+    margin-bottom:14px;
+  }
+  .tier:hover{transform:translateY(-2px);}
+  .tier:last-child{margin-bottom:0;}
+
+  /* Width narrows tier by tier to visually BE a funnel */
+  .tier[data-w="100"]{max-width:920px;}
+  .tier[data-w="82"]{max-width:754px;}
+  .tier[data-w="64"]{max-width:588px;}
+  .tier[data-w="46"]{max-width:422px;}
+  .tier[data-w="30"]{max-width:274px;}
+
+  .tier .tnum{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.1em;
+    text-transform:uppercase; color:var(--gold-deep); margin-bottom:6px;
+    display:flex; align-items:center; justify-content:space-between;
+  }
+  .tier .tnum .count{
+    font-size:10px; color:#8a8d80; font-weight:500;
+  }
+  .tier h3{
+    font-family:'Fraunces', serif; font-size:19px; font-weight:600; margin:0 0 6px; line-height:1.2;
+  }
+  .tier p.desc{font-size:13.5px; line-height:1.55; color:#4a5049; margin:0 0 10px;}
+  .tier .expand-hint{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:#8a8d80;
+    display:flex; align-items:center; gap:6px;
+  }
+  .tier .expand-hint .arrow{transition:transform .3s ease; display:inline-block;}
+  .tier.open .expand-hint .arrow{transform:rotate(90deg);}
+
+  .tier-1{background:linear-gradient(135deg, rgba(47,77,99,.13), var(--panel)); border-color:rgba(47,77,99,.35);}
+  .tier-2{background:linear-gradient(135deg, rgba(63,93,67,.13), var(--panel)); border-color:rgba(63,93,67,.35);}
+  .tier-3{background:linear-gradient(135deg, rgba(169,117,47,.15), var(--panel)); border-color:rgba(169,117,47,.4);}
+  .tier-4{background:linear-gradient(135deg, rgba(161,61,43,.13), var(--panel)); border-color:rgba(161,61,43,.35);}
+  .tier-5{background:linear-gradient(135deg, rgba(125,86,32,.22), var(--panel)); border-color:var(--gold-deep);}
+
+  .tier-1 .tnum{color:var(--blue);}
+  .tier-2 .tnum{color:var(--green-deep);}
+  .tier-4 .tnum{color:var(--red);}
+
+  .tier-body{
+    max-height:0;
+    overflow:hidden;
+    transition: max-height .4s ease, opacity .3s ease, margin-top .3s ease;
+    opacity:0;
+  }
+  .tier.open .tier-body{
+    max-height:900px;
+    opacity:1;
+    margin-top:12px;
+  }
+
+  .tier-body-inner{
+    border-top:1px dashed var(--rule);
+    padding-top:14px;
+    display:grid;
+    gap:10px;
+  }
+  .row{
+    display:grid;
+    grid-template-columns: 90px 1fr;
+    gap:12px;
+    align-items:start;
+    font-size:13.5px;
+    line-height:1.55;
+  }
+  .row .rlabel{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.05em;
+    text-transform:uppercase;
+    color:#6b6f65;
+    padding-top:2px;
+  }
+  .row .rval b{color:var(--ink);}
+  .row .rval{color:#3a3f38;}
+  .example-chip{
+    display:inline-block;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    background:rgba(0,0,0,.05);
+    border:1px solid var(--line);
+    padding:4px 9px;
+    border-radius:7px;
+    margin:2px 6px 2px 0;
+  }
+
+  /* connecting funnel lines between tiers */
+  .connector{
+    width:1px;
+    height:14px;
+    background:repeating-linear-gradient(to bottom, var(--rule) 0 4px, transparent 4px 8px);
+    margin:-2px 0;
+  }
+
+  /* ---------- WORKED EXAMPLE ---------- */
+  .worked{
+    margin-top:44px;
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:24px;
+    box-shadow:var(--shadow);
+  }
+  .worked h2{font-family:'Fraunces', serif; font-size:20px; margin:0 0 6px;}
+  .worked .wsub{font-size:13px; color:#6b6f65; margin:0 0 20px;}
+
+  .fact-input{
+    font-family:'Fraunces', serif;
+    font-style:italic;
+    font-size:15px;
+    line-height:1.6;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:10px;
+    padding:14px 16px;
+    margin-bottom:18px;
+  }
+
+  .flow-steps{display:flex; flex-direction:column; gap:0;}
+  .flow-step{
+    display:grid;
+    grid-template-columns: 34px 1fr;
+    gap:14px;
+    position:relative;
+    padding-bottom:22px;
+  }
+  .flow-step:last-child{padding-bottom:0;}
+  .flow-step::before{
+    content:"";
+    position:absolute;
+    left:16px; top:30px; bottom:0;
+    width:1px;
+    background:var(--rule);
+  }
+  .flow-step:last-child::before{display:none;}
+  .fs-dot{
+    width:34px; height:34px; border-radius:50%;
+    background:var(--paper);
+    border:2px solid var(--gold);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:13px;
+    color:var(--gold-deep);
+    z-index:1;
+  }
+  .fs-content h4{font-family:'Fraunces', serif; font-size:15.5px; margin:0 0 4px; font-weight:600;}
+  .fs-content p{font-size:13.5px; line-height:1.55; margin:0; color:#3a3f38;}
+  .fs-content .tiny{font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--gold-deep); text-transform:uppercase; letter-spacing:.06em; margin-bottom:3px;}
+
+  /* ---------- TECHNIQUE CARDS ---------- */
+  .techniques{margin-top:44px;}
+  .techniques h2{font-family:'Fraunces', serif; font-size:20px; margin:0 0 6px;}
+  .techniques .wsub{font-size:13px; color:#6b6f65; margin:0 0 20px;}
+  .tech-grid{
+    display:grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap:14px;
+  }
+  .tech-card{
+    background:var(--panel);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px;
+    box-shadow:var(--shadow);
+  }
+  .tech-card .ticon{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+    color:var(--gold-deep);
+    background:rgba(169,117,47,.14);
+    display:inline-block;
+    padding:3px 8px;
+    border-radius:6px;
+    margin-bottom:10px;
+  }
+  .tech-card h4{font-family:'Fraunces', serif; font-size:15.5px; margin:0 0 8px;}
+  .tech-card p{font-size:13px; line-height:1.55; color:#3a3f38; margin:0;}
+
+  footer{
+    margin-top:40px; text-align:center; font-size:12px; color:#8a8d80;
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  @media(max-width:640px){
+    .tier[data-w]{max-width:100% !important;}
+    .row{grid-template-columns: 1fr;}
+    .row .rlabel{padding-top:0;}
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{transition-duration:.01ms !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Memory Engineering for Bar Exam Retrieval</div>
+    <h1>The <em>retrieval funnel</em><br>from everything you know<br>to what your pen writes</h1>
+    <p class="sub">The bottleneck on exam day was never how much law you memorized. It's how fast you narrow a whole subject's worth of provisions down to the 3–4 tools a specific fact pattern actually needs. This is that narrowing, engineered as five deliberate filters. Tap each tier to open it.</p>
+  </header>
+
+  <div class="funnel">
+
+    <div class="tier tier-1" data-w="100" data-tier="1">
+      <div class="tnum">Tier 1 — The Pool <span class="count">~8 bar subjects · thousands of provisions</span></div>
+      <h3>Everything you've ever read</h3>
+      <p class="desc">Civil Law, Criminal Law, Political Law, Remedial, Commercial, Labor, Taxation, Legal Ethics — undifferentiated, the way it sits after months of reading. This tier is not searchable under pressure. Nobody thinks "let me scan all of Civil Law" in a 4-minute window.</p>
+      <div class="expand-hint"><span class="arrow">▸</span> why this tier is useless alone</div>
+      <div class="tier-body"><div class="tier-body-inner">
+        <div class="row"><div class="rlabel">The trap</div><div class="rval">Most review time gets spent <b>refilling this pool</b> — more reading, more coverage — while the actual bottleneck is downstream. You can know 100% of the codal and still blank on exam day because nothing routes you from fact pattern to provision fast enough.</div></div>
+        <div class="row"><div class="rlabel">The fix</div><div class="rval">Stop treating Tier 1 as where retention happens. It's just inventory. Retention actually happens in Tiers 2–3 below — that's where you build the <b>index</b> into the inventory.</div></div>
+      </div></div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="tier tier-2" data-w="82" data-tier="2">
+      <div class="tnum">Tier 2 — Fact-Pattern Signatures <span class="count">~15–25 recurring shapes per subject</span></div>
+      <h3>The shape of the problem, not its story</h3>
+      <p class="desc">Bar examiners recycle a small number of underlying fact <em>shapes</em> dressed in new names every year. "Two buyers, one property" is a shape. "Someone relied on a defective delegation of authority" is a shape. You're not memorizing facts — you're building a pattern library of shapes.</p>
+      <div class="expand-hint"><span class="arrow">▸</span> how to build this layer</div>
+      <div class="tier-body"><div class="tier-body-inner">
+        <div class="row"><div class="rlabel">Technique</div><div class="rval">Every time you solve a practice problem, after you're done, strip out the names and dates and write the <b>shape</b> in one sentence. "Two innocent parties, one registered late" — that sentence is what you actually store, not the Ana/Ben/Diane story.</div></div>
+        <div class="row"><div class="rlabel">Example shapes</div><div class="rval">
+          <span class="example-chip">double sale, one unregistered</span>
+          <span class="example-chip">agent exceeded authority</span>
+          <span class="example-chip">confession obtained w/o counsel</span>
+          <span class="example-chip">void vs voidable marriage</span>
+          <span class="example-chip">warrantless search exception</span>
+        </div></div>
+        <div class="row"><div class="rlabel">Why it works</div><div class="rval">This is the layer that actually connects to Tier 1. A shape is a <b>hook</b> — your brain doesn't search all of Civil Law, it matches the shape and the provision comes attached to it, because you built that attachment on purpose during review.</div></div>
+      </div></div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="tier tier-3" data-w="64" data-tier="3">
+      <div class="tnum">Tier 3 — Trigger Words <span class="count">3–6 words per shape</span></div>
+      <h3>The words in the question that fire the shape</h3>
+      <p class="desc">Inside the fact pattern, specific words are doing the signaling — the examiner is telling you which shape this is, whether they mean to or not. This tier is the fastest one to drill, and the one most reviewees skip because it feels too simple to practice on purpose.</p>
+      <div class="expand-hint"><span class="arrow">▸</span> see the trigger-word map</div>
+      <div class="tier-body"><div class="tier-body-inner">
+        <div class="row"><div class="rlabel">"in good faith"</div><div class="rval">→ signals Tier 2 shape <b>double sale / possessor rights</b> → routes to Art. 1544 or possession provisions</div></div>
+        <div class="row"><div class="rlabel">"without... knowledge"</div><div class="rval">→ signals <b>fraud / vitiated consent / agency</b> shape → routes to Arts. on voidable contracts or agency</div></div>
+        <div class="row"><div class="rlabel">"forged deed"</div><div class="rval">→ signals <b>void, not voidable</b> → routes to nullity provisions, not rescission</div></div>
+        <div class="row"><div class="rlabel">"immediately after arrest"</div><div class="rval">→ signals <b>custodial investigation</b> shape → routes to Miranda rights / Art. III Sec. 12</div></div>
+        <div class="row"><div class="rlabel">Technique</div><div class="rval">Build a personal glossary of 40–60 trigger words as you review, each pointing to one shape. This is the single highest-yield memorization task in the whole funnel because it's small, concrete, and directly load-bearing on exam day.</div></div>
+      </div></div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="tier tier-4" data-w="46" data-tier="4">
+      <div class="tnum">Tier 4 — The Short List <span class="count">2–4 candidate provisions</span></div>
+      <h3>What you actually hold in working memory</h3>
+      <p class="desc">By this point you're not recalling the whole codal — you're holding a short list of 2–4 candidate rules that the trigger words surfaced, and choosing between them using the specific facts. This is the only tier that should feel like real-time thinking during the exam.</p>
+      <div class="expand-hint"><span class="arrow">▸</span> how to choose between candidates</div>
+      <div class="tier-body"><div class="tier-body-inner">
+        <div class="row"><div class="rlabel">Ask</div><div class="rval">Which candidate rule has <b>all its elements</b> satisfied by facts actually stated in the problem? Bar examiners write facts on purpose — an unused fact usually means you picked the wrong candidate.</div></div>
+        <div class="row"><div class="rlabel">Ask</div><div class="rval">Is there a <b>more specific</b> provision that overrides the general one? Specific beats general — this single check resolves a huge share of "which article do I cite" hesitation.</div></div>
+        <div class="row"><div class="rlabel">Discipline</div><div class="rval">Give yourself a hard cap — 30–45 seconds to choose. If you're still unsure past that, write your best answer and move; a decisive B-answer beats a blank A-answer.</div></div>
+      </div></div>
+    </div>
+
+    <div class="connector"></div>
+
+    <div class="tier tier-5" data-w="30" data-tier="5">
+      <div class="tnum">Tier 5 — Committed <span class="count">1 rule, on paper</span></div>
+      <h3>Feeds straight into ALAC</h3>
+      <p class="desc">One rule, chosen. This is where the first mind map you saw takes over — Answer, Legal Basis, Application, Conclusion. Everything above this line was retrieval. Everything from here is construction.</p>
+    </div>
+
+  </div>
+
+  <div class="worked">
+    <h2>Watch the funnel run on one problem</h2>
+    <p class="wsub">Same fact pattern as before — traced through all five tiers in real time.</p>
+    <div class="fact-input">"Ana sold her only parcel of land to Ben, delivering the title and possession. A week later, without Ana's knowledge, Carlo — who forged a fake deed — sold the same land to Diane, an innocent buyer who checked the title, found it clean, and paid full value."</div>
+
+    <div class="flow-steps">
+      <div class="flow-step">
+        <div class="fs-dot">1</div>
+        <div class="fs-content">
+          <div class="tiny">Trigger words fire</div>
+          <h4>"forged deed" · "checked the title" · "paid full value"</h4>
+          <p>Two signals compete: forgery (points toward nullity) and good-faith buyer language (points toward double sale / registration). You hold both candidates.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="fs-dot">2</div>
+        <div class="fs-content">
+          <div class="tiny">Shape match</div>
+          <h4>This is a double-sale shape, not a simple nullity shape</h4>
+          <p>The forged deed makes Carlo→Diane void as between Carlo and Ana — but the exam is really asking who wins between Ben and Diane, which is the classic "two buyers, one property" signature.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="fs-dot">3</div>
+        <div class="fs-content">
+          <div class="tiny">Short list narrows</div>
+          <h4>Candidates: Art. 1544 (double sale) vs. general nullity of void contracts</h4>
+          <p>Check: does Diane's registration in good faith satisfy every element Art. 1544 needs? Yes — the fact pattern gave you "checked the title" and "found it clean" on purpose.</p>
+        </div>
+      </div>
+      <div class="flow-step">
+        <div class="fs-dot">4</div>
+        <div class="fs-content">
+          <div class="tiny">Committed</div>
+          <h4>Art. 1544 — first registrant in good faith prevails</h4>
+          <p>One rule, chosen in under a minute. This is what hands off to the Answer–Legal Basis–Application–Conclusion writing you already have.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="techniques">
+    <h2>Six ways to actually build this, not just look at it</h2>
+    <p class="wsub">The funnel is the model. These are the drills that put it in your head.</p>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="ticon">Drill 01</div>
+        <h4>Reverse flashcards</h4>
+        <p>Normal flashcards go provision → meaning. Flip it: put a <b>fact-pattern shape</b> on the front, and force yourself to name the article on the back. This is the direction your brain actually needs on exam day.</p>
+      </div>
+      <div class="tech-card">
+        <div class="ticon">Drill 02</div>
+        <h4>Trigger-word glossary</h4>
+        <p>One running document per subject: word or phrase → shape it signals → provision it routes to. Add to it every time a practice question surprises you. By month 3 this document IS your Tier 3.</p>
+      </div>
+      <div class="tech-card">
+        <div class="ticon">Drill 03</div>
+        <h4>Strip-and-restate</h4>
+        <p>After every practice problem, delete the names and dates and rewrite the facts as one abstract sentence. This is what actually deposits a shape into Tier 2 — reading model answers does not.</p>
+      </div>
+      <div class="tech-card">
+        <div class="ticon">Drill 04</div>
+        <h4>Timed short-listing</h4>
+        <p>Practice stopping at Tier 4 on purpose — read a problem, name your 2–3 candidate provisions out loud, and stop before writing anything. Isolating retrieval from writing makes each one faster on its own.</p>
+      </div>
+      <div class="tech-card">
+        <div class="ticon">Drill 05</div>
+        <h4>Elements checklist, not article numbers</h4>
+        <p>Memorize provisions as a numbered checklist of elements, not as prose. "1544: (a) immovable (b) double sale (c) registration (d) good faith" recalls faster under stress than the codal sentence does.</p>
+      </div>
+      <div class="tech-card">
+        <div class="ticon">Drill 06</div>
+        <h4>Interleave, don't block</h4>
+        <p>Studying 20 Property questions in a row trains recognition, not retrieval, because you already know the subject going in. Mix subjects in one practice set so you rebuild the Tier 1→2 jump every single time, the way the actual bar does.</p>
+      </div>
+    </div>
+  </div>
+
+  <footer>tap any tier above to expand · the funnel only works if tiers 2 and 3 get built on purpose</footer>
+</div>
+
+<script>
+document.querySelectorAll('.tier').forEach(tier => {
+  tier.addEventListener('click', (e) => {
+    tier.classList.toggle('open');
+  });
+});
+</script>
+</body>
+</html>

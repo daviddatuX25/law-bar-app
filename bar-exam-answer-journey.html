@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Answer Journey — Bar Exam Mind Map</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&display=swap');
+
+  :root{
+    --ink: #1c2320;
+    --paper: #f6f2e9;
+    --paper-2: #efe8d8;
+    --rule: #cabf9f;
+    --gold: #a9752f;
+    --gold-deep: #7d5620;
+    --green: #3f5d43;
+    --green-deep: #29402c;
+    --red: #a13d2b;
+    --blue: #2f4d63;
+    --line: rgba(28,35,32,0.14);
+    --shadow: 0 10px 30px rgba(28,35,32,0.14);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 800px at 10% -10%, rgba(169,117,47,0.08), transparent 60%),
+      radial-gradient(1000px 700px at 100% 0%, rgba(63,93,67,0.07), transparent 55%),
+      var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    min-height:100vh;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 18px 80px;}
+
+  header{
+    padding:6px 4px 26px;
+    border-bottom:1px solid var(--line);
+    margin-bottom:26px;
+    position:relative;
+  }
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--gold-deep);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:14px;
+  }
+  .eyebrow::before{
+    content:"";
+    width:22px;height:1px;background:var(--gold-deep);
+    display:inline-block;
+  }
+  h1{
+    font-family:'Fraunces', serif;
+    font-weight:600;
+    font-size:clamp(28px, 5vw, 44px);
+    line-height:1.05;
+    margin:0 0 12px;
+    letter-spacing:-0.01em;
+  }
+  h1 em{font-style:italic; font-weight:500; color:var(--green-deep);}
+  .sub{
+    font-size:15px;
+    line-height:1.55;
+    color:#4a5049;
+    max-width:640px;
+    margin:0;
+  }
+
+  /* ---- Question card ---- */
+  .qcard{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:14px;
+    padding:18px 20px;
+    margin:22px 0 30px;
+    box-shadow:var(--shadow);
+  }
+  .qcard .tag{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--green-deep);
+    background:rgba(63,93,67,0.12);
+    padding:3px 8px;
+    border-radius:5px;
+    display:inline-block;
+    margin-bottom:10px;
+  }
+  .qcard p{margin:0; font-size:15px; line-height:1.6;}
+  .qcard .call{
+    margin-top:10px;
+    font-style:italic;
+    color:var(--gold-deep);
+    font-size:14.5px;
+  }
+
+  /* ---- Progress rail ---- */
+  .rail{
+    display:flex;
+    gap:6px;
+    margin-bottom:28px;
+    overflow-x:auto;
+    padding-bottom:6px;
+  }
+  .rail button{
+    flex:1;
+    min-width:78px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.06em;
+    text-transform:uppercase;
+    padding:10px 8px;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:transparent;
+    color:#6b6f65;
+    cursor:pointer;
+    transition:all .25s ease;
+  }
+  .rail button.done{color:var(--paper); background:var(--green); border-color:var(--green);}
+  .rail button.active{
+    color:var(--paper);
+    background:var(--gold-deep);
+    border-color:var(--gold-deep);
+    transform:translateY(-2px);
+    box-shadow:0 6px 14px rgba(125,86,32,0.35);
+  }
+
+  /* ---- Main stage ---- */
+  .stage{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:22px;
+  }
+  @media(min-width:900px){
+    .stage{grid-template-columns: 1.15fr 0.85fr;}
+  }
+
+  .map-panel{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:20px;
+    box-shadow:var(--shadow);
+    position:relative;
+    overflow:hidden;
+  }
+  .map-panel h2{
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    font-weight:600;
+    margin:0 0 4px;
+  }
+  .map-panel .hint{
+    font-size:12.5px;
+    color:#6b6f65;
+    margin:0 0 16px;
+  }
+
+  svg{width:100%; height:auto; display:block; overflow:visible;}
+
+  .node-circle{
+    transition: r .3s ease, fill .3s ease, stroke-width .3s ease;
+    cursor:pointer;
+  }
+  .node-label{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    fill:var(--ink);
+    pointer-events:none;
+  }
+  .node-group.dim .node-circle{opacity:.28;}
+  .node-group.dim .node-label{opacity:.32;}
+  .node-group.active .node-circle{filter:drop-shadow(0 0 10px rgba(169,117,47,0.55));}
+
+  .edge-path{
+    fill:none;
+    stroke:var(--rule);
+    stroke-width:1.6;
+    transition: stroke .3s ease, stroke-width .3s ease, opacity .3s ease;
+  }
+  .edge-path.lit{stroke:var(--gold); stroke-width:2.6;}
+  .edge-path.dim{opacity:.15;}
+
+  .pulse{
+    fill:none;
+    stroke:var(--gold);
+    stroke-width:3;
+    stroke-linecap:round;
+    opacity:0;
+  }
+  .pulse.run{
+    animation: dash 1.1s ease forwards;
+  }
+  @keyframes dash{
+    0%{opacity:1; stroke-dashoffset: var(--len);}
+    100%{opacity:.9; stroke-dashoffset:0;}
+  }
+
+  /* ---- Detail panel ---- */
+  .detail-panel{
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px;
+    box-shadow:var(--shadow);
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .detail-panel .letter{
+    font-family:'Fraunces', serif;
+    font-size:40px;
+    font-weight:700;
+    line-height:1;
+    color:var(--gold-deep);
+  }
+  .detail-panel .stepname{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:#6b6f65;
+    margin-top:-10px;
+  }
+  .detail-panel h3{
+    font-family:'Fraunces', serif;
+    font-size:20px;
+    font-weight:600;
+    margin:0;
+    line-height:1.25;
+  }
+  .detail-panel .phrase{
+    font-family:'IBM Plex Mono', monospace;
+    background:rgba(169,117,47,0.13);
+    border:1px solid rgba(169,117,47,0.3);
+    color:var(--gold-deep);
+    padding:10px 12px;
+    border-radius:9px;
+    font-size:13.5px;
+    line-height:1.5;
+  }
+  .detail-panel .why{
+    font-size:14px;
+    line-height:1.6;
+    color:#3a3f38;
+    margin:0;
+  }
+  .detail-panel .why b{color:var(--green-deep);}
+  .retention{
+    margin-top:auto;
+    border-top:1px dashed var(--rule);
+    padding-top:14px;
+  }
+  .retention .rlabel{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--red);
+    margin-bottom:6px;
+  }
+  .retention p{font-size:13px; line-height:1.55; margin:0; color:#4a5049;}
+
+  .nav-buttons{display:flex; gap:10px; margin-top:6px;}
+  .nav-buttons button{
+    flex:1;
+    padding:11px 10px;
+    border-radius:9px;
+    border:1px solid var(--line);
+    background:var(--paper);
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+    color:var(--ink);
+    transition:transform .15s ease, background .2s ease;
+  }
+  .nav-buttons button:hover{transform:translateY(-1px); background:#fff;}
+  .nav-buttons button:active{transform:translateY(0);}
+  .nav-buttons button.primary{background:var(--green-deep); color:var(--paper); border-color:var(--green-deep);}
+
+  /* ---- Full answer reveal ---- */
+  .answer-block{
+    margin-top:30px;
+    background:var(--paper-2);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:22px;
+    box-shadow:var(--shadow);
+  }
+  .answer-block h2{
+    font-family:'Fraunces', serif;
+    font-size:19px;
+    margin:0 0 14px;
+  }
+  .answer-text{
+    font-size:15px;
+    line-height:1.85;
+    font-family:'Fraunces', serif;
+  }
+  .answer-text span{
+    padding:1px 3px;
+    border-radius:4px;
+    transition: background .4s ease, box-shadow .4s ease;
+  }
+  .answer-text span.tag-A{background:rgba(169,117,47,0.22);}
+  .answer-text span.tag-L{background:rgba(63,93,67,0.2);}
+  .answer-text span.tag-Ap{background:rgba(47,77,99,0.18);}
+  .answer-text span.tag-C{background:rgba(161,61,43,0.16);}
+  .legend{display:flex; flex-wrap:wrap; gap:14px; margin-top:16px; font-size:12px; font-family:'IBM Plex Mono', monospace;}
+  .legend span{display:flex; align-items:center; gap:6px;}
+  .swatch{width:11px;height:11px;border-radius:3px; display:inline-block;}
+
+  footer{
+    margin-top:36px;
+    text-align:center;
+    font-size:12px;
+    color:#8a8d80;
+    font-family:'IBM Plex Mono', monospace;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    .pulse.run{animation:none; opacity:.9;}
+    *{transition-duration:.01ms !important;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Bar Exam Answer Journey</div>
+    <h1>How one <em>legal answer</em><br>actually gets built</h1>
+    <p class="sub">Tap each stop below. Watch the map light up node by node — same order your pen should move in during the actual exam — using the ALAC structure that Philippine bar reviewers (including Legal Edge) teach for essay answers.</p>
+  </header>
+
+  <div class="qcard">
+    <span class="tag">Sample bar problem — Civil Law, Obligations & Contracts</span>
+    <p>Ana sold her only parcel of land to Ben, delivering the title and possession. A week later, without Ana's knowledge, Carlo — who forged a fake deed — sold the same land to Diane, an innocent buyer who checked the title, found it clean, and paid full value.</p>
+    <p class="call">Call of the question: Between Ben and Diane, who has the better right to the land? Explain.</p>
+  </div>
+
+  <div class="rail" id="rail"></div>
+
+  <div class="stage">
+    <div class="map-panel">
+      <h2>The map</h2>
+      <p class="hint">Each node is a checkpoint your answer must pass through. The lines are how one point <em>earns</em> the next — that's what "connected concepts" means on the bar.</p>
+      <svg viewBox="0 0 620 520" id="mapSvg"></svg>
+    </div>
+
+    <div class="detail-panel" id="detailPanel">
+      <!-- filled by JS -->
+    </div>
+  </div>
+
+  <div class="answer-block">
+    <h2>Full written answer — color-coded</h2>
+    <p style="font-size:13px;color:#6b6f65;margin:-8px 0 16px;">This is what the map above looks like once it's actually written on the page. Same colors, same order.</p>
+    <div class="answer-text" id="answerText"></div>
+    <div class="legend">
+      <span><span class="swatch" style="background:rgba(169,117,47,0.5)"></span> Answer</span>
+      <span><span class="swatch" style="background:rgba(63,93,67,0.45)"></span> Legal Basis</span>
+      <span><span class="swatch" style="background:rgba(47,77,99,0.4)"></span> Application</span>
+      <span><span class="swatch" style="background:rgba(161,61,43,0.35)"></span> Conclusion</span>
+    </div>
+  </div>
+
+  <footer>tap a node or use ← → · built for exam-day recall, not decoration</footer>
+</div>
+
+<script>
+/* ---------------- DATA ---------------- */
+// Nodes describe the "journey" of the answer. Positions are hand-placed to read as a
+// left-to-right reasoning flow, not a generic radial mindmap, since the exam itself is linear.
+const steps = [
+  {
+    id: 'issue',
+    letter: '?',
+    step: 'Step 0 — Spot the issue',
+    title: 'What is actually being asked',
+    phrase: '"Who has the better right..." → a double sale problem',
+    why: 'Before any letter of ALAC, your pen should find the <b>call of the question</b>. Everything after this is wasted ink if you answer the wrong issue. This is the node every other node connects back to — lose it, and the whole map collapses.',
+    retention: 'Retention trick: read the call of the question FIRST, before the facts. It tells you which facts even matter.',
+    pos: {x: 70, y: 260}
+  },
+  {
+    id: 'A',
+    letter: 'A',
+    step: 'Step 1 — Answer',
+    title: 'Give the direct answer',
+    phrase: '"Diane has the better right to the land."',
+    why: '<b>Answer first, reasoning after.</b> Philippine bar examiners are trained to scan for a direct yes/no/name before they read your reasoning — this is the single biggest difference between ALAC and the American IRAC method.',
+    retention: 'Retention trick: if you can\'t write one clean sentence here, you haven\'t actually found the issue yet. Go back to Step 0.',
+    pos: {x: 210, y: 90}
+  },
+  {
+    id: 'L',
+    letter: 'L',
+    step: 'Step 2 — Legal Basis',
+    title: 'Name the rule, not just the topic',
+    phrase: 'Art. 1544, Civil Code — rules on double sales of immovable property',
+    why: 'This node only connects if it\'s the <b>exact</b> provision, not "the law on sales" in general. Examiners give points for the specific article number and the specific rule inside it (registration in good faith), not for gesturing at the topic.',
+    retention: 'Retention trick: memorize codal provisions as if-then statements, not as numbers. "If immovable + double sale, THEN ownership goes to first registrant in good faith" sticks longer than "Article 1544."',
+    pos: {x: 350, y: 40}
+  },
+  {
+    id: 'Ap',
+    letter: 'Ap',
+    step: 'Step 3 — Application',
+    title: 'Match each element to a fact, out loud',
+    phrase: '"Here, Diane registered... because she checked the title and found no defect, she is a buyer in good faith."',
+    why: 'This is where most examinees actually lose points — not from missing the rule, but from <b>reciting</b> facts instead of <b>connecting</b> them. The word "because" is doing the legal work here. Ben, by contrast, never registered at all.',
+    retention: 'Retention trick: for every element of the rule, force yourself to write the word "because" or "here" before the fact. If you can\'t, you haven\'t actually applied it — you\'ve just restated the story.',
+    pos: {x: 460, y: 190}
+  },
+  {
+    id: 'C',
+    letter: 'C',
+    step: 'Step 4 — Conclusion',
+    title: 'Close the loop back to the Answer',
+    phrase: '"Diane\'s registration in good faith, ahead of Ben\'s mere unregistered sale, gives her the superior right."',
+    why: 'Notice this sentence is almost the <b>same claim as Step 1</b>, just now carrying the weight of L and Ap behind it. That\'s the whole point of the journey: the phrase "better right" travels from an unsupported guess to an earned conclusion.',
+    retention: 'Retention trick: literally echo your Answer\'s wording in your Conclusion. If they don\'t rhyme, your Application probably drifted off the actual issue.',
+    pos: {x: 350, y: 340}
+  },
+  {
+    id: 'edge',
+    letter: '✓',
+    step: 'The check',
+    title: 'Where "Legal Edge" style discipline comes in',
+    phrase: 'One issue → one ALAC block → move on. Repeat per issue.',
+    why: 'Review centers like Legal Edge drill this less as a magic acronym and more as <b>exam discipline</b>: issue-spot fast, answer straight, cite the exact provision, connect every fact with "because," and stop once concluded — don\'t wander into a second essay on the same point. That discipline is the actual "edge."',
+    retention: 'Retention trick: time yourself. One ALAC block for a single sub-issue should take 4–6 minutes on paper. If a block is taking 12, you\'re over-explaining instead of applying.',
+    pos: {x: 210, y: 440}
+  }
+];
+
+const order = ['issue','A','L','Ap','C','edge'];
+
+// Edges = the earning relationship between nodes (directed, in reasoning order)
+const edges = [
+  ['issue','A'], ['A','L'], ['L','Ap'], ['Ap','C'], ['C','edge'], ['edge','issue']
+];
+
+let current = 0;
+
+/* ---------------- BUILD RAIL ---------------- */
+const rail = document.getElementById('rail');
+order.forEach((id, i) => {
+  const s = steps.find(x=>x.id===id);
+  const btn = document.createElement('button');
+  btn.textContent = s.letter === '?' ? 'Issue' : (s.letter === '✓' ? 'Discipline' : s.letter);
+  btn.dataset.idx = i;
+  btn.addEventListener('click', ()=> goTo(i));
+  rail.appendChild(btn);
+});
+
+/* ---------------- BUILD SVG ---------------- */
+const svgNS = "http://www.w3.org/2000/svg";
+const svg = document.getElementById('mapSvg');
+
+function nodeById(id){ return steps.find(s=>s.id===id); }
+
+// draw edges first (so nodes sit on top)
+const edgeEls = {};
+edges.forEach(([a,b], i) => {
+  const na = nodeById(a), nb = nodeById(b);
+  const path = document.createElementNS(svgNS, 'path');
+  const d = curvePath(na.pos, nb.pos);
+  path.setAttribute('d', d);
+  path.setAttribute('class', 'edge-path');
+  path.setAttribute('data-a', a);
+  path.setAttribute('data-b', b);
+  svg.appendChild(path);
+  edgeEls[a+'-'+b] = path;
+
+  // pulse overlay for animation
+  const pulse = document.createElementNS(svgNS, 'path');
+  pulse.setAttribute('d', d);
+  pulse.setAttribute('class', 'pulse');
+  const len = path.getTotalLength ? 260 : 260;
+  pulse.style.setProperty('--len', len);
+  pulse.setAttribute('stroke-dasharray', len);
+  pulse.setAttribute('stroke-dashoffset', len);
+  svg.appendChild(pulse);
+  edgeEls[a+'-'+b+'-pulse'] = pulse;
+});
+
+function curvePath(p1, p2){
+  const mx = (p1.x + p2.x) / 2;
+  const my = (p1.y + p2.y) / 2;
+  // slight curve for organic feel
+  const dx = p2.x - p1.x, dy = p2.y - p1.y;
+  const nx = -dy * 0.18, ny = dx * 0.18;
+  return `M ${p1.x} ${p1.y} Q ${mx+nx} ${my+ny} ${p2.x} ${p2.y}`;
+}
+
+// nodes
+const nodeEls = {};
+steps.forEach(s => {
+  const g = document.createElementNS(svgNS, 'g');
+  g.setAttribute('class', 'node-group');
+  g.setAttribute('data-id', s.id);
+  g.style.cursor = 'pointer';
+
+  const circle = document.createElementNS(svgNS, 'circle');
+  circle.setAttribute('cx', s.pos.x);
+  circle.setAttribute('cy', s.pos.y);
+  circle.setAttribute('r', s.id==='issue' ? 30 : (s.id==='edge' ? 26 : 24));
+  circle.setAttribute('class', 'node-circle');
+  circle.setAttribute('fill', s.id==='issue' ? '#efe8d8' : '#f6f2e9');
+  circle.setAttribute('stroke', s.id==='issue' ? 'var(--red)' : 'var(--gold)');
+  circle.setAttribute('stroke-width', '2');
+  g.appendChild(circle);
+
+  const label = document.createElementNS(svgNS, 'text');
+  label.setAttribute('x', s.pos.x);
+  label.setAttribute('y', s.pos.y + 4);
+  label.setAttribute('text-anchor', 'middle');
+  label.setAttribute('class', 'node-label');
+  label.setAttribute('font-weight', '600');
+  label.setAttribute('font-size', s.letter.length > 1 ? '13' : '15');
+  label.textContent = s.letter;
+  g.appendChild(label);
+
+  const sublabel = document.createElementNS(svgNS, 'text');
+  sublabel.setAttribute('x', s.pos.x);
+  sublabel.setAttribute('y', s.pos.y + (s.id==='issue' || s.id==='edge' ? 46 : 40));
+  sublabel.setAttribute('text-anchor', 'middle');
+  sublabel.setAttribute('class', 'node-label');
+  sublabel.setAttribute('font-size', '9.5');
+  sublabel.setAttribute('fill', '#6b6f65');
+  sublabel.textContent = s.title.length > 22 ? s.title.slice(0,20)+'…' : s.title;
+  g.appendChild(sublabel);
+
+  g.addEventListener('click', ()=> {
+    const idx = order.indexOf(s.id);
+    goTo(idx);
+  });
+
+  svg.appendChild(g);
+  nodeEls[s.id] = g;
+});
+
+/* ---------------- DETAIL PANEL ---------------- */
+const detailPanel = document.getElementById('detailPanel');
+
+function renderDetail(idx){
+  const s = steps.find(x=>x.id===order[idx]);
+  detailPanel.innerHTML = `
+    <div>
+      <div class="letter">${s.letter}</div>
+      <div class="stepname">${s.step}</div>
+    </div>
+    <h3>${s.title}</h3>
+    <div class="phrase">${s.phrase}</div>
+    <p class="why">${s.why}</p>
+    <div class="retention">
+      <div class="rlabel">Retention point</div>
+      <p>${s.retention}</p>
+    </div>
+    <div class="nav-buttons">
+      <button id="prevBtn">← Back</button>
+      <button id="nextBtn" class="primary">Next →</button>
+    </div>
+  `;
+  document.getElementById('prevBtn').addEventListener('click', ()=> goTo(Math.max(0, idx-1)));
+  document.getElementById('nextBtn').addEventListener('click', ()=> goTo(Math.min(order.length-1, idx+1)));
+}
+
+/* ---------------- NAVIGATION / ANIMATION ---------------- */
+function goTo(idx){
+  const prevIdx = current;
+  current = idx;
+  const activeId = order[idx];
+
+  // rail state
+  Array.from(rail.children).forEach((btn,i) => {
+    btn.classList.toggle('active', i===idx);
+    btn.classList.toggle('done', i<idx);
+  });
+
+  // nodes dim/active
+  Object.entries(nodeEls).forEach(([id, g]) => {
+    g.classList.toggle('active', id===activeId);
+    g.classList.toggle('dim', id!==activeId);
+  });
+
+  // edges: light up all edges up to current step, dim the rest
+  edges.forEach(([a,b]) => {
+    const path = edgeEls[a+'-'+b];
+    const aIdx = order.indexOf(a), bIdx = order.indexOf(b);
+    const bothPassed = aIdx <= idx && bIdx <= idx && aIdx !== -1 && bIdx !== -1 && !(a==='edge'&&idx<5);
+    path.classList.toggle('lit', bothPassed);
+    path.classList.toggle('dim', !bothPassed);
+  });
+
+  // animate the newly entered edge (prevIdx -> idx) if moving forward
+  if(idx > prevIdx){
+    const a = order[idx-1], b = order[idx];
+    const pulse = edgeEls[a+'-'+b+'-pulse'];
+    if(pulse){
+      pulse.classList.remove('run');
+      void pulse.offsetWidth; // reflow to restart animation
+      pulse.classList.add('run');
+    }
+  }
+
+  renderDetail(idx);
+  highlightAnswer(activeId);
+}
+
+/* ---------------- ANSWER TEXT WITH HIGHLIGHTING ---------------- */
+const answerParts = [
+  {tag:null, text:''},
+  {tag:'A', text:'Diane has the better right to the land.'},
+  {tag:'L', text:' Under Article 1544 of the Civil Code, when the same immovable property is sold to different buyers, ownership belongs to the person who, in good faith, first registers the sale.'},
+  {tag:'Ap', text:' Here, Diane registered her purchase and did so in good faith because she examined the title, found no annotation or defect, and paid full value without any notice of Ben\'s earlier unregistered sale. Ben, in contrast, never registered his purchase from Ana, and possession alone does not defeat a subsequent registrant in good faith under this provision.'},
+  {tag:'C', text:' Therefore, since Diane registered first and in good faith, while Ben\'s claim rests only on an unregistered sale, Diane\'s title is superior and she has the better right to the land.'}
+];
+
+const answerTextEl = document.getElementById('answerText');
+function renderAnswer(){
+  answerTextEl.innerHTML = answerParts.map(p => {
+    if(!p.tag) return '';
+    const cls = p.tag === 'Ap' ? 'tag-Ap' : 'tag-'+p.tag;
+    return `<span class="${cls}" data-tag="${p.tag}">${p.text}</span>`;
+  }).join('');
+}
+renderAnswer();
+
+function highlightAnswer(activeId){
+  const map = {A:'A', L:'L', Ap:'Ap', C:'C'};
+  const tag = map[activeId];
+  const spans = answerTextEl.querySelectorAll('span');
+  spans.forEach(sp => {
+    if(!tag){
+      sp.style.boxShadow = 'none';
+      return;
+    }
+    if(sp.dataset.tag === tag){
+      sp.style.boxShadow = '0 0 0 2px var(--gold)';
+    } else {
+      sp.style.boxShadow = 'none';
+    }
+  });
+}
+
+/* ---------------- KEYBOARD NAV ---------------- */
+document.addEventListener('keydown', (e) => {
+  if(e.key === 'ArrowRight') goTo(Math.min(order.length-1, current+1));
+  if(e.key === 'ArrowLeft') goTo(Math.max(0, current-1));
+});
+
+/* ---------------- INIT ---------------- */
+goTo(0);
+</script>
+</body>
+</html>
