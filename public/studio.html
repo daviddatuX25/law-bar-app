@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ingestion Studio — Memory Engineering</title>
+  <link rel="stylesheet" href="app.css">
+  <style>
+    .studio-control-panel {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 20px 24px;
+      margin-bottom: 25px;
+      box-shadow: 0 4px 12px rgba(27, 33, 29, 0.05);
+      flex-wrap: wrap;
+      gap: 15px;
+    }
+    
+    .dropdown-container {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .studio-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 25px;
+      margin-top: 10px;
+    }
+
+    .pane-card {
+      background: var(--panel);
+      border: 1px solid var(--rule);
+      border-radius: 16px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    .pane-card h3 {
+      font-family: 'Fraunces', serif;
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--green-deep);
+      margin-top: 0;
+      margin-bottom: 5px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pane-card-subtitle {
+      font-size: 13px;
+      color: #6a7069;
+      margin-bottom: 10px;
+      margin-top: -5px;
+    }
+
+    textarea {
+      width: 100%;
+      height: 380px;
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 15px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      color: var(--ink);
+      outline: none;
+      resize: vertical;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(169, 117, 47, 0.15);
+    }
+
+    .log-box {
+      background: #181c19;
+      color: #e4ebe6;
+      padding: 20px;
+      border-radius: 8px;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 12.5px;
+      height: 380px;
+      overflow-y: auto;
+      border: 1px solid var(--line);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+      line-height: 1.6;
+    }
+
+    .err { color: #f25c54; }
+    .ok { color: #70e000; }
+    .warn { color: #ffb703; }
+    .system { color: #8892b0; }
+
+    /* Premium Buttons */
+    .btn-premium {
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid var(--rule);
+      border-radius: 8px;
+      padding: 10px 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      outline: none;
+      user-select: none;
+    }
+
+    .btn-premium:hover:not(:disabled) {
+      border-color: var(--gold);
+      color: var(--gold-deep);
+      box-shadow: 0 4px 10px rgba(169, 117, 47, 0.12);
+      transform: translateY(-1px);
+    }
+    
+    .btn-premium:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .btn-premium:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .btn-primary:hover:not(:disabled) {
+      background: var(--green-deep);
+      border-color: var(--green-deep);
+      color: white;
+      box-shadow: 0 4px 10px rgba(63, 93, 67, 0.2);
+    }
+
+    .btn-secondary {
+      font-size: 12px;
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    .action-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 10px;
+    }
+
+    @media(max-width: 900px) {
+      .studio-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="nav-header">
+      <h1>Ingestion <em>Studio</em></h1>
+      <nav class="nav-links">
+        <a href="index.html">Dashboard</a>
+        <a href="deck.html">Study Deck</a>
+        <a href="reader.html">Codal Reader</a>
+        <a href="studio.html">Studio</a>
+      </nav>
+    </header>
+
+    <div class="studio-control-panel">
+      <div class="dropdown-container">
+        <label for="import-subject-select" style="font-weight: 600; font-size: 14px; color: var(--gold-deep);">Subject Ingestion Target:</label>
+        <select id="import-subject-select" class="select-box">
+          <option value="civil-law">Civil Law</option>
+        </select>
+      </div>
+      <div>
+        <button id="insert-template-btn" class="btn-premium btn-secondary">Insert Example Template</button>
+      </div>
+    </div>
+
+    <div class="studio-grid">
+      <div class="pane-card">
+        <h3>Paste Markdown Content</h3>
+        <div class="pane-card-subtitle">Input pipeline-generated Markdown text complying with the card specification.</div>
+        <textarea id="import-text" placeholder="CARD subject-1&#13;FRONT (shape): Abstracted fact pattern...&#13;FRONT (trigger words): triggers...&#13;BACK (provision): citation - Title...&#13;BACK (elements):&#13;1. Element 1...&#13;SOURCE: Source Citation..."></textarea>
+        <div class="action-row">
+          <button id="submit-import-btn" class="btn-premium btn-primary" disabled>Import Cards</button>
+        </div>
+      </div>
+      
+      <div class="pane-card">
+        <h3>Parser Log Stream</h3>
+        <div class="pane-card-subtitle">Real-time compilation logs and ingestion response output.</div>
+        <div class="log-box" id="studio-logs">
+          <span class="system">[System Idle] Waiting for ingestion payload...</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const subjectSelect = document.getElementById('import-subject-select');
+      const textarea = document.getElementById('import-text');
+      const logBox = document.getElementById('studio-logs');
+      const submitBtn = document.getElementById('submit-import-btn');
+      const insertTemplateBtn = document.getElementById('insert-template-btn');
+
+      // Load subjects dynamically
+      fetch('/api/subjects')
+        .then(res => res.json())
+        .then(subjects => {
+          if (subjects.length > 0) {
+            subjectSelect.innerHTML = '';
+            subjects.forEach(sub => {
+              const opt = document.createElement('option');
+              opt.value = sub.id;
+              opt.textContent = sub.name;
+              subjectSelect.appendChild(opt);
+            });
+          }
+        })
+        .catch(err => {
+          console.error('Error loading subjects:', err);
+        });
+
+      // Insert example template helper
+      const exampleTemplate = `CARD civil-1
+FRONT (shape): Two buyers, one immovable, one registered.
+FRONT (trigger words): double sale, registered first
+BACK (provision): Art. 1544 - Double Sale
+BACK (elements):
+1. Double sale of same property
+2. Valid title
+BACK (common confusion): Art. 1458 - Contract of Sale :: Distinction is double sale requires two sales.
+SOURCE: Civil Code Art. 1544`;
+
+      insertTemplateBtn.addEventListener('click', () => {
+        textarea.value = exampleTemplate;
+        handleValidation();
+      });
+
+      // Real-time validation handler
+      textarea.addEventListener('input', handleValidation);
+
+      function handleValidation() {
+        const text = textarea.value;
+        const validationResult = validateMarkdown(text);
+
+        if (validationResult.isEmpty) {
+          logBox.innerHTML = '<span class="system">[System Idle] Waiting for ingestion payload...</span>';
+          submitBtn.disabled = true;
+          return;
+        }
+
+        let html = '';
+        if (validationResult.errors.length > 0) {
+          html += `<span class="err"><strong>Validation Failed:</strong> ${validationResult.errors.length} syntax/schema error(s) found</span><br><br>`;
+          validationResult.errors.forEach(err => {
+            html += `<span class="err">- ${escapeHtml(err)}</span><br>`;
+          });
+          submitBtn.disabled = true;
+        } else if (validationResult.data.length === 0) {
+          html += `<span class="warn"><strong>Warning:</strong> No card declarations found. Start a card block with "CARD [id]".</span>`;
+          submitBtn.disabled = true;
+        } else {
+          html += `<span class="ok"><strong>Validation Passed:</strong> ${validationResult.data.length} card(s) parsed successfully and ready for import.</span><br><br>`;
+          validationResult.data.forEach(card => {
+            html += `<span class="system">[Parsed Card]</span> <strong style="color: var(--gold);">${escapeHtml(card.id)}</strong><br>`;
+            html += `<span class="system">  Shape:</span> ${escapeHtml(card.shape)}<br>`;
+            html += `<span class="system">  Triggers:</span> ${escapeHtml(card.triggers.join(', '))}<br>`;
+            html += `<span class="system">  Provision:</span> ${escapeHtml(card.provision)}<br>`;
+            html += `<span class="system">  Elements:</span> ${escapeHtml(card.elements.join('; '))}<br>`;
+            html += `<span class="system">  Source:</span> ${escapeHtml(card.source)}<br><br>`;
+          });
+          submitBtn.disabled = false;
+        }
+        logBox.innerHTML = html;
+      }
+
+      submitBtn.addEventListener('click', () => {
+        const text = textarea.value;
+        const subjectId = subjectSelect.value;
+
+        logBox.innerHTML = '<span class="system">[Network] Sending payload to ingestion parser...</span>';
+        submitBtn.disabled = true;
+
+        fetch('/api/import', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ subjectId, markdown: text })
+        })
+        .then(res => {
+          if (!res.ok) {
+            return res.json().then(errData => { throw errData; });
+          }
+          return res.json();
+        })
+        .then(res => {
+          logBox.innerHTML = `<span class="ok"><strong>In-bound Parse Success.</strong> Inserted ${res.count} shapes and flashcards into the database for subject "${escapeHtml(subjectId)}".</span>`;
+          textarea.value = '';
+          submitBtn.disabled = true;
+        })
+        .catch(err => {
+          let errorMsg = err.error || err.message || 'Unknown Error';
+          let logMsg = `<span class="err"><strong>Import Failed:</strong> ${escapeHtml(errorMsg)}</span><br><br>`;
+          if (err.details && Array.isArray(err.details)) {
+            err.details.forEach(detail => logMsg += `<span class="err">- ${escapeHtml(detail)}</span><br>`);
+          }
+          logBox.innerHTML = logMsg;
+          submitBtn.disabled = false;
+        });
+      });
+
+      function escapeHtml(str) {
+        if (!str) return '';
+        return str
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;')
+          .replace(/'/g, '&#039;');
+      }
+
+      function validateMarkdown(mdContent) {
+        if (typeof mdContent !== 'string') {
+          return {
+            success: false,
+            isEmpty: true,
+            data: [],
+            errors: ['Input must be a string.']
+          };
+        }
+
+        if (!mdContent.trim()) {
+          return {
+            success: true,
+            isEmpty: true,
+            data: [],
+            errors: []
+          };
+        }
+
+        const lines = mdContent.split(/\r?\n/);
+        const cards = [];
+        const errors = [];
+        
+        let currentCard = null;
+        let cardLineNum = 0;
+
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (!line) continue;
+
+          if (line.startsWith('CARD ')) {
+            if (currentCard) {
+              validateAndPushCard(currentCard, cardLineNum, cards, errors);
+            }
+            currentCard = {
+              id: line.substring(5).trim(),
+              shape: '',
+              triggers: [],
+              provision: '',
+              elements: [],
+              confusion: '',
+              source: ''
+            };
+            cardLineNum = i + 1;
+          } else if (currentCard) {
+            if (line.startsWith('FRONT (shape):')) {
+              currentCard.shape = line.replace('FRONT (shape):', '').trim();
+            } else if (line.startsWith('FRONT (trigger words):')) {
+              currentCard.triggers = line.replace('FRONT (trigger words):', '').split(',').map(t => t.trim()).filter(Boolean);
+            } else if (line.startsWith('BACK (provision):')) {
+              currentCard.provision = line.replace('BACK (provision):', '').trim();
+            } else if (line.startsWith('BACK (elements):')) {
+              let j = i + 1;
+              while (j < lines.length && !lines[j].startsWith('BACK (') && !lines[j].startsWith('CARD ') && !lines[j].startsWith('SOURCE:')) {
+                const listLine = lines[j].trim();
+                if (listLine.match(/^\d+\./)) {
+                  currentCard.elements.push(listLine.replace(/^\d+\./, '').trim());
+                }
+                j++;
+              }
+              i = j - 1;
+            } else if (line.startsWith('BACK (common confusion):')) {
+              currentCard.confusion = line.replace('BACK (common confusion):', '').trim();
+            } else if (line.startsWith('SOURCE:')) {
+              currentCard.source = line.replace('SOURCE:', '').trim();
+            }
+          }
+        }
+        
+        if (currentCard) {
+          validateAndPushCard(currentCard, cardLineNum, cards, errors);
+        }
+
+        return {
+          success: errors.length === 0,
+          isEmpty: false,
+          data: cards,
+          errors
+        };
+      }
+
+      function validateAndPushCard(card, lineNum, cards, errors) {
+        const cardErrors = [];
+        if (!card.id) {
+          cardErrors.push(`Line ${lineNum}: Missing card ID.`);
+        }
+        if (!card.shape) {
+          cardErrors.push(`Line ${lineNum}: Missing shape description.`);
+        }
+        if (!card.triggers || card.triggers.length === 0) {
+          cardErrors.push(`Line ${lineNum}: Missing trigger words.`);
+        }
+        if (!card.provision) {
+          cardErrors.push(`Line ${lineNum}: Missing controlling provision.`);
+        }
+        if (!card.elements || card.elements.length === 0) {
+          cardErrors.push(`Line ${lineNum}: Elements checklist must be a numbered list.`);
+        }
+        if (!card.source) {
+          cardErrors.push(`Line ${lineNum}: Missing source citation.`);
+        }
+        
+        if (cardErrors.length === 0) {
+          cards.push(card);
+        } else {
+          errors.push(...cardErrors);
+        }
+      }
+    });
+  </script>
+</body>
+</html>
