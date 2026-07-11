@@ -19,7 +19,7 @@ class DbAdapter {
       const info = this.db.prepare("PRAGMA table_info(flashcards)").all();
       const hasCol = info.some(col => col.name === 'source_paragraph_id');
       if (!hasCol) {
-        this.db.exec("ALTER TABLE flashcards ADD COLUMN source_paragraph_id TEXT REFERENCES source_paragraphs(id);");
+        this.db.exec("ALTER TABLE flashcards ADD COLUMN source_paragraph_id TEXT REFERENCES source_paragraphs(id) ON DELETE SET NULL;");
       }
     } catch (err) {
       console.error("Migration error on flashcards:", err.message);

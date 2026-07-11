@@ -355,4 +355,29 @@ test('SQLite Foreign Key Enforcement', () => {
   }, /FOREIGN KEY constraint failed/);
 });
 
+test('Source Paragraph Deletion Nullifies Flashcard Link', () => {
+  const db = new DbAdapter(':memory:');
+  db.initialize();
+
+  db.runWriteQuery("INSERT INTO subjects (id, name) VALUES ('subj-1', 'Test Subject')");
+  db.runWriteQuery("INSERT INTO sources (id, title, subject_id) VALUES ('src-1', 'Test Source', 'subj-1')");
+  db.runWriteQuery("INSERT INTO source_paragraphs (id, source_id, anchor_id, content_text) VALUES ('para-1', 'src-1', 'p1', 'Some content')");
+  db.runWriteQuery("INSERT INTO shapes (id, subject_id, shape_text) VALUES ('shape-1', 'subj-1', 'Test Shape')");
+  db.runWriteQuery(
+    "INSERT INTO flashcards (id, subject_id, shape_id, source_citation, source_paragraph_id) VALUES (?, ?, ?, ?, ?)",
+    ['card-1', 'subj-1', 'shape-1', 'Test Citation', 'para-1']
+  );
+
+  let card = db.db.prepare("SELECT * FROM flashcards WHERE id = 'card-1'").get();
+  assert.strictEqual(card.source_paragraph_id, 'para-1');
+
+  // Delete the source paragraph
+  db.runWriteQuery("DELETE FROM source_paragraphs WHERE id = 'para-1'");
+
+  // Verify the flashcard's source_paragraph_id is null and NO error was thrown
+  card = db.db.prepare("SELECT * FROM flashcards WHERE id = 'card-1'").get();
+  assert.strictEqual(card.source_paragraph_id, null);
+});
+
+
 

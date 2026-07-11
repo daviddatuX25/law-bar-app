@@ -62,5 +62,5 @@ CREATE TABLE IF NOT EXISTS flashcards (
   subject_id TEXT REFERENCES subjects(id),
   shape_id TEXT REFERENCES shapes(id),
   source_citation TEXT NOT NULL,
-  source_paragraph_id TEXT REFERENCES source_paragraphs(id)
+  source_paragraph_id TEXT REFERENCES source_paragraphs(id) ON DELETE SET NULL
 );
