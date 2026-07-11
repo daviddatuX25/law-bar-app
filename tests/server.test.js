@@ -163,6 +163,17 @@ test('Express Server API routes', async (t) => {
     assert.strictEqual(res404.statusCode || res404.status, 404);
   });
 
+  await t.test('GET /api/sources/:id/paragraphs returns list of paragraphs', async () => {
+    const res = await fetch('http://localhost:3001/api/sources/source-1/paragraphs');
+    assert.strictEqual(res.statusCode || res.status, 200);
+    const data = await res.json();
+    assert.ok(Array.isArray(data));
+    assert.strictEqual(data.length, 2);
+    assert.strictEqual(data[0].id, 'source-1:p1');
+    assert.strictEqual(data[0].anchor_id, 'p1');
+    assert.strictEqual(data[0].content_text, 'A fee simple absolute is the largest estate known to the law.');
+  });
+
   await t.test('GET /api/subjects/:id/sources returns sources list', async () => {
     const res = await fetch('http://localhost:3001/api/subjects/subject-1/sources');
     assert.strictEqual(res.statusCode || res.status, 200);
@@ -246,6 +257,24 @@ SOURCE: Restatement § 3
     assert.deepStrictEqual(imported.front_triggers, ['forever']);
     assert.strictEqual(imported.back_provision, 'Restatement 3 (Fee Simple)');
     assert.deepStrictEqual(imported.back_elements, ['Element A', 'Element B']);
+  });
+
+  await t.test('POST /api/generate/flashcards returns generated markdown text', async () => {
+    const payload = {
+      subjectId: 'civil-law',
+      sourceId: 'civil-code',
+      paragraphIds: ['civil-code-p1'],
+      prompt: 'double sale'
+    };
+    const res = await fetch('http://localhost:3001/api/generate/flashcards', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    assert.strictEqual(res.statusCode || res.status, 200);
+    const data = await res.json();
+    assert.strictEqual(data.success, true);
+    assert.ok(data.markdown.includes('CARD'));
   });
 
   // Clean up server
