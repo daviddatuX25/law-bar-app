@@ -91,64 +91,7 @@ function handleToolCall(id, name, args) {
     }
 
     try {
-      const provisions = [];
-      const shapes = [];
-      const trigger_words = [];
-      const flashcards = [];
-
-      for (const card of parsed.data) {
-        const shapeId = `shape-${card.id}`;
-        const provisionId = `prov-${card.id}`;
-        
-        const provisionParts = card.provision.split('-');
-        const citation = provisionParts[0].trim();
-        const shortTitle = provisionParts[1]?.trim() || '';
-
-        provisions.push({
-          id: provisionId,
-          citation: citation,
-          short_title: shortTitle,
-          elements_checklist: card.elements,
-          common_confusion: card.confusion || null,
-          distinguishing_fact: null
-        });
-
-        shapes.push({
-          id: shapeId,
-          shape_text: card.shape,
-          frequency: 1,
-          provisions: [
-            { id: provisionId, is_primary: true }
-          ]
-        });
-
-        if (card.triggers) {
-          for (const word of card.triggers) {
-            trigger_words.push({
-              shape_id: shapeId,
-              word: word,
-              is_ambiguous: false,
-              distinguishing_fact: null
-            });
-          }
-        }
-
-        flashcards.push({
-          id: card.id,
-          shape_id: shapeId,
-          source_citation: card.source
-        });
-      }
-
-      const formattedData = {
-        subjectName: args.subjectName || subjectId,
-        provisions,
-        shapes,
-        trigger_words,
-        flashcards
-      };
-
-      adapter.insertSubjectData(subjectId, formattedData);
+      adapter.importSubjectData(subjectId, parsed.data);
       sendResult(id, { content: [{ type: 'text', text: `Imported ${parsed.data.length} flashcards.` }] });
     } catch (dbErr) {
       sendError(id, `Database insertion failed: ${dbErr.message}`);

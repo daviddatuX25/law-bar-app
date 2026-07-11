@@ -80,39 +80,9 @@ function startServer(db, port = process.env.PORT || 3000) {
     }
 
     try {
-      // Bulk transaction insert
-      db.db.exec('BEGIN TRANSACTION');
-      
-      // Ensure the subject exists in the subjects table
-      db.runWriteQuery("INSERT OR IGNORE INTO subjects (id, name) VALUES (?, ?)", [subjectId, subjectId]);
-
-      for (const card of parseResult.data) {
-        const shapeId = `shape-${card.id}`;
-        const provisionId = `prov-${card.id}`;
-
-        // Clear existing associated records to preserve idempotency & avoid duplicates
-        db.runWriteQuery("DELETE FROM trigger_words WHERE shape_id = ?", [shapeId]);
-        db.runWriteQuery("DELETE FROM shape_provisions WHERE shape_id = ?", [shapeId]);
-
-        db.runWriteQuery("INSERT OR REPLACE INTO shapes (id, subject_id, shape_text) VALUES (?, ?, ?)", [shapeId, subjectId, card.shape]);
-        db.runWriteQuery("INSERT OR REPLACE INTO provisions (id, subject_id, citation, short_title, elements_checklist, common_confusion) VALUES (?, ?, ?, ?, ?, ?)", [
-          provisionId, subjectId, card.provision.split('-')[0].trim(), card.provision.split('-')[1]?.trim() || '', JSON.stringify(card.elements), card.confusion
-        ]);
-        db.runWriteQuery("INSERT OR REPLACE INTO shape_provisions (shape_id, provision_id, is_primary) VALUES (?, ?, 1)", [shapeId, provisionId]);
-        db.runWriteQuery("INSERT OR REPLACE INTO flashcards (id, subject_id, shape_id, source_citation) VALUES (?, ?, ?, ?)", [card.id, subjectId, shapeId, card.source]);
-
-        for (const trigger of card.triggers) {
-          db.runWriteQuery("INSERT INTO trigger_words (shape_id, word) VALUES (?, ?)", [shapeId, trigger]);
-        }
-      }
-      db.db.exec('COMMIT');
+      db.importSubjectData(subjectId, parseResult.data);
       res.json({ success: true, count: parseResult.data.length });
     } catch (err) {
-      try {
-        db.db.exec('ROLLBACK');
-      } catch (rollbackErr) {
-        // Ignore rollback errors if transaction was not active
-      }
       res.status(500).json({ error: err.message });
     }
   });
