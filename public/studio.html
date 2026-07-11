@@ -571,10 +571,12 @@ SOURCE: Civil Code Art. 1544`;
         const query = genParaSearch.value.toLowerCase();
         genParagraphsList.innerHTML = '';
 
-        const filtered = paragraphsData.filter(p => 
-          p.anchor_id.toLowerCase().includes(query) || 
-          p.content_text.toLowerCase().includes(query)
-        );
+        const filtered = paragraphsData.filter(p => {
+          const anchor = p.anchor_id || '';
+          const text = p.content_text || '';
+          return anchor.toLowerCase().includes(query) || 
+                 text.toLowerCase().includes(query);
+        });
 
         if (filtered.length === 0) {
           genParagraphsList.innerHTML = '<div style="opacity: 0.6; font-size: 13px; text-align: center; padding: 20px;">No matching paragraphs found.</div>';
@@ -593,7 +595,7 @@ SOURCE: Civil Code Art. 1544`;
           const cb = document.createElement('input');
           cb.type = 'checkbox';
           cb.value = p.id;
-          cb.dataset.anchor = p.anchor_id;
+          cb.dataset.anchor = p.anchor_id || '';
           cb.style.marginTop = '3px';
           cb.checked = p.checked || false;
 
@@ -611,7 +613,9 @@ SOURCE: Civil Code Art. 1544`;
           });
 
           const label = document.createElement('div');
-          label.innerHTML = `<strong>${escapeHtml(p.anchor_id)}</strong>: ${escapeHtml(p.content_text.substring(0, 120))}${p.content_text.length > 120 ? '...' : ''}`;
+          const anchor = p.anchor_id || '';
+          const text = p.content_text || '';
+          label.innerHTML = `<strong>${escapeHtml(anchor)}</strong>: ${escapeHtml(text.substring(0, 120))}${text.length > 120 ? '...' : ''}`;
           
           item.appendChild(cb);
           item.appendChild(label);
