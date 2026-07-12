@@ -30,6 +30,10 @@ const PIPELINE_SOURCE_MAP = {
   'negotiable-instruments': { subjectId: 'commercial-law', sourceId: 'negotiable-instruments', title: 'Negotiable Instruments Law (Act 2031)' },
   'labor-code':       { subjectId: 'labor-law',       sourceId: 'labor-code',             title: 'Labor Code of the Philippines (PD 442)' },
   'nirc':             { subjectId: 'taxation',        sourceId: 'nirc',                   title: 'National Internal Revenue Code (NIRC / RA 8424)' },
+  'remedial-civil-rules':    { subjectId: 'remedial-law',  sourceId: 'remedial-civil',    title: 'Rules of Civil Procedure (A.M. No. 19-10-20-SC)' },
+  'remedial-evidence-rules': { subjectId: 'remedial-law',  sourceId: 'remedial-evidence', title: 'Rules on Evidence (A.M. No. 19-08-15-SC)' },
+  'remedial-criminal-rules': { subjectId: 'remedial-law',  sourceId: 'remedial-criminal', title: 'Rules of Criminal Procedure' },
+  'legal-ethics-cpra':       { subjectId: 'legal-ethics', sourceId: 'cpra',              title: 'Code of Professional Responsibility and Accountability' },
 };
 
 // Subject display names (from subject-sources.json)

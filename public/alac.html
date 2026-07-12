@@ -11,7 +11,10 @@
   <div class="wrap">
     <header class="nav-header">
       <h1>ALAC <em>Practice</em></h1>
-      <nav class="nav-links">
+      <button class="nav-hamburger" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-links" id="nav-links">
         <a href="index.html">Dashboard</a>
         <a href="deck.html">Study Deck</a>
         <a href="reader.html">Codal Reader</a>
@@ -35,7 +38,7 @@
       </div>
     </section>
 
-    <div class="alac-layout">
+    <div class="alac-layout" id="alac-layout">
       <!-- Left: Fact Pattern Panel -->
       <div class="alac-fact-panel">
         <div class="alac-fact-header">
@@ -50,9 +53,20 @@
         </div>
       </div>
 
-      <!-- Right: Answer Builder Panel -->
-      <div class="alac-answer-panel">
-        <div class="alac-section alac-section-a">
+      <!-- Middle: Answer Builder Panel -->
+      <div class="alac-answer-panel" id="alac-answer-panel">
+        <!-- Mode Toggle -->
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
+          <span style="font-size: 12px; color: #7a7e74; font-weight: 600;">Answer Mode:</span>
+          <button id="alac-mode-toggle" class="alac-mode-toggle" data-mode="segmented">
+            <span class="alac-mode-seg">📋 Segmented</span>
+            <span class="alac-mode-free">📝 Freeform</span>
+          </button>
+        </div>
+
+        <!-- Segmented Mode Sections -->
+        <div id="alac-segmented-sections">
+          <div class="alac-section alac-section-a">
           <div class="alac-section-header">
             <span class="alac-letter">A</span>
             <span class="alac-section-title">Answer</span>
@@ -87,6 +101,35 @@
           </div>
           <textarea id="alac-conclusion-text" class="alac-textarea" placeholder="Therefore, [restate your direct answer]..."></textarea>
         </div>
+        </div><!-- end alac-segmented-sections -->
+
+        <!-- Freeform Mode Textarea (hidden by default) -->
+        <div id="alac-freeform-section" style="display: none;">
+          <textarea id="alac-freeform-text" class="alac-textarea alac-freeform-textarea" placeholder="Write your complete ALAC answer as a single flowing text, just like you would in the actual bar exam...
+
+A — Answer: Start with your direct, categorical answer (1-2 sentences).
+
+L — Law: Cite the applicable provision and enumerate ALL elements.
+
+A — Application: Apply each element to the specific facts. This is where most points are earned.
+
+C — Conclusion: Restate your answer with the legal basis.
+
+The AI evaluator will automatically identify which parts of your answer correspond to each ALAC section."></textarea>
+        </div>
+
+        <div style="display: flex; justify-content: flex-end; margin-top: 8px;">
+          <button id="alac-evaluate-btn" class="alac-eval-btn">🧠 Evaluate My Answer</button>
+        </div>
+      </div>
+
+      <!-- Right: Evaluation Panel -->
+      <div class="alac-eval-panel" id="alac-eval-panel">
+        <div class="eval-placeholder" id="eval-placeholder">
+          <div class="eval-placeholder-icon">🧠</div>
+          <div>Write your ALAC answer in the middle panel,<br>then click <strong>Evaluate My Answer</strong>.</div>
+          <div style="font-size: 12px; opacity: 0.6; margin-top: 4px;">AI evaluation compares your answer against<br>the model answer key below.</div>
+        </div>
       </div>
     </div>
 
@@ -117,5 +160,18 @@
     </footer>
   </div>
   <script src="app.js"></script>
+  <script>
+    (function() {
+      var btn = document.getElementById('nav-toggle');
+      var nav = document.getElementById('nav-links');
+      if (btn && nav) {
+        btn.addEventListener('click', function() {
+          var open = nav.classList.toggle('open');
+          btn.classList.toggle('open', open);
+          btn.setAttribute('aria-expanded', open);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>

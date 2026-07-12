@@ -10,7 +10,10 @@
   <div class="wrap">
     <header class="nav-header">
       <h1>The <em>Retrieval Funnel</em></h1>
-      <nav class="nav-links">
+      <button class="nav-hamburger" id="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="nav-links" id="nav-links">
         <a href="index.html">Dashboard</a>
         <a href="deck.html">Study Deck</a>
         <a href="reader.html">Codal Reader</a>
@@ -111,5 +114,18 @@
     </footer>
   </div>
   <script src="app.js"></script>
+  <script>
+    (function() {
+      var btn = document.getElementById('nav-toggle');
+      var nav = document.getElementById('nav-links');
+      if (btn && nav) {
+        btn.addEventListener('click', function() {
+          var open = nav.classList.toggle('open');
+          btn.classList.toggle('open', open);
+          btn.setAttribute('aria-expanded', open);
+        });
+      }
+    })();
+  </script>
 </body>
 </html>
