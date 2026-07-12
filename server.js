@@ -266,7 +266,7 @@ function startServer(db, port = process.env.PORT || 3005) {
     }
 
     try {
-      db.importSubjectData(subjectId, parseResult.data, parseResult.decoy_pairs);
+      db.importSubjectData(subjectId, parseResult.data, parseResult.decoy_pairs, parseResult.alac_questions);
       res.json({ success: true, count: parseResult.data.length });
     } catch (err) {
       res.status(500).json({ error: err.message });

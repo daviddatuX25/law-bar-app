@@ -363,7 +363,7 @@ class DbAdapter {
     return stmt.run(...params);
   }
 
-  importSubjectData(subjectId, cards, decoyPairs = []) {
+  importSubjectData(subjectId, cards, decoyPairs = [], alacQuestions = []) {
     const provisions = [];
     const shapes = [];
     const trigger_words = [];
@@ -420,7 +420,8 @@ class DbAdapter {
       shapes,
       trigger_words,
       flashcards,
-      decoy_pairs: decoyPairs
+      decoy_pairs: decoyPairs,
+      alac_questions: alacQuestions
     };
 
     this.insertSubjectData(subjectId, formattedData);
@@ -430,6 +431,7 @@ class DbAdapter {
     this.db.exec('BEGIN');
     try {
       // 1. Delete old data
+      this.db.prepare('DELETE FROM alac_questions WHERE subject_id = ?').run(subjectId);
       this.db.prepare('DELETE FROM flashcards WHERE subject_id = ?').run(subjectId);
       this.db.prepare('DELETE FROM decoy_pairs WHERE subject_id = ?').run(subjectId);
       this.db.prepare('DELETE FROM trigger_words WHERE shape_id IN (SELECT id FROM shapes WHERE subject_id = ?)').run(subjectId);
@@ -534,6 +536,20 @@ class DbAdapter {
             fc.source_citation,
             fc.source_paragraph_id || null
           );
+        }
+      }
+
+      // 9. Insert ALAC questions
+      if (data.alac_questions) {
+        const stmtAlac = this.db.prepare('INSERT OR REPLACE INTO alac_questions (id, subject_id, question_text) VALUES (?, ?, ?)');
+        const stmtLink = this.db.prepare('INSERT OR REPLACE INTO alac_question_flashcards (alac_question_id, flashcard_id) VALUES (?, ?)');
+        for (const aq of data.alac_questions) {
+          stmtAlac.run(aq.id, subjectId, aq.question_text);
+          if (aq.linked_flashcard_ids) {
+            for (const fcId of aq.linked_flashcard_ids) {
+              stmtLink.run(aq.id, fcId);
+            }
+          }
         }
       }
 

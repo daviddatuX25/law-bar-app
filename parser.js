@@ -11,16 +11,33 @@ function parseMarkdown(mdContent) {
   const lines = mdContent.split(/\r?\n/);
   const cards = [];
   const decoyPairs = [];
+  const alacQuestions = [];
   const errors = [];
   
   let currentCard = null;
   let cardLineNum = 0;
   let currentDecoy = null;
   let decoyLineNum = 0;
+  let currentAlac = null;
+  let alacLineNum = 0;
+  let parsingAlac = false;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
     if (!line) continue;
+
+    if (line.startsWith('### ALAC QUESTIONS')) {
+      if (currentCard) {
+        validateAndPushCard(currentCard, cardLineNum, cards, errors);
+        currentCard = null;
+      }
+      if (currentDecoy) {
+        decoyPairs.push(currentDecoy);
+        currentDecoy = null;
+      }
+      parsingAlac = true;
+      continue;
+    }
 
     if (line.startsWith('CARD ')) {
       if (currentCard) {
@@ -60,6 +77,27 @@ function parseMarkdown(mdContent) {
         distinguishing_fact: ''
       };
       decoyLineNum = i + 1;
+    } else if (parsingAlac) {
+      if (line.startsWith('QUESTION ')) {
+        if (currentAlac) {
+          alacQuestions.push(currentAlac);
+        }
+        currentAlac = {
+          id: line.substring(9).trim(),
+          subject_id: '',
+          question_text: '',
+          linked_flashcard_ids: []
+        };
+        alacLineNum = i + 1;
+      } else if (currentAlac) {
+        if (line.startsWith('SUBJECT:')) {
+          currentAlac.subject_id = line.replace('SUBJECT:', '').trim();
+        } else if (line.startsWith('QUESTION_TEXT:')) {
+          currentAlac.question_text = line.replace('QUESTION_TEXT:', '').trim();
+        } else if (line.startsWith('LINKED_FLASHCARDS:')) {
+          currentAlac.linked_flashcard_ids = line.replace('LINKED_FLASHCARDS:', '').split(',').map(s => s.trim()).filter(Boolean);
+        }
+      }
     } else if (currentDecoy) {
       if (line.startsWith('SUBJECT:')) {
         currentDecoy.subject_id = line.replace('SUBJECT:', '').trim();
@@ -108,11 +146,15 @@ function parseMarkdown(mdContent) {
   if (currentDecoy) {
     decoyPairs.push(currentDecoy);
   }
+  if (currentAlac) {
+    alacQuestions.push(currentAlac);
+  }
 
   return {
     success: errors.length === 0,
     data: cards,
     decoy_pairs: decoyPairs,
+    alac_questions: alacQuestions,
     errors
   };
 }

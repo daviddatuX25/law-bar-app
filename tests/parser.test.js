@@ -146,3 +146,30 @@ SOURCE_PARAGRAPH: civil-code-p1544`;
   assert.strictEqual(res.success, true);
   assert.strictEqual(res.data[0].source_paragraph_id, 'civil-code-p1544');
 });
+
+test('Parser Ingestion Validation - Parse ALAC Questions', () => {
+  const md = `
+CARD civil-1
+FRONT (shape): Two buyers, one immovable, one registered.
+FRONT (trigger words): double sale, registered first
+BACK (provision): Art. 1544 - Double Sale
+BACK (elements):
+1. Double sale of same property
+SOURCE: Civil Code Art. 1544
+
+### ALAC QUESTIONS
+
+QUESTION civil-alac-1
+SUBJECT: civil-law
+QUESTION_TEXT: A sold to B...
+LINKED_FLASHCARDS: civil-1, civil-2
+  `;
+  const result = parseMarkdown(md);
+  assert.strictEqual(result.success, true);
+  assert.strictEqual(result.alac_questions.length, 1);
+  assert.strictEqual(result.alac_questions[0].id, 'civil-alac-1');
+  assert.strictEqual(result.alac_questions[0].subject_id, 'civil-law');
+  assert.strictEqual(result.alac_questions[0].question_text, 'A sold to B...');
+  assert.deepStrictEqual(result.alac_questions[0].linked_flashcard_ids, ['civil-1', 'civil-2']);
+});
+
