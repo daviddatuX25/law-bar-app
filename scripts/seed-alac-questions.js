@@ -13,9 +13,6 @@
 const { DbAdapter } = require('../db.js');
 const { randomUUID } = require('crypto');
 
-const db = new DbAdapter('./bar_exam.db');
-db.initialize();
-
 // ---------------------------------------------------------------------------
 // QUESTION BANK
 // Each entry: { subject_id, question_text, flashcard_ids: [string] }
@@ -264,7 +261,11 @@ const QUESTIONS = [
 // ---------------------------------------------------------------------------
 // Seed
 // ---------------------------------------------------------------------------
-async function seed() {
+async function seedAlacQuestions(dbInstance) {
+  const db = dbInstance || new DbAdapter('./bar_exam.db');
+  if (!dbInstance) {
+    db.initialize();
+  }
   let created = 0;
   let skipped = 0;
 
@@ -288,4 +289,8 @@ async function seed() {
   console.log(`\nDone. Created ${created} questions, ${skipped} failed.`);
 }
 
-seed().catch(err => console.error('Seed error:', err.message));
+if (require.main === module) {
+  seedAlacQuestions().catch(err => console.error('Seed error:', err.message));
+}
+
+module.exports = { seedAlacQuestions };

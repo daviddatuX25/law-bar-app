@@ -362,6 +362,21 @@ if (require.main === module) {
   const { DbAdapter } = require('./db');
   const db = new DbAdapter();
   db.initialize();
+
+  // Auto-seed ALAC questions if they don't exist in the database yet
+  try {
+    const existing = db.db.prepare("SELECT COUNT(*) as count FROM alac_questions").get();
+    if (!existing || existing.count === 0) {
+      console.log('[server] No ALAC questions found in database. Seeding default questions...');
+      const { seedAlacQuestions } = require('./scripts/seed-alac-questions');
+      seedAlacQuestions(db).catch(err => {
+        console.error('[server] Error during auto-seeding:', err.message);
+      });
+    }
+  } catch (err) {
+    console.error('[server] Failed checking or seeding ALAC questions:', err.message);
+  }
+
   startServer(db);
 }
 
