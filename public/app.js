@@ -603,7 +603,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // ==========================================================================
   const alacSubjectDropdown = document.getElementById('alac-subject-dropdown');
   if (alacSubjectDropdown) {
-    let alacFlashcards = [];
+    let alacQuestions = [];
     let alacIndex = 0;
 
     fetch('/api/subjects')
@@ -629,23 +629,25 @@ document.addEventListener('DOMContentLoaded', () => {
     alacSubjectDropdown.addEventListener('change', () => {
       const subjectId = alacSubjectDropdown.value;
       if (!subjectId) {
-        alacFlashcards = [];
+        alacQuestions = [];
         alacIndex = 0;
-        renderAlacCard();
+        renderAlacQuestion();
         return;
       }
-      fetch(`/api/subjects/${subjectId}/deck`)
+      fetch(`/api/subjects/${subjectId}/alac-questions`)
         .then(res => res.json())
         .then(data => {
-          alacFlashcards = data.flashcards || [];
+          alacQuestions = data || [];
           alacIndex = 0;
-          renderAlacCard();
+          renderAlacQuestion();
         })
-        .catch(err => console.error('Error loading ALAC deck:', err));
+        .catch(err => console.error('Error loading ALAC questions:', err));
     });
 
     const alacRevealBtn = document.getElementById('alac-reveal-btn');
     const alacNextBtn = document.getElementById('alac-next-btn');
+    const alacHintBtn = document.getElementById('alac-hint-btn');
+    const alacHintBox = document.getElementById('alac-hint-box');
     const alacAnswerKey = document.getElementById('answer-key-panel');
 
     if (alacRevealBtn) {
@@ -659,15 +661,27 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
 
-    if (alacNextBtn) {
-      alacNextBtn.addEventListener('click', () => {
-        if (alacFlashcards.length === 0) return;
-        alacIndex = (alacIndex + 1) % alacFlashcards.length;
-        renderAlacCard();
+    if (alacHintBtn && alacHintBox) {
+      alacHintBtn.addEventListener('click', () => {
+        if (alacHintBox.style.display === 'none') {
+          alacHintBox.style.display = 'block';
+          alacHintBtn.textContent = '🙈 Hide Hint';
+        } else {
+          alacHintBox.style.display = 'none';
+          alacHintBtn.textContent = '💡 Get Hint';
+        }
       });
     }
 
-    function renderAlacCard() {
+    if (alacNextBtn) {
+      alacNextBtn.addEventListener('click', () => {
+        if (alacQuestions.length === 0) return;
+        alacIndex = (alacIndex + 1) % alacQuestions.length;
+        renderAlacQuestion();
+      });
+    }
+
+    function renderAlacQuestion() {
       const factPanel = document.getElementById('alac-fact-display');
       const alacProgressEl = document.getElementById('alac-progress');
       // Clear textareas
@@ -675,16 +689,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const el = document.getElementById(id);
         if (el) el.value = '';
       });
-      // Hide answer key
+      // Hide answer key & hint
       if (alacAnswerKey) alacAnswerKey.classList.remove('revealed');
       if (alacRevealBtn) alacRevealBtn.textContent = '🔑 Reveal Answer Key';
+      if (alacHintBox) alacHintBox.style.display = 'none';
+      if (alacHintBtn) alacHintBtn.textContent = '💡 Get Hint';
+
       // Reset evaluation panel
       resetEvalPanel();
       // Reset layout to 2-column
       const alacLayout = document.getElementById('alac-layout');
       if (alacLayout) alacLayout.classList.remove('alac-layout-3col');
 
-      if (alacFlashcards.length === 0) {
+      if (alacQuestions.length === 0) {
         if (factPanel) factPanel.textContent = 'Select a subject above to load a question.';
         if (alacProgressEl) alacProgressEl.textContent = '';
         const keyEl = document.getElementById('alac-key-provision');
@@ -693,34 +710,65 @@ document.addEventListener('DOMContentLoaded', () => {
         if (keyEl) keyEl.textContent = '';
         if (keyElsEl) keyElsEl.innerHTML = '';
         if (keyConfEl) keyConfEl.textContent = '';
-        alacCurrentCard = null;
+        if (alacHintBox) alacHintBox.innerHTML = '';
+        if (alacHintBtn) alacHintBtn.style.display = 'none';
+        alacCurrentQuestion = null;
         updateEvalButton();
         return;
       }
 
-      const card = alacFlashcards[alacIndex];
-      alacCurrentCard = card;  // Store for evaluation
-      if (factPanel) factPanel.textContent = card.front_shape;
-      if (alacProgressEl) alacProgressEl.textContent = `Question ${alacIndex + 1} of ${alacFlashcards.length}`;
+      const question = alacQuestions[alacIndex];
+      alacCurrentQuestion = question;  // Store for evaluation
+      if (factPanel) factPanel.textContent = question.question_text;
+      if (alacProgressEl) alacProgressEl.textContent = `Question ${alacIndex + 1} of ${alacQuestions.length}`;
+
+      // Populate hint box
+      if (alacHintBox && alacHintBtn) {
+        if (question.linked_cards && question.linked_cards.length > 0) {
+          alacHintBox.innerHTML = question.linked_cards.map((c, i) => `
+            <div style="margin-bottom: ${i < question.linked_cards.length - 1 ? '12px' : '0'}; border-bottom: ${i < question.linked_cards.length - 1 ? '1px dashed rgba(212, 175, 55, 0.2)' : 'none'}; padding-bottom: ${i < question.linked_cards.length - 1 ? '8px' : '0'};">
+              <strong>Concept ${i + 1}:</strong> ${c.back_provision}<br/>
+              <strong>Original Scenario:</strong> ${c.front_shape}<br/>
+              <strong>Trigger Words:</strong> ${c.front_triggers.join(', ')}
+            </div>
+          `).join('');
+          alacHintBtn.style.display = 'inline-block';
+        } else {
+          alacHintBox.innerHTML = 'No hints available.';
+          alacHintBtn.style.display = 'none';
+        }
+      }
 
       // Populate answer key (hidden until revealed)
       const keyEl = document.getElementById('alac-key-provision');
       const keyElsEl = document.getElementById('alac-key-elements');
       const keyConfEl = document.getElementById('alac-key-confusion');
 
-      if (keyEl) keyEl.textContent = card.back_provision || '';
+      if (keyEl) {
+        keyEl.innerHTML = (question.linked_cards || []).map(c => `<div>⚖️ ${c.back_provision}</div>`).join('');
+      }
       if (keyElsEl) {
-        keyElsEl.innerHTML = (card.back_elements || []).map((el, i) => `<li>${el}</li>`).join('');
+        keyElsEl.innerHTML = (question.linked_cards || []).map(c => `
+          <div style="margin-bottom: 8px;">
+            <strong style="color: var(--gold-deep);">${c.back_provision} Elements:</strong>
+            <ol style="margin: 4px 0 0 16px; padding: 0;">
+              ${c.back_elements.map(el => `<li>${el}</li>`).join('')}
+            </ol>
+          </div>
+        `).join('');
       }
       if (keyConfEl) {
-        keyConfEl.textContent = card.back_confusion
-          ? `Common Confusion: ${card.back_confusion}`
-          : '';
+        const confs = (question.linked_cards || []).filter(c => c.back_confusion).map(c => `
+          <div style="margin-bottom: 6px;">
+            <strong>${c.back_provision}:</strong> ${c.back_confusion}
+          </div>
+        `);
+        keyConfEl.innerHTML = confs.length > 0 ? confs.join('') : 'None listed.';
       }
       updateEvalButton();
     }
 
-    let alacCurrentCard = null;  // Track current card for evaluation
+    let alacCurrentQuestion = null;  // Track current question for evaluation
     let alacMode = 'segmented';  // 'segmented' | 'freeform'
 
     // ==========================================================================
@@ -765,7 +813,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const app = document.getElementById('alac-application-text')?.value?.trim() || '';
         hasContent = answer.length > 0 || law.length > 0 || app.length > 0;
       }
-      alacEvaluateBtn.disabled = !hasContent || !alacCurrentCard;
+      alacEvaluateBtn.disabled = !hasContent || !alacCurrentQuestion;
     }
 
     // Watch textareas for content changes → enable/disable evaluate button
@@ -818,15 +866,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Exported globally so onclick handlers can reach it
     window.copyAlacPromptToClipboard = function () {
-      if (!alacCurrentCard) {
+      if (!alacCurrentQuestion) {
         alert('Please choose a subject and load a fact pattern first.');
         return;
       }
 
-      const factPattern = alacCurrentCard.front_shape || '';
-      const provision = alacCurrentCard.back_provision || '';
-      const elements = (alacCurrentCard.back_elements || []).map((el, i) => `${i + 1}. ${el}`).join('\n');
-      const confusion = alacCurrentCard.back_confusion || 'None';
+      const factPattern = alacCurrentQuestion.question_text || '';
+      const provision = alacCurrentQuestion.linked_cards.map(c => c.back_provision).join(' & ') || 'None';
+      const elements = alacCurrentQuestion.linked_cards.flatMap(c => c.back_elements || []).map((el, i) => `${i + 1}. ${el}`).join('\n');
+      const confusion = alacCurrentQuestion.linked_cards.filter(c => c.back_confusion).map(c => `${c.back_provision}: ${c.back_confusion}`).join('\n') || 'None';
 
       let studentAnswer = '';
       if (alacMode === 'freeform') {
@@ -1041,12 +1089,12 @@ Please format your response clearly:
 
     if (alacEvaluateBtn) {
       alacEvaluateBtn.addEventListener('click', async () => {
-        if (!alacCurrentCard) return;
+        if (!alacCurrentQuestion) return;
 
-        const factPattern = alacCurrentCard.front_shape || '';
-        const provision = alacCurrentCard.back_provision || '';
-        const elements = alacCurrentCard.back_elements || [];
-        const confusion = alacCurrentCard.back_confusion || '';
+        const factPattern = alacCurrentQuestion.question_text || '';
+        const provision = alacCurrentQuestion.linked_cards.map(c => c.back_provision).join(' & ') || 'None';
+        const elements = alacCurrentQuestion.linked_cards.flatMap(c => c.back_elements || []);
+        const confusion = alacCurrentQuestion.linked_cards.filter(c => c.back_confusion).map(c => `${c.back_provision}: ${c.back_confusion}`).join('\n') || '';
 
         // Build request body based on mode
         let body;
