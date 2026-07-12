@@ -635,13 +635,24 @@ document.addEventListener('DOMContentLoaded', () => {
         return;
       }
       fetch(`/api/subjects/${subjectId}/alac-questions`)
-        .then(res => res.json())
+        .then(res => {
+          if (!res.ok) {
+            return res.json().then(e => { throw new Error(e.error || 'Server error'); });
+          }
+          return res.json();
+        })
         .then(data => {
           alacQuestions = data || [];
           alacIndex = 0;
           renderAlacQuestion();
         })
-        .catch(err => console.error('Error loading ALAC questions:', err));
+        .catch(err => {
+          console.error('Error loading ALAC questions:', err);
+          const factPanel = document.getElementById('alac-fact-display');
+          if (factPanel) {
+            factPanel.innerHTML = `<span style="color: var(--red);">Error loading questions: ${err.message}</span>`;
+          }
+        });
     });
 
     const alacRevealBtn = document.getElementById('alac-reveal-btn');
