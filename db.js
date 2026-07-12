@@ -97,12 +97,23 @@ class DbAdapter {
 
     const paraStmt = this.db.prepare('SELECT * FROM source_paragraphs WHERE source_id = ?');
     const paragraphs = paraStmt.all(sourceId);
-    const countStmt = this.db.prepare('SELECT COUNT(*) as count FROM flashcards WHERE source_paragraph_id = ? OR source_paragraph_id = ?');
+
+    const countStmt = this.db.prepare(`
+      SELECT source_paragraph_id, COUNT(*) as count 
+      FROM flashcards 
+      WHERE source_paragraph_id LIKE ? 
+      GROUP BY source_paragraph_id
+    `);
+    const counts = countStmt.all(`${sourceId}:%`);
+    const countMap = {};
+    for (const row of counts) {
+      countMap[row.source_paragraph_id] = row.count;
+    }
 
     return {
       ...source,
       paragraphs: paragraphs.map(p => {
-        const cardCount = countStmt.get(p.id, p.anchor_id).count;
+        const cardCount = countMap[p.id] || countMap[p.anchor_id] || 0;
         return {
           id: p.anchor_id,
           text: p.content_text,
@@ -438,55 +449,60 @@ class DbAdapter {
     const existing = this.db.prepare('SELECT id FROM sources WHERE id = ?').get(sourceId);
     const replaced = !!existing;
 
-    // Ensure subject row exists with proper display name
-    this.db.prepare('INSERT OR REPLACE INTO subjects (id, name) VALUES (?, ?)').run(subjectId, subjectName);
-
-    // Delete existing source rows for this sourceId (re-import is safe)
-    this.db.prepare('DELETE FROM source_paragraphs WHERE source_id = ?').run(sourceId);
-    this.db.prepare('DELETE FROM sources WHERE id = ?').run(sourceId);
-
-    this.db.prepare('INSERT INTO sources (id, title, subject_id) VALUES (?, ?, ?)').run(sourceId, title, subjectId);
-
-    // Strip HTML tags to get clean text
-    const cleanText = rawText
-      .replace(/<[^>]*>/g, ' ')       // strip all HTML tags
-      .replace(/&nbsp;/g, ' ')
-      .replace(/&amp;/g, '&')
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&quot;/g, '"')
-      .replace(/&#039;/g, "'")
-      .replace(/&[a-z]+;/gi, ' ')     // remaining HTML entities → space
-      .replace(/\r\n/g, '\n')
-      .replace(/\r/g, '\n')
-      .replace(/\t/g, ' ')
-      .replace(/ {2,}/g, ' ')          // collapse multiple spaces
-      .replace(/\n{3,}/g, '\n\n');     // collapse 3+ newlines to 2
-
-    // Split into paragraphs: blank lines OR Article/Section/Chapter headings
-    const rawParagraphs = cleanText
-      .split(/\n{2,}|(?=\b(?:Art(?:icle)?|Sec(?:tion)?|Chapter|Rule|BOOK|TITLE|PRELIMINARY)\b[.\s]*\d)/i)
-      .map(p => p.trim())
-      .filter(p => p.length > 20);
-
-    const stmtPara = this.db.prepare(
-      'INSERT INTO source_paragraphs (id, source_id, anchor_id, content_text) VALUES (?, ?, ?, ?)'
-    );
-
-    this.db.exec('BEGIN');
+    this.db.exec('PRAGMA foreign_keys = OFF;');
     try {
-      rawParagraphs.forEach((text, idx) => {
-        const anchorId = `${sourceId}-p${idx + 1}`;
-        const paraId = `${sourceId}:${anchorId}`;
-        stmtPara.run(paraId, sourceId, anchorId, text);
-      });
-      this.db.exec('COMMIT');
-    } catch (e) {
-      this.db.exec('ROLLBACK');
-      throw e;
-    }
+      // Ensure subject row exists with proper display name
+      this.db.prepare('INSERT OR REPLACE INTO subjects (id, name) VALUES (?, ?)').run(subjectId, subjectName);
 
-    return { count: rawParagraphs.length, replaced };
+      // Delete existing source rows for this sourceId (re-import is safe)
+      this.db.prepare('DELETE FROM source_paragraphs WHERE source_id = ?').run(sourceId);
+      this.db.prepare('DELETE FROM sources WHERE id = ?').run(sourceId);
+
+      this.db.prepare('INSERT INTO sources (id, title, subject_id) VALUES (?, ?, ?)').run(sourceId, title, subjectId);
+
+      // Strip HTML tags to get clean text
+      const cleanText = rawText
+        .replace(/<[^>]*>/g, ' ')       // strip all HTML tags
+        .replace(/&nbsp;/g, ' ')
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#039;/g, "'")
+        .replace(/&[a-z]+;/gi, ' ')     // remaining HTML entities → space
+        .replace(/\r\n/g, '\n')
+        .replace(/\r/g, '\n')
+        .replace(/\t/g, ' ')
+        .replace(/ {2,}/g, ' ')          // collapse multiple spaces
+        .replace(/\n{3,}/g, '\n\n');     // collapse 3+ newlines to 2
+
+      // Split into paragraphs: blank lines OR Article/Section/Chapter headings
+      const rawParagraphs = cleanText
+        .split(/\n{2,}|(?=\b(?:Art(?:icle)?|Sec(?:tion)?|Chapter|Rule|BOOK|TITLE|PRELIMINARY)\b[.\s]*\d)/i)
+        .map(p => p.trim())
+        .filter(p => p.length > 20);
+
+      const stmtPara = this.db.prepare(
+        'INSERT INTO source_paragraphs (id, source_id, anchor_id, content_text) VALUES (?, ?, ?, ?)'
+      );
+
+      this.db.exec('BEGIN');
+      try {
+        rawParagraphs.forEach((text, idx) => {
+          const anchorId = `${sourceId}-p${idx + 1}`;
+          const paraId = `${sourceId}:${anchorId}`;
+          stmtPara.run(paraId, sourceId, anchorId, text);
+        });
+        this.db.exec('COMMIT');
+      } catch (e) {
+        this.db.exec('ROLLBACK');
+        throw e;
+      }
+
+      return { count: rawParagraphs.length, replaced };
+    } finally {
+      this.db.exec('PRAGMA foreign_keys = ON;');
+    }
   }
 }
 

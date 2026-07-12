@@ -25,7 +25,10 @@ try {
     // Try to parse the citation for article, section, or rule numbers
     const cit = fc.source_citation;
     const match = cit.match(/\b(art(?:icle)?|sec(?:tion)?|rule)\.?\s*(\d+)/i);
-    if (!match) continue;
+    if (!match) {
+      console.log(`Skipped card "${fc.id}" ("${cit}"): citation doesn't match regex`);
+      continue;
+    }
 
     const type = match[1].toLowerCase();
     const num = match[2];

@@ -399,5 +399,40 @@ test('Source Paragraph Deletion Nullifies Flashcard Link', () => {
   assert.strictEqual(card.source_paragraph_id, null);
 });
 
+test('Source Re-import Does Not Sever Flashcard Links', () => {
+  const db = new DbAdapter(':memory:');
+  db.initialize();
+
+  // 1. Setup subject and import a source
+  const subjectId = 'subj-1';
+  const sourceId = 'src-1';
+  const text = 'Article 1. The Civil Code of the Philippines.\n\nArticle 2. Laws shall take effect after fifteen days.';
+  
+  db.importSource(subjectId, 'Civil Law', sourceId, 'Civil Code', text);
+
+  // Verify it created source paragraphs
+  const source = db.getSource(sourceId);
+  assert.strictEqual(source.paragraphs.length, 2);
+  const para1Id = `${sourceId}:${source.paragraphs[0].id}`; // e.g. 'src-1:src-1-p1'
+  
+  // 2. Insert a flashcard linked to the first paragraph
+  db.runWriteQuery("INSERT INTO shapes (id, subject_id, shape_text) VALUES ('shape-1', 'subj-1', 'Test Shape')");
+  db.runWriteQuery(
+    "INSERT INTO flashcards (id, subject_id, shape_id, source_citation, source_paragraph_id) VALUES (?, ?, ?, ?, ?)",
+    ['card-1', subjectId, 'shape-1', 'Article 1', para1Id]
+  );
+
+  // Verify flashcard is linked
+  let card = db.db.prepare("SELECT * FROM flashcards WHERE id = 'card-1'").get();
+  assert.strictEqual(card.source_paragraph_id, para1Id);
+
+  // 3. Re-import the source
+  db.importSource(subjectId, 'Civil Law', sourceId, 'Civil Code', text);
+
+  // 4. Verify flashcard is STILL linked to the recreated paragraph and NOT nullified
+  card = db.db.prepare("SELECT * FROM flashcards WHERE id = 'card-1'").get();
+  assert.strictEqual(card.source_paragraph_id, para1Id);
+});
+
 
 
