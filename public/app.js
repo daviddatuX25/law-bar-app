@@ -729,7 +729,7 @@ document.addEventListener('DOMContentLoaded', () => {
             <div style="margin-bottom: ${i < question.linked_cards.length - 1 ? '12px' : '0'}; border-bottom: ${i < question.linked_cards.length - 1 ? '1px dashed rgba(212, 175, 55, 0.2)' : 'none'}; padding-bottom: ${i < question.linked_cards.length - 1 ? '8px' : '0'};">
               <strong>Concept ${i + 1}:</strong> ${c.back_provision}<br/>
               <strong>Original Scenario:</strong> ${c.front_shape}<br/>
-              <strong>Trigger Words:</strong> ${c.front_triggers.join(', ')}
+              <strong>Trigger Words:</strong> ${(c.front_triggers || []).join(', ')}
             </div>
           `).join('');
           alacHintBtn.style.display = 'inline-block';
@@ -752,7 +752,7 @@ document.addEventListener('DOMContentLoaded', () => {
           <div style="margin-bottom: 8px;">
             <strong style="color: var(--gold-deep);">${c.back_provision} Elements:</strong>
             <ol style="margin: 4px 0 0 16px; padding: 0;">
-              ${c.back_elements.map(el => `<li>${el}</li>`).join('')}
+              ${(c.back_elements || []).map(el => `<li>${el}</li>`).join('')}
             </ol>
           </div>
         `).join('');
