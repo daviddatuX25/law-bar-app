@@ -1163,7 +1163,7 @@ Please format your response clearly:
       });
     }
 
-    renderAlacCard();
+    renderAlacQuestion();
   }
 });
 
