@@ -1,11 +1,7 @@
-# Progress Ledger
+# Progress Ledger - Disguised ALAC Questions
 
-- [x] Task 1: Database Adapter and Normalized SQLite Schema
-- [x] Task 2: AST Markdown Parser & Data Ingestion Validator
-- [x] Task 3: Seed Pipeline and Relational Verification
-- [x] Task 4: Express API Routing
-- [x] Task 5: Premium CSS Design Tokens & Funnel Dashboard
-- [x] Task 6: Interactive Study Deck & Decoy Cards Drill
-- [x] Task 7: Split-Screen Document Reader & Connector
-- [x] Task 8: Creator and Importer Studio
-- [x] Task 9: MCP Server Framework Integration
+- [ ] Task 1: Database Migration & Model Methods
+- [ ] Task 2: Pipeline Ingestion (Parser Updates)
+- [ ] Task 3: Backend API routes
+- [ ] Task 4: Frontend Practice UI Integration
+- [ ] Task 5: Studio UI Editor Tab
