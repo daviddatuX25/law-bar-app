@@ -3,16 +3,20 @@ function parseMarkdown(mdContent) {
     return {
       success: false,
       data: [],
+      decoy_pairs: [],
       errors: ['Input must be a string.']
     };
   }
 
   const lines = mdContent.split(/\r?\n/);
   const cards = [];
+  const decoyPairs = [];
   const errors = [];
   
   let currentCard = null;
   let cardLineNum = 0;
+  let currentDecoy = null;
+  let decoyLineNum = 0;
 
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i].trim();
@@ -21,6 +25,11 @@ function parseMarkdown(mdContent) {
     if (line.startsWith('CARD ')) {
       if (currentCard) {
         validateAndPushCard(currentCard, cardLineNum, cards, errors);
+        currentCard = null;
+      }
+      if (currentDecoy) {
+        decoyPairs.push(currentDecoy);
+        currentDecoy = null;
       }
       currentCard = {
         id: line.substring(5).trim(),
@@ -33,6 +42,38 @@ function parseMarkdown(mdContent) {
         source_paragraph_id: null
       };
       cardLineNum = i + 1;
+    } else if (line.startsWith('DECOY ')) {
+      if (currentCard) {
+        validateAndPushCard(currentCard, cardLineNum, cards, errors);
+        currentCard = null;
+      }
+      if (currentDecoy) {
+        decoyPairs.push(currentDecoy);
+        currentDecoy = null;
+      }
+      currentDecoy = {
+        id: line.substring(6).trim(),
+        subject_id: '',
+        shape_a_id: '',
+        shape_b_id: '',
+        shared_trigger: '',
+        distinguishing_fact: ''
+      };
+      decoyLineNum = i + 1;
+    } else if (currentDecoy) {
+      if (line.startsWith('SUBJECT:')) {
+        currentDecoy.subject_id = line.replace('SUBJECT:', '').trim();
+      } else if (line.startsWith('SHAPE_A:')) {
+        currentDecoy.shape_a_id = line.replace('SHAPE_A:', '').trim();
+      } else if (line.startsWith('SHAPE_B:')) {
+        currentDecoy.shape_b_id = line.replace('SHAPE_B:', '').trim();
+      } else if (line.startsWith('SHARED_TRIGGER:')) {
+        currentDecoy.shared_trigger = line.replace('SHARED_TRIGGER:', '').trim();
+      } else if (line.startsWith('DISTINQUISHING_FACT:')) {
+        currentDecoy.distinguishing_fact = line.replace('DISTINQUISHING_FACT:', '').trim();
+      } else if (line.startsWith('DISTINGUISHING_FACT:')) {
+        currentDecoy.distinguishing_fact = line.replace('DISTINGUISHING_FACT:', '').trim();
+      }
     } else if (currentCard) {
       if (line.startsWith('FRONT (shape):')) {
         currentCard.shape = line.replace('FRONT (shape):', '').trim();
@@ -43,7 +84,7 @@ function parseMarkdown(mdContent) {
       } else if (line.startsWith('BACK (elements):')) {
         // Parse lines following it until another section starts
         let j = i + 1;
-        while (j < lines.length && !lines[j].startsWith('BACK (') && !lines[j].startsWith('CARD ') && !lines[j].startsWith('SOURCE:')) {
+        while (j < lines.length && !lines[j].startsWith('BACK (') && !lines[j].startsWith('CARD ') && !lines[j].startsWith('DECOY ') && !lines[j].startsWith('SOURCE:')) {
           const listLine = lines[j].trim();
           if (listLine.match(/^\d+\./)) {
             currentCard.elements.push(listLine.replace(/^\d+\./, '').trim());
@@ -64,10 +105,14 @@ function parseMarkdown(mdContent) {
   if (currentCard) {
     validateAndPushCard(currentCard, cardLineNum, cards, errors);
   }
+  if (currentDecoy) {
+    decoyPairs.push(currentDecoy);
+  }
 
   return {
     success: errors.length === 0,
     data: cards,
+    decoy_pairs: decoyPairs,
     errors
   };
 }

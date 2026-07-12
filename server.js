@@ -262,7 +262,7 @@ function startServer(db, port = process.env.PORT || 3005) {
     }
 
     try {
-      db.importSubjectData(subjectId, parseResult.data);
+      db.importSubjectData(subjectId, parseResult.data, parseResult.decoy_pairs);
       res.json({ success: true, count: parseResult.data.length });
     } catch (err) {
       res.status(500).json({ error: err.message });

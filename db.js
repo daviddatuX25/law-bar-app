@@ -137,12 +137,46 @@ class DbAdapter {
     const para = paraStmt.get(paragraphIdOrAnchor, paragraphIdOrAnchor);
     if (!para) return null;
 
-    const provStmt = this.db.prepare(`
-      SELECT * FROM provisions 
-      WHERE id = ? OR id = ? OR citation LIKE ?
+    // 1. Try to find a provision via linked flashcards (most accurate)
+    let prov = null;
+    const provViaFlashcardStmt = this.db.prepare(`
+      SELECT p.* 
+      FROM provisions p
+      JOIN shape_provisions sp ON p.id = sp.provision_id
+      JOIN flashcards f ON f.shape_id = sp.shape_id
+      WHERE (f.source_paragraph_id = ? OR f.source_paragraph_id = ?) AND sp.is_primary = 1
       LIMIT 1
     `);
-    const prov = provStmt.get(para.id, para.anchor_id, `%${para.anchor_id}%`);
+    prov = provViaFlashcardStmt.get(para.id, para.anchor_id);
+
+    // 2. Fallback to direct ID or citation-like match
+    if (!prov) {
+      const provStmt = this.db.prepare(`
+        SELECT * FROM provisions 
+        WHERE id = ? OR id = ? OR citation LIKE ?
+        LIMIT 1
+      `);
+      prov = provStmt.get(para.id, para.anchor_id, `%${para.anchor_id}%`);
+    }
+
+    // 3. Fallback to extracting article/section/rule number from paragraph text
+    if (!prov) {
+      const match = para.content_text.match(/\b(?:article|art|section|sec|rule)\.?\s*(\d+)/i);
+      if (match) {
+        const num = match[1];
+        const provFallbackStmt = this.db.prepare(`
+          SELECT * FROM provisions 
+          WHERE subject_id = ? AND (citation LIKE ? OR citation LIKE ? OR citation LIKE ?)
+          LIMIT 1
+        `);
+        const sourceStmt = this.db.prepare('SELECT subject_id FROM sources WHERE id = ?');
+        const source = sourceStmt.get(para.source_id);
+        const subId = source ? source.subject_id : '';
+        if (subId) {
+          prov = provFallbackStmt.get(subId, `%Art%${num}%`, `%Sec%${num}%`, `%Rule%${num}%`);
+        }
+      }
+    }
 
     let provisionData = null;
     let shapes = [];
@@ -258,7 +292,7 @@ class DbAdapter {
     return stmt.run(...params);
   }
 
-  importSubjectData(subjectId, cards) {
+  importSubjectData(subjectId, cards, decoyPairs = []) {
     const provisions = [];
     const shapes = [];
     const trigger_words = [];
@@ -314,7 +348,8 @@ class DbAdapter {
       provisions,
       shapes,
       trigger_words,
-      flashcards
+      flashcards,
+      decoy_pairs: decoyPairs
     };
 
     this.insertSubjectData(subjectId, formattedData);

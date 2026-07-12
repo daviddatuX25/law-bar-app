@@ -91,7 +91,7 @@ function handleToolCall(id, name, args) {
     }
 
     try {
-      adapter.importSubjectData(subjectId, parsed.data);
+      adapter.importSubjectData(subjectId, parsed.data, parsed.decoy_pairs);
       sendResult(id, { content: [{ type: 'text', text: `Imported ${parsed.data.length} flashcards.` }] });
     } catch (dbErr) {
       sendError(id, `Database insertion failed: ${dbErr.message}`);
