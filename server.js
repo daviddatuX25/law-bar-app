@@ -318,6 +318,18 @@ function startServer(db, port = process.env.PORT || 3005) {
     }
   });
 
+  app.get('/api/debug/db', (req, res) => {
+    try {
+      const subjects = db.db.prepare("SELECT COUNT(*) as count FROM subjects").get().count;
+      const flashcards = db.db.prepare("SELECT COUNT(*) as count FROM flashcards").get().count;
+      const questions = db.db.prepare("SELECT COUNT(*) as count FROM alac_questions").get().count;
+      const links = db.db.prepare("SELECT COUNT(*) as count FROM alac_question_flashcards").get().count;
+      res.json({ subjects, flashcards, questions, links });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
   app.get('/api/subjects/:id/alac-questions', (req, res) => {
     try {
       const questions = db.getAlacQuestions(req.params.id);
