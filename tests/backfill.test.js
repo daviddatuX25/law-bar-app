@@ -28,6 +28,14 @@ test('Backfill migration script matches and links flashcards correctly', () => {
           {
             id: 'p1545',
             text: 'Article 1545. For the conditions and warranties...'
+          },
+          {
+            id: 'psec2',
+            text: 'Section 2. This is section 2 text.'
+          },
+          {
+            id: 'prule10',
+            text: 'Rule 10. This is rule 10 text.'
           }
         ]
       }
@@ -48,6 +56,22 @@ test('Backfill migration script matches and links flashcards correctly', () => {
         elements_checklist: [],
         common_confusion: '',
         distinguishing_fact: ''
+      },
+      {
+        id: 'prov-sec2',
+        citation: 'Sec. 2',
+        short_title: 'Section Title',
+        elements_checklist: [],
+        common_confusion: '',
+        distinguishing_fact: ''
+      },
+      {
+        id: 'prov-rule10',
+        citation: 'Rule 10',
+        short_title: 'Rule Title',
+        elements_checklist: [],
+        common_confusion: '',
+        distinguishing_fact: ''
       }
     ],
     shapes: [
@@ -62,6 +86,18 @@ test('Backfill migration script matches and links flashcards correctly', () => {
         shape_text: 'Condition failure',
         frequency: 1,
         provisions: [{ id: 'prov-1545', is_primary: 1 }]
+      },
+      {
+        id: 'shape-sec2',
+        shape_text: 'Section shape',
+        frequency: 1,
+        provisions: [{ id: 'prov-sec2', is_primary: 1 }]
+      },
+      {
+        id: 'shape-rule10',
+        shape_text: 'Rule shape',
+        frequency: 1,
+        provisions: [{ id: 'prov-rule10', is_primary: 1 }]
       }
     ],
     trigger_words: [],
@@ -81,6 +117,16 @@ test('Backfill migration script matches and links flashcards correctly', () => {
         id: 'fc-3',
         shape_id: 'shape-1544',
         source_citation: 'Art. 9999' // No matching article
+      },
+      {
+        id: 'fc-4',
+        shape_id: 'shape-sec2',
+        source_citation: 'Sec. 2'
+      },
+      {
+        id: 'fc-5',
+        shape_id: 'shape-rule10',
+        source_citation: 'Rule 10'
       }
     ]
   });
@@ -90,6 +136,8 @@ test('Backfill migration script matches and links flashcards correctly', () => {
   assert.strictEqual(initialCards.find(c => c.id === 'fc-1').source_paragraph_id, null);
   assert.strictEqual(initialCards.find(c => c.id === 'fc-2').source_paragraph_id, null);
   assert.strictEqual(initialCards.find(c => c.id === 'fc-3').source_paragraph_id, null);
+  assert.strictEqual(initialCards.find(c => c.id === 'fc-4').source_paragraph_id, null);
+  assert.strictEqual(initialCards.find(c => c.id === 'fc-5').source_paragraph_id, null);
 
   // Close connection so child process can write to SQLite without locking issues
   db.db.close();
@@ -115,10 +163,14 @@ test('Backfill migration script matches and links flashcards correctly', () => {
   const fc1 = updatedCards.find(c => c.id === 'fc-1');
   const fc2 = updatedCards.find(c => c.id === 'fc-2');
   const fc3 = updatedCards.find(c => c.id === 'fc-3');
+  const fc4 = updatedCards.find(c => c.id === 'fc-4');
+  const fc5 = updatedCards.find(c => c.id === 'fc-5');
 
   assert.strictEqual(fc1.source_paragraph_id, 'civil-code:p1544', "fc-1 should be linked to civil-code:p1544 (matching 'Art. 1544')");
   assert.strictEqual(fc2.source_paragraph_id, 'civil-code:p1545', "fc-2 should be linked to civil-code:p1545 (matching 'Article 1545')");
   assert.strictEqual(fc3.source_paragraph_id, null, "fc-3 should remain unlinked (no matching paragraph)");
+  assert.strictEqual(fc4.source_paragraph_id, 'civil-code:psec2', "fc-4 should be linked to civil-code:psec2 (matching 'Sec. 2')");
+  assert.strictEqual(fc5.source_paragraph_id, 'civil-code:prule10', "fc-5 should be linked to civil-code:prule10 (matching 'Rule 10')");
 
   // Clean up
   verifyDb.db.close();
