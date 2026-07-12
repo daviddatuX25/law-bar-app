@@ -64,3 +64,16 @@ CREATE TABLE IF NOT EXISTS flashcards (
   source_citation TEXT NOT NULL,
   source_paragraph_id TEXT REFERENCES source_paragraphs(id) ON DELETE SET NULL
 );
+
+CREATE TABLE IF NOT EXISTS alac_questions (
+  id TEXT PRIMARY KEY,
+  subject_id TEXT REFERENCES subjects(id) ON DELETE CASCADE,
+  question_text TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS alac_question_flashcards (
+  alac_question_id TEXT REFERENCES alac_questions(id) ON DELETE CASCADE,
+  flashcard_id TEXT REFERENCES flashcards(id) ON DELETE CASCADE,
+  PRIMARY KEY (alac_question_id, flashcard_id)
+);

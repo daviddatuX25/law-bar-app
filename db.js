@@ -287,6 +287,77 @@ class DbAdapter {
     };
   }
 
+  createAlacQuestion({ id, subject_id, question_text, linked_flashcard_ids }) {
+    this.db.exec('BEGIN');
+    try {
+      // Insert/replace alac_question
+      const insertQ = this.db.prepare(`
+        INSERT OR REPLACE INTO alac_questions (id, subject_id, question_text)
+        VALUES (?, ?, ?)
+      `);
+      insertQ.run(id, subject_id, question_text);
+
+      // Clear existing links
+      const deleteLinks = this.db.prepare(`
+        DELETE FROM alac_question_flashcards WHERE alac_question_id = ?
+      `);
+      deleteLinks.run(id);
+
+      // Insert new links
+      if (linked_flashcard_ids && linked_flashcard_ids.length > 0) {
+        const insertLink = this.db.prepare(`
+          INSERT INTO alac_question_flashcards (alac_question_id, flashcard_id)
+          VALUES (?, ?)
+        `);
+        for (const fcId of linked_flashcard_ids) {
+          insertLink.run(id, fcId);
+        }
+      }
+      this.db.exec('COMMIT');
+    } catch (e) {
+      this.db.exec('ROLLBACK');
+      throw e;
+    }
+  }
+
+  getAlacQuestions(subjectId) {
+    const questionsQuery = this.db.prepare(`
+      SELECT id, subject_id, question_text FROM alac_questions WHERE subject_id = ?
+    `);
+    const rows = questionsQuery.all(subjectId);
+
+    const linksQuery = this.db.prepare(`
+      SELECT f.id, s.shape_text as front_shape,
+             (SELECT json_group_array(word) FROM trigger_words WHERE shape_id = s.id) as front_triggers,
+             p.citation || ' (' || p.short_title || ')' as back_provision,
+             p.elements_checklist as back_elements,
+             p.common_confusion as back_confusion
+      FROM alac_question_flashcards aqf
+      JOIN flashcards f ON aqf.flashcard_id = f.id
+      JOIN shapes s ON f.shape_id = s.id
+      JOIN shape_provisions sp ON s.id = sp.shape_id AND sp.is_primary = 1
+      JOIN provisions p ON sp.provision_id = p.id
+      WHERE aqf.alac_question_id = ?
+    `);
+
+    return rows.map(q => {
+      const cards = linksQuery.all(q.id).map(c => ({
+        ...c,
+        front_triggers: JSON.parse(c.front_triggers),
+        back_elements: JSON.parse(c.back_elements)
+      }));
+      return {
+        ...q,
+        linked_cards: cards
+      };
+    });
+  }
+
+  deleteAlacQuestion(id) {
+    const stmt = this.db.prepare('DELETE FROM alac_questions WHERE id = ?');
+    stmt.run(id);
+  }
+
   runWriteQuery(sql, params = []) {
     const stmt = this.db.prepare(sql);
     return stmt.run(...params);

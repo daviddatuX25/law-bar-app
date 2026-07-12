@@ -434,5 +434,40 @@ test('Source Re-import Does Not Sever Flashcard Links', () => {
   assert.strictEqual(card.source_paragraph_id, para1Id);
 });
 
+test('ALAC Questions CRUD operations', () => {
+  const db = new DbAdapter(':memory:');
+  db.initialize();
+
+  // 1. Create subject & flashcards first
+  db.db.exec("INSERT OR IGNORE INTO subjects (id, name) VALUES ('test-subject', 'Test Subject')");
+  db.db.exec("INSERT OR IGNORE INTO shapes (id, subject_id, shape_text) VALUES ('test-shape-1', 'test-subject', 'Shape 1')");
+  db.db.exec("INSERT OR IGNORE INTO provisions (id, subject_id, citation, short_title, elements_checklist) VALUES ('test-prov-1', 'test-subject', 'Art. 1', 'Title 1', '[\"El 1\"]')");
+  db.db.exec("INSERT OR IGNORE INTO shape_provisions (shape_id, provision_id, is_primary) VALUES ('test-shape-1', 'test-prov-1', 1)");
+  db.db.exec("INSERT OR IGNORE INTO flashcards (id, subject_id, shape_id, source_citation) VALUES ('fc-1', 'test-subject', 'test-shape-1', 'Source 1')");
+
+  // 2. Create ALAC question
+  const qData = {
+    id: 'alac-q-1',
+    subject_id: 'test-subject',
+    question_text: 'This is a disguised bar-exam question.',
+    linked_flashcard_ids: ['fc-1']
+  };
+  db.createAlacQuestion(qData);
+
+  // 3. Fetch ALAC questions and verify
+  const questions = db.getAlacQuestions('test-subject');
+  assert.strictEqual(questions.length, 1);
+  assert.strictEqual(questions[0].id, 'alac-q-1');
+  assert.strictEqual(questions[0].question_text, 'This is a disguised bar-exam question.');
+  assert.strictEqual(questions[0].linked_cards.length, 1);
+  assert.strictEqual(questions[0].linked_cards[0].id, 'fc-1');
+
+  // 4. Delete ALAC question
+  db.deleteAlacQuestion('alac-q-1');
+  const questionsAfter = db.getAlacQuestions('test-subject');
+  assert.strictEqual(questionsAfter.length, 0);
+});
+
+
 
 
