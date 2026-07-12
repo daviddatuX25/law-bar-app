@@ -338,7 +338,7 @@ function startServer(db, port = process.env.PORT || 3005) {
       const existing = db.db.prepare("SELECT COUNT(*) as count FROM alac_questions").get();
       if (!existing || existing.count === 0) {
         console.log('[server] No ALAC questions found in database. Seeding default questions on-the-fly...');
-        const { seedAlacQuestions } = require('./scripts/seed-alac-questions');
+        const { seedAlacQuestions } = require('./lib/seed-alac-questions');
         await seedAlacQuestions(db).catch(err => {
           console.error('[server] Error during on-the-fly seeding:', err.message);
         });
@@ -393,7 +393,7 @@ if (require.main === module) {
     const existing = db.db.prepare("SELECT COUNT(*) as count FROM alac_questions").get();
     if (!existing || existing.count === 0) {
       console.log('[server] No ALAC questions found in database. Seeding default questions...');
-      const { seedAlacQuestions } = require('./scripts/seed-alac-questions');
+      const { seedAlacQuestions } = require('./lib/seed-alac-questions');
       seedAlacQuestions(db).catch(err => {
         console.error('[server] Error during auto-seeding:', err.message);
       });
