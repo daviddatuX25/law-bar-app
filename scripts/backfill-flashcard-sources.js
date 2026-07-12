@@ -29,9 +29,9 @@ const updateFlashcardStmt = db.db.prepare("UPDATE flashcards SET source_paragrap
 db.db.exec("BEGIN");
 try {
   for (const fc of flashcards) {
-    // Try to parse the citation for article, section, or rule numbers
+    // Try to parse the citation for article, section, or rule numbers (including Roman numerals)
     const cit = fc.source_citation;
-    const match = cit.match(/\b(art(?:icle)?s?|sec(?:tion)?s?|rules?)\.?\s*(\d+)/i);
+    const match = cit.match(/\b(art(?:icle)?s?|sec(?:tion)?s?|rules?)\.?\s*([0-9ivxldcm]+)/i);
     if (!match) {
       console.log(`Skipped card "${fc.id}" ("${cit}"): citation doesn't match regex`);
       continue;
@@ -39,6 +39,7 @@ try {
 
     const type = match[1].toLowerCase();
     const num = match[2];
+
 
     let typeNormalized = "";
     if (type.startsWith("art")) {

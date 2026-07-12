@@ -189,7 +189,67 @@ BACK (elements):
 BACK (common confusion): Art. 1409 (Void Contracts) :: Voidable contracts are valid until annulled and can be ratified. Void contracts are inexistent from the start and cannot be ratified.
 SOURCE: Civil Code Arts. 1390, 1391, 1392
 
+CARD civil-16
+FRONT (shape): A spouse is utterly unable to perform essential marital obligations due to a grave psychological condition existing at marriage celebration.
+FRONT (trigger words): psychological incapacity, marital obligations, grave, juridical antecedence, incurable
+BACK (provision): Art. 36, Family Code - Psychological Incapacity
+BACK (elements):
+1. Grave (grave psychological anomaly preventing performance of essential marital obligations)
+2. Juridical antecedence (exists at the time of the celebration of marriage)
+3. Incurable (clinically or psychologically permanent)
+BACK (common confusion): Art. 45 par. 5 (Physical Incapacity) :: Psychological incapacity refers to the inability to comply with essential marital obligations (love, respect, support) due to psychological reasons; physical incapacity is the physical inability to consummate the marriage (impotence).
+SOURCE: Family Code Art. 36; Tan-Cruz v. Cruz, G.R. No. 203878 (2020)
+
+CARD civil-17
+FRONT (shape): One spouse sells or encumbers a conjugal/community property without the written consent of the other spouse or court authority.
+FRONT (trigger words): conjugal property sale, community property, without consent, void disposition, joint administration
+BACK (provision): Art. 96 & 124, Family Code - Sale of Conjugal/Community Property without Consent
+BACK (elements):
+1. Property belongs to absolute community or conjugal partnership
+2. One spouse disposes or encumbered the property
+3. Done without the written consent of the other spouse or authority of the court
+4. The transaction is void in its entirety (not merely voidable), but constitutes a continuing offer to the non-consenting spouse
+BACK (common confusion): Art. 1390 (Voidable Contracts) :: A sale of conjugal property without the other spouse's consent is void under the Family Code (Art. 124), not voidable under the Civil Code (which was the old rule under the Civil Code Art. 166/173).
+SOURCE: Family Code Arts. 96, 124; Bar 2018 Q8
+
+CARD civil-18
+FRONT (shape): A buyer purchases registered land relying solely on the face of the Torrens certificate of title, without knowledge of any defect.
+FRONT (trigger words): mirror doctrine, Torrens title, innocent purchaser for value, registered land, face of the title
+BACK (provision): Sec. 44, PD 1529 - Mirror Doctrine / Innocent Purchaser for Value
+BACK (elements):
+1. The land is registered under the Torrens System
+2. The buyer purchases the property in good faith and for value
+3. The buyer relies on the clean certificate of title
+4. The buyer is not required to look beyond the face of the title, except when there are annotations or circumstances triggering suspicion
+BACK (common confusion): Bad Faith Buyers :: If the buyer has actual knowledge of a prior claim or defect in the vendor's title, they cannot invoke the mirror doctrine; they are considered buyers in bad faith.
+SOURCE: PD 1529 Sec. 44; Bar 2017 Q12
+
+CARD civil-19
+FRONT (shape): A marriage is celebrated without a valid marriage license, and it does not fall under any of the exceptional marriages exempt from the license requirement.
+FRONT (trigger words): marriage license, absence of license, void marriage, essential requisition, exempt marriages
+BACK (provision): Arts. 4 & 35(3), Family Code - Void Marriage due to Absence of License
+BACK (elements):
+1. Marriage celebrated between a man and a woman
+2. No valid marriage license was issued prior to the marriage
+3. The marriage does not qualify as an exempt marriage (e.g., cohabitation of 5+ years, marriage at point of death)
+4. The marriage is void from inception (void ab initio)
+BACK (common confusion): Art. 45 (Voidable Marriage due to Consent/Age) :: Absence of a formal requisite (like a license) makes the marriage void from inception under Art. 35. Defects in consent or age make the marriage voidable under Art. 45.
+SOURCE: Family Code Arts. 4, 35(3); Bar 2019 Q5
+
+CARD civil-20
+FRONT (shape): A testator disposes of their entire estate by will, leaving nothing or less than the statutory share to their compulsory heirs.
+FRONT (trigger words): legitime, compulsory heir, preterition, disinheritance, preterited heir, free portion
+BACK (provision): Art. 886-887, Civil Code - Legitime of Compulsory Heirs
+BACK (elements):
+1. The testator has compulsory heirs (e.g. legitimate children, spouse)
+2. The testator disposes of property by will or donation
+3. The disposition deprives or impairs the legitime (reserved portion of the estate) of the compulsory heirs
+4. The impaired heirs may demand completion or reduction of donations/legacies (remedy of inoficiosidad)
+BACK (common confusion): Art. 854 (Preterition) :: Preterition is the total omission of a compulsory heir in the direct line in a will, which annuls the institution of heirs. Deprivation of legitime without total omission only entitles the heir to demand completion of legitime.
+SOURCE: Civil Code Arts. 854, 886-887; Bar 2018 Q6
+
 ### DECOY PAIRS
+
 
 DECOY decoy-1
 SUBJECT: civil-law

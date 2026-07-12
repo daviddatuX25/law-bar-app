@@ -1,0 +1,400 @@
+Section 1.   Form of negotiable instrument. -An instrument to be negotiable must conform to the following requirements:
+(a)  It must be in writing and signed by the maker or drawer;
+(b) Must contain an unconditional promise or order to pay a sum certain in money;
+(c) Must be payable on demand, or at a fixed or determinable future time;
+(d) Must be payable to order or to bearer; and
+(e) Where the instrument is addressed to a drawee, he must be named or otherwise indicated therein with reasonable certainty.
+Section 2.   Certainly as to sum ; what constitutes. -The sum payable sum is a sum certain within the meaning of this Act, although it is to be paid-
+(a) With interest; or
+(b)  By stated installments or
+(c) By stated installments, with a provision that upon default in payment of any installment or of interest the whole shall become due; or
+(d) With exchange, whether at a fixed rate or at the current rate; or
+(e) With costs of collection or an attorney's fee, in case payment shall not be made at maturity.
+Section 3.   When promise is unconditional. -An unqualified order or promise to pay is unconditional within the meaning of this Act, though coupled with-
+(a) An indication of a particular fund out of which reimbursement is to be made, or a particular account to be debited with the amount; or
+(b) A statement of the transaction which gives rise to the instrument.
+But an order or promise to pay out of a particular fund is not unconditional.
+Section 4.   Determinable future time; what constitutes. -An instrument is payable at a determinable future time, within the meaning of this Act, which is expressed to be payable-
+(a) At a fixed period after date or sight; or
+(b) On or before a fixed or determinable future time specified therein; or
+(c) On or at a fixed period after the occurrence of a specified event, which is certain to happen, though the time of happening be uncertain.
+An instrument payable upon a contingency is not negotiable, and the happening of the event does not cure the defect.
+Section 5.   Additional provisions not affecting  negotiability. -An instrument which contains an order or promise to do any act in f addition to the payment of money is not negotiable.   But the negotiable character of an instrument otherwise negotiable is not affected by a provision which-
+(a) Authorizes the sale of collateral securities in case the instrument be not paid at maturity; or
+(b) Authorizes a confession of judgment if the instrument be not paid at maturity; or
+(c)   Waives the benefit of any law intended for the advantage or protection of the obligor; or
+(d)   Gives the holder an election to require something to be done in lieu of payment of money.
+But nothing in this section shall validate any provision or stipulation otherwise illegal.
+Section 6.   Omissions; seal; particular money. -The validity and negotiable character of an instrument are not affected by the fact that-
+(a)  It is not dated; or
+(b) Does not specify the value given, or that any value has been given therefor; or
+(c) Does not specify the place where it is drawn or the place where it is payable; or
+(d) Bears a seal; or
+(e) Designates a particular kind of current money in which payment is to be made.
+But nothing in this section shall alter or repeal any statute requiring in certain cases the nature of the consideration to be stated in the instrument.
+Section 7.   When payable on demand. -An instrument is payable on demand-
+(a) Where it is expressed to be payable on demand, or at sight, or on presentation; or
+(b) In which no time for payment is expressed.
+Where an instrument is issued, accepted, or indorsed when overdue, it is, as regards the person so issuing, accepting, or indorsing it, payable on demand.
+Section 8.   When payable to order. -The instrument is payable to order where it is drawn payable to the order of a specified person or to him or his order.   It may be drawn payable to the order of-
+(a) A payee who is not maker, drawer, or drawee; or
+(b) The drawer or maker; or
+(c) The drawee; or
+(d) Two or more payees jointly; or
+(e) One or some of several payees; or
+(f) The holder of an office for the time being.
+Where the instrument is payable to order the payee must be named or otherwise indicated therein with reasonable certainty.
+Section 9.   When payable to bearer. -The instrument is payable to bearer-
+(a) When it is expressed to be so payable; or
+(b)  When it is payable to a person named therein or bearer; or (c) When it is payable to the order of a fictitious or person, and such fact was known to the person making it so payable; or
+(d)  When the name of the payee does not purport to be the name of any person; or
+(e) When the only or last indorsement is an indorsement in blank, sufficient terms.
+Section 10.   Terms, when sufficient. -The instrument need not follow the language of this Act, but any terms are sufficient which clearly indicate an intention to conform to the requirements hereof.
+Section 11.   Date, presumption as to. -Where the instrument or an acceptance or any indorsement thereon is dated, such date is deemed prima facie to be the true date of the making, drawing, acceptance, or indorsement, as the case may be.
+Section 12.   Antedated and postdated. -The instrument is not invalid for the reason only that it is antedated or postdated, provided this is not done for an illegal or fraudulent purpose.   The person to whom an instrument so dated is delivered acquires the title thereto as of the date of delivery.
+Section 13.    When date may be inserted. -Where an instrument expressed to be payable at a fixed period after date is issued undated, or where the acceptance of an instrument payable at a fixed period after sight is undated, any holder may insert therein the true date of issue or acceptance, and the instrument shall be payable accordingly.   The insertion of a wrong date does not avoid the instrument in the hands of a subsequent holder in due course; but as to him, the date so inserted is to be regarded as the true date.
+Section 14.   Blanks; when may be filled. -Where the instrument is wanting in any material particular, the person in possession thereof has a prima facie authority to complete it by filling up the blanks therein. And a signature on a blank paper delivered by the person making the signature in order that the paper may be converted into a negotiable instrument operates as a prima facie authority to fill it up as such for any amount. In order, however, that any such instrument when completed may be enforced against any person who became a party thereto prior to its completion, it must be filled up strictly in accordance with the authority given and within a reasonable time.   But if any such instrument, after completion, is negotiated to a holder in due course, it is valid  and effectual for all purposes in his hands, and he may enforce it as if it had been filled up strictly in accordance with  the authority given and within a reasonable time.
+Section 15.   Incomplete instrument not delivered. -Where an incomplete instrument has not been delivered it will not, if completed and negotiated, without authority, be a valid contract in the hands of any holder, as against any person whose signature was placed thereon before delivery.
+Section 16.   Delivery; when effectual: when presumed. -Every contract on a negotiable instrument is incomplete and revocable until delivery of the instrument for the purpose of giving effect thereto. As between immediate parties, and as regards a remote party other than a holder in due course, the delivery, in order to be effectual, must be made either by or under the authority of the party making, drawing, accepting, or indorsing, as the case may be; and in such case the delivery may be shown to have been conditional, or for a special purpose only, and not for the purpose of transferring the property in the instrument. But where the instrument is in the hands of a holder in due course, a valid delivery thereof by all parties prior to him so as to make them liable to him is conclusively presumed. And where the instrument is no longer in the possession of a party whose signature appears thereon, a valid and intentional delivery by him is presumed until the contrary is proved.
+Section 17.   Construction where instrument is ambiguous. -Where construction. the language of the instrument is ambiguous or there are omissions therein, the following rules of construction apply:
+(a)   Where the sum payable is expressed in words and also in figures and there is a discrepancy between the two, the sum denoted by the words is the sum payable; but if the words are ambiguous or uncertain, reference may be had to the figures to fix the amount;
+(b)   Where the instrument provides for the payment of interest, without  specifying the date  from which interest is to run, the interest runs from the date of the instrument, and if the instrument is undated, from the issue thereof;
+(c)   Where the instrument is not dated, it will be considered to be dated as of the time it was issued;
+(d)   Where there is a conflict between the written and printed provisions of the instrument, the written provisions prevail;
+(e)   Where the instrument is so ambiguous that there is doubt whether it is a bill or note, the holder may treat it as either at his election;
+(f) Where a signature is so placed upon the instrument that it is not clear in what capacity the person making the same intended to sign, he is to be deemed an indorser;
+(g) Where an instrument containing the words "I promise to pay" is signed by two or more persons, they are deemed to be jointly and severally liable thereon.
+Section 18.   Liability of person signing in trade or assumed name. - No person is liable on the instrument whose signature does not appear thereon, except as herein otherwise expressly provided.   But one who signs in a trade or assumed name will be liable to the same extent as if he had signed in his own name.
+Section 19.   Signature by agent; authority; how shown. -The signature of any party may be made by a duly authorized agent.   No particular form of appointment is necessary for this purpose; and the authority of the agent may be established as in other cases of agency.
+Section 20.   Liability of person signing as agent, and so forth. -  Where the instrument contains or a person adds to his signature words indicating that he signs for or on behalf of a principal, or in a representative capacity, he is not liable on the instrument if he was duly authorized; but the mere addition of words describing him as an agent, or as filling a representative character, without disclosing his"principal, does not exempt him from personal liability.
+Section 21.   Signature by procuration; effect of. -A signature by uration. "procuration" operates as notice that the agent has but a limited authority to  sign, and the principal is bound only in ease the agent in so signing acted within the actual limits of his authority.
+Section 22.   Effect of indorsement by infant or corporation. -The corporation, indorsement or assignment of the instrument by a corporation or by an infant passes the property therein, notwithstanding that from want, of capacity the corporation or infant may incur no liability thereon.
+Section 23.   Forged signature; effect of. -When a signature is forged or made without the authority of the person whose signature it purports to be, it is wholly inoperative, and no right to retain the instrument, or to give a discharge therefor, or to enforce payment thereof against any party thereto, can be acquired through or under such signature, unless the party against whom it is sought to enforce such right is precluded from setting up the forgery or want of authority.
+CHAPTER II.
+CONSIDERATION.
+Section 24.   Presumption of consideration. -Every negotiable instrument is deemed prima facie to have been issued for a valuable consideration; and every person whose signature appears thereon to have become a party thereto for value.
+Section 25.   Value, what constitutes. -Value is any consideration sufficient to support a simple contract.   An antecedent or preexisting debt constitutes value; and is deemed such whether the instrument is payable on demand or at a future time.
+Section 26.   What constitutes holder for value. -Where value has at any time been given for the instrument, the holder is deemed a holder for value in respect to all parties who became such prior to that time.
+Section 27.   When lien on instrument constitutes holder for value. - Where the holder has a lien on the instrument, arising either from contract or by implication of law, he is deemed a holder for value to the extent of his lien.
+Section 28.   Effect of want of consideration. -Absence or failure of consideration is matter  of defense  as  against any person not a holder in due course; and partial  failure  of  consideration is  a defense pro tanto, whether the failure is an ascertained and liquidated amount or otherwise.
+Section 29.   Liability of accommodation party. -Au accommodation party is one who has signed the instrument as maker, drawer, acceptor, or indorser, without receiving value therefor, and for the purpose of lending his name to some other person.   Such a person is liable on the instrument to a holder for value, notwithstanding such holder at the time of taking the instrument knew him to be only an accommodation party.
+CHAPTER III.
+NEGOTIATION.
+Section 30.   What constitutes negotiation. - An instrument is negotiated when it is transferred from one person to another in such manner as to constitute the transferee the holder thereof. If payable to bearer, it is negotiated by delivery; if payable to order, it is negotiated by the indorsement of the holder completed by delivery.
+Section 31.   Indorsement; how made. - The indorsment must be written on the instrument itself or upon a paper attached thereto.   The signature of the indorser, without additional words, is a sufficient indorsement.
+Section 32.   Indorsement must be of entire instrument. - The indorsement must be an indorsement of the entire instrument.   An indorsement which purports to transfer to the indorsee a part only of the amount payable, or which purports to transfer the instrument to two or more indorsees severally, does not operate as a negotiation of the instrument.   But where the instrument has been paid in part, it may be indorsed as to the residue.
+Section 33.   Kinds of indorsement. - An indorsement may be either special or in blank; and it may also be either restrictive or qualified, or conditional.
+Section 34.   Special indorsement; indorsement in blank. - A special in indorsement specifies the person to whom, or to whose order, the blank' instrument is to be payable; and the indorsement of such indorsee is necessary to the further negotiation of the instrument.   An indorsement in blank specifies no indorsee,  and an instrument so indorsed is payable to bearer, and may be negotiated by delivery.
+Section 35.   Blank indorsement; how changed to special indorsement. - The holder may convert a blank indorsement into a special indorsement by writing over the signature of the indorser in blank any contract consistent with the character of the indorsement.
+Section 36.   "When   indorsement   restrictive. - An   indorsement is restrictive which either-
+(a) Prohibits the further negotiation of the instrument; or
+(b) Constitutes the indorsee the agent of the indorser; or
+(c) Vests the title in the indorsee in trust for or to the use of some other person.
+But the mere absence of words implying power to negotiate does not make an indorsement restrictive.
+Section 37.   Effect of restricting indorsement; rights of indorsee. - A restrictive indorsement confers upon the indorsee the right-
+(a) To receive payment of the instrument;
+(b) To bring any action thereon that the indorser could bring;
+(c) To transfer his rights as such indorsee, where the form of the indorsement authorizes him to do so.
+But all subsequent indorsees acquire only the title of the first indorsee under the restrictive indorsement.
+Section 38.   Qualified indorsement. - A qualified indorsement constitutcs the indorser a mere assignor of the title to the instrument. It may be made by adding to the indorser's signature the words "without recourse" or any words of similar import.    Such an indorsement does not impair the negotiable character of the instrument.
+Section 39.   Conditional indorsement. - "Where an indorsement is conditional, a party required to pay the instrument may disregard the condition and make payment to the indorsee or his transferee whether the condition has been fulfilled or not. But any person to whom an instrument so indorsed is negotiated will hold the same, or the proceeds thereof, subject to the rights of the person indorsing conditionally.
+Section 40.   Indorsement of instrument payable to bearer. - Where instruments to an instrument, payable to bearer, is indorsed specially, it may nevertheless be further negotiated by delivery; but the person indorsing specially is liable as indorser to only such holders as make title through his indorsement.
+Section 41.   Indorsement where payable to two or more persons. - Where an instrument is payable to the order of two or more payees more' or indorsees who are not partners, all must indorse, unless the one indorsing has authority to indorse for the others.
+Section 42.   Effect of instrument drawn or indorsed to a person as - Where an instrument is drawn or indorsed to a person as "cashier" or other fiscal officer of a bank or corporation, it is deemed prima facie to be payable to the bank or corporation of which he is such officer; and may be negotiated by either the indorsement of the bank or corporation, or the indorsement of the officer.
+Section 43.   Indorsement where name in misspelled, and so forth. - Where the name of a payee or indorsee is wrongly designated or misspelled, he may indorse the instrument as therein described, adding, if he think fit, his proper signature.
+Section 44.   Indorsement in representative capacity. - Where any person is under obligation to indorse in a representative capacity, he may indorse in such terms as to negative personal liability.
+Section 45.   Time of indorsement; presumption. - Except where an indorsement bears date after the maturity of the instrument, every negotiation is deemed prima facie to have been effected before the instrument was overdue.
+Section 46.   Place of indorsement; presumption. -Except where the contrary appears, every indorsement is presumed prima facie to have been made at the place where the instrument is dated.
+Section 47.   Continuation of negotiable; presumption. - An instrument negotiable character. negOyable in its origin continues to be negotiable until it has been' restrictively indorsed or discharged by payment or otherwise.
+Section 48.   Striking out indorsement. - The holder may at any time strike out any indorsement which is not; necessary to Ids title. The indorser whose indorsement is struck out, and all indorsers subsequent to him, are thereby relieved from liability on the instrument.
+Section 49.   Transfer without indorsement: effect of. - Where the holder of an instrument payable to his order transfers it for value without indorsing it, the transfer vests in the transferee such title as the transferor had therein, and the transferee acquires, in addition, the right to have the indorsement of the transferor. But for the purpose of determining whether the transferee is a holder in due course, the negotiation takes effect as of the time when the indorsement is actually made.
+Section 50.   When prior party may negotiate instrument. -Where an instrument is negotiated back to a prior party, such party may, subject to the provisions of this Act, reissue and further negotiate the same. But he is not entitled to enforce payment thereof against any intervening party to whom ho was personally liable.
+CHAPTER IV.
+RIGHTS OF THE HOLDER.
+Section 51.   Bight of holder to sue; payment. - The holder of a negotiable instrument may sue thereon in his own name; and payment to him in due course discharges the instrument.
+Section 52 .  What constitutes a holder in due course. - A holder in due course is a holder who has taken the instrument under the following conditions:
+(a)  That it is complete and regular upon its face;
+(b) That he became the holder of it before it was overdue, and without notice that it had been previously dishonored, if such was the fact;
+(c)   That he took it in good faith and for value;
+(d)   That at the time it was negotiated to him he had no notice of any infirmity in the instrument or defect in the title of the person negotiating it.
+Section 53.   When person not deemed holder in due course. - Where course an instrument payable on demand is negotiated an unreasonable length of time after its issue, the holder is not deemed a holder in due course.
+Section 54.   Notice before full amount paid. - Where the transferee receives notice of any infirmity in the instrument or defect in the title of the person negotiating the same before he has paid the full amount agreed to be paid therefor, he will be deemed a holder in due course only to the extent of the amount theretofore paid by him.
+Section 55.   When title defective. - The title of a person who negotiates an instrument is defective within the meaning of this Act when he obtained the instrument, or any signature thereto, by fraud, duress, or force and fear, or other unlawful means, or for an illegal consideration, or when he negotiates it in breach of faith, or under such circumstances as amount to a fraud.
+Section 56.   What constitutes notice of defect. - To constitute notice  of an infirmity in. the instrument or defect in the title of the person negotiating the same, the person to whom it is negotiated must have had actual knowledge of the infirmity or defect, or knowledge of such facts that his action in taking the instrument amounted to had faith.
+Section 57.   Rights of holder in due course. - A holder in due course holds the instrument free from any defect of title of prior parties, and payee from defenses available to prior parties among themselves. and  may enforce payment of the instrument for the full amount thereof against all parties liable thereon.
+Section 58.   When subject to original defenses. - In the hands of any holder other than a holder in due course, a negotiable instrument is subject to the same defenses as if it were nonnegotiable. But a holder who derives his title through a holder in due course, and who is not himself a party to any fraud or illegality affecting the instrument, has all the rights of such former holder in respect of all parties prior to the latter.
+Section 59.    Who  deemed holder in due course. - Every holder is deemed prima facie to be a holder in due course; but when it iacourse' shown that the title of any person who has negotiated the instrument was defective, the burden is on the holder to prove that he or some person under whom he claims acquired the title as holder in due course.    But the last-mentioned rule does not apply in favor of a party who became bound on the instrument prior to the acquisition of srich  defective title.
+CHAPTER V.
+LIABILITIES
+Section 60.   Liability of maker. - The maker of a negotiable instrument by making it engages that he will pay it according to its tenor, and admits the existence of the payee and his then capacity to indorse.
+Section 61.   Liability of drawer. - The drawer by drawing the instru-ment admits the existence of the payee and his then capacity to indorse; and engages that on due presentment the instrument will be accepted or paid, or both, according to its tenor, and that if it be dishonored, and the necessary proceedings on dishonor be duly taken, he will pay the amount thereof to the holder, or to any subsequent indorser who may be compelled to pay it. But the drawer may insert in the instrument an express stipulation negativing or limiting his own liability to the holder.
+Section 62.   Liability of acceptor. - The acceptor by accepting the instrument engages that he will pay it according to the tenor of his acceptance; and admits-
+(a)   The existence of the drawer, the genuineness of his signature, and his capacity and authority to draw the instrument; and
+(b)   The existence of the payee and his then capacity to indorse.
+Section 63.   When person deemed indorser. - A person placing his signature upon an instrument otherwise than as maker, drawer, or acceptor is deemed to be an indorser, unless he clearly indicates by appropriate words his intention to be bound in some other capacity.
+Section 64.   Liability of irregular indorser. - Where a person, not otherwise a party to an instrument, places thereon his signature in blank before delivery, he is liable as indorsee in accordance with the following rules:
+(a) If the instrument is payable to the order of a third person, he is liable to the payee and to all subsequent parties.
+(b) If the instrument is payable to the order of the maker or drawer, or is payable to bearer, he is liable to all parties subsequent to the maker or drawer.
+(c) If he signs for the accommodation of the payee, he is liable to all parties subsequent to the payee.
+Section 65. Warranty where negotiation by delivery, and so forth. -
+Every person negotiating an instrument by delivery or by a qualified indorsement warrants-
+(a) That the instrument is genuine and in all respects what it purports to be;
+(b) That he has a good title to it;
+(c) That all prior parties had capacity to contract;
+(d) That he has no knowledge of any fact which would impair the validity of the instrument or render it valueless.
+But when the negotiation is by delivery only, the warranty extends in favor of no holder other than the immediate transferee.
+The provisions of subdivision (c) of this section do not apply to persons negotiating public or corporation securities, other than bills and notes.
+Section 66.   Liability of general indorser. -Every indorser who indorses without qualification, warrants to all subsequent holders in due course-
+(a)  The matters and things mentioned in subdivisions (a), (&), and (c) of the next preceding section; and
+(b) That the instrument is at the time of his indorsement valid and subsisting.
+And, in addition, he engages that on due presentment, it shall be accepted or paid, or both, as the case may be, according to its tenor, and that if it be dishonored, and the necessary proceedings on dishonor be duly taken, he will pay the amount thereof to the  holder, or to any subsequent indorser who may be compelled to  Pay it.
+Section 67.   Liability of indorser where paper negotiable by delivery. - Where  a person places  his  indorsement  on  an  instrument negotiable by delivery he incurs all the liabilities of an indorser.
+Section 68. Order in which endorsers are liable. - As respects one another, indorsers are liable prim a facie in the order in which they indorse; but evidence is admissible to show that  as between or among themselves they have agreed  otherwise.   Joint payees  or joint indorsees who  indorse  are  deemed  to  indorse  jointly and severally.
+Section 69.   Liability of an agent or broker. - Where a broker or other agent negotiates an instrument without indorsement, he incurs all the liabilities prescribed by section sixty-five of this Act, unless he discloses the name of his principal and the fact that he is acting only as agent.
+CHAPTER VI.
+PRESENTMENT  FOR  PAYMENT.
+Section 70.   Effect of want of demand on principal debtor. - Presentment for payment is not necessary in order to charge the person primarily liable on the instrument; but if the instrument is, by its terms, payable at a special place, and he is able and willing to pay it there at maturity, such ability and willingness are equivalent to a tender of payment upon his part. But, except as herein otherwise provided, presentment for payment is necessary in order to charge the drawer and indorsers.
+Section 71.   Presentment where instrument is not payable on demand and where payable on demand. - Where the instrument is not payable on demand, presentment must be made on the day it falls due. Where it is payable on demand, presentment must be made within a reasonable time after its issue, except that in the case of a bill of exchange, presentment for payment will be sufficient if made within a reasonable time after the last negotiation thereof.
+Section 72.   What constitutes a sufficient presentment. - Presentment for payment, to be sufficient, must be made-
+(a) By the holder, or by some person authorized to receive payment on his behalf;
+(b) At a reasonable hour on a business day;
+(c) At a proper place as herein defined;
+(d) To the person primarily liable on the instrument, or if he is absent or inaccessible, to any person found at the place where the presentment is made.
+Section 73.   Place  of presentment. -Presentment for payment is made at the proper place,-
+(a) Where a place of payment is specified in the instrument and it is there presented;
+(b) Where no place of payment is specified, but the address of the person to make payment is given in the instrument and it is there presented;
+(c)   Where no place of payment is specified and no address is given and the instrument is presented at the usual place of business or residence of the person to make payment;
+(d)   In any other case if presented to the person to make payment wherever he can be found, or if presented at his last known place of business or residence.
+Section 74.   Instrument must he exhibited. - The instrument must be exhibited to the person from whom payment is demanded, and when it is paid must be delivered up to the party paying it.
+Section 75.   Presentment where instrument payable at bank. - Where Payable at bank. the instrument is payable at a bank, presentment for payment must be made during banking hours, unless the person to make payment has no funds there to meet it at any time during the day, in which case presentment at any hour before the bank is closed on that day is sufficient.
+Section 76.   Presentment where principal debtor is dead. - Where the person primarily liable on the instrument is dead, and no place of payment is specified, presentment for payment must be made to his personal representative, if such there be, and if, with the exercise of reasonable diligence, he can be found.
+Section 77.   Presentment to persons liable as partners. - Where the persons primarily liable on the instrument are liable as partners, and no place of payment is specified, presentment for payment may be made to any one of them, even though there has been a dissolution of the firm.
+Section 78.   Presentment to joint debtors. - Where there are several persons, not partners, primarily liable on the instrument, and no place of payment is specified, presentment must be made to them all.
+Section 79.   When presentment not required to charge the drawer. - Presentment for payment is not required in order to charge the require drawer whereas he has no right to expect or require that the drawee or acceptor will pay the instrument.
+Section 80.   When presentment not required to charge the indorser. - Presentment for payment is not required in order to charge an indorser where the instrument was made or accepted for his accommodation and he has no reason to expect that the instrument will be paid if presented.
+Section 81.   When delay in making presentment is excused. - Delay in making presentment for payment is excused when the delay is caused by circumstances beyond the control of the holder, and not imputable to his default, misconduct, or negligence.   When the cause of delay ceases to operate, presentment must be made with reasonable diligence.
+Section 82.    When presentment may he dispensed with. -Presentment for payment is dispensed with-
+(a) Where after the exercise of reasonable diligence presentment as required by this Act can not be made;
+(b) Where the drawee is a fictitious person;
+(c) By waiver of presentment, express or implied.
+Section 83.   When instrument dishonored by nonpayment. - The instrument is dishonored by nonpayment when-
+(a) It is duly presented for payment and payment is refused or can not be obtained; or
+(b) Presentment is excused and the instrument is overdue and unpaid.
+Section 84.   Liability of person secondarily liable, when instrument dishonored. - Subject to the provisions of this Act, when the instrument is dishonored by nonpayment, an immediate right of recourse to all parties secondarily liable thereon accrues to the holder.
+Section 85.   Time of maturity. - Every   negotiable instrument is payable at the time fixed therein without grace.   When the day of maturity falls upon Sunday, or a holiday, the instrument is payable on the next succeeding business day. Instruments falling due or becoming payable on Saturday are to be presented for payment on the next succeeding business day, except that instruments payable on demand may, at the option of the holder, be presented for payment before twelve o'clock noon on Saturday when that entire day is not a holiday.
+Section 86.   Time; how computed. - Where the instrument is payable at a fixed period after date, after sight, or after the happening of a specified event, the time of payment is determined by excluding the day from which the time is to begin to run, and by including the date of payment.
+Section 87.   Rule where instrument payable at bank. - Where the instrument is made payable at a bank it is equivalent to an order to the bank to pay the same for the account of the principal debtor thereon.
+Section 88.   What constitutes payment in due course. - Payment is made in due course when it is made at or after the maturity of the instrument to the holder thereof in good faith and without notice that his title is defective.
+CHAPTER VII.
+NOTICE OF DISHONOR.
+Section 89.   To whom notice of dishonor must be given. - Except as herein otherwise provided, when a negotiable instrument has been dishonored by nonacceptance or nonpayment, notice of dishonor must be given to the drawer and to each indorser, and any drawer or indorser to whom such notice is not given is discharged.
+Section 90.   By whom given. -The notice may be given by or on behalf of the holder, or by or on behalf of any party to the instrument who might be compelled to pay it to the holder, and who, upon taking it up, would have a right to reimbursement from the party to whom the notice is given.
+Section 91.   Notice given by agent. - Notice of  dishonor may be given by an agent either in his own name or in the name of any party entitled to give notice, whether that party be his principal or not.
+Section 92.    Effect of notice given on behalf of holder. - Where notice is given by or on behalf of the holder, it inures for the benefit  of all subsequent holders and all prior parties who have a right of recourse against the party to whom it is given.
+Section 93.   Effect where notice is given by party entitled thereto. - Where notice is given by or on behalf of a party entitled to give notice, it inures for the benefit of the holder and all parties subsequent to the party to whom notice is given.
+Section 94.   When agent may give notice. - Where the instrument has been dishonored in the hands of an agent, he may either himself give notice to the parties liable thereon, or he may give notice to his principal. If he give notice to his principal, he must do so within the same time as if he were the holder, and the principal upon the receipt of such notice has himself the same time for giving notice as if the agent had been an independent holder.
+Section 95.   When notice sufficient. - A written notice need not be and an insufficient written notice may be supplemented and validated by verbal communication.   A misdescription of the instrument does not vitiate the notice unless the party to whom the notice is given is in fact misled thereby.
+Section 96.   Form of notice. - The notice may be in writing or  oral  and may be  given in  any  terms which  sufficiently identify the instrument and indicate that it has been dishonored by nonacceptance or nonpayment.    It may in all cases be given by delivering it personally or through the mails.
+Section 97.   To whom notice may be given. - Notice of dishonor may be given either to the party himself or to his agent in that behalf.
+Section 98.   Notice where party is dead. - When any party is dead, and his death is known to the party giving notice, the notice must be given to a personal representative, if there be one, and if with reasonable diligence he can be found. If there be no personal representative, notice may be sent to the last residence or last place of business of the deceased.
+Section 99.   Notice to partners. - Where the parties to be notified are partners, notice to any one partner is notice to the firm even though there has been a dissolution.
+Section 100.   Notice to persons jointly liable. -Notice to joint parties who are not partners must be given to each of them, unless one of them has authority to receive such notice for the others.
+Section 101.  Notice to bankrupt.- Where a party has been adjudged bankrupt or an insolvent, or has made an assignment for the benefit of creditors, notice may be given either to the party himself or to his trustee or assignee.
+Section 102.   Time within which notice must be given. - Notice may be given as soon as the instrument is dishonored; and unless delay is excused as hereinafter provided, must be given within the times fixed by this Act.
+Section 103.   Where parties reside in same place. - Where the person giving and the person to receive notice reside in the same place, notice must be given within the following times:
+(a) If given at the place of business of the person to receive notice, it must be given before the close of business hours on the day following.
+(b) If given at his residence, it must be given before the usual hours of rest on the day following.
+(c) If sent by mail, it must be deposited in the post-office in time to reach him in usual course on the day following.
+Section 104.   Where parties reside in different places. - Where the person giving and the person to receive notice reside in different places, the notice must be given within the following times:
+(a) If sent by mail, it must be deposited in the post-office in time to go by mail the day following the day of dishonor, or if there be no mail at a convenient hour on that day, by the next mail thereafter.
+(b) If given otherwise than through the post-office, then within the time that notice would have been received in due course of mail, if it had been deposited in the post-office within the time specified in the last subdivision.
+Section 105.   When sender deemed to have given due notice. - Where notice of dishonor is duly addressed and deposited in the post-office, the sender is deemed to have given due notice, notwithstanding any miscarriage in the mails.
+Section 106.   Deposit in post-office; what constitutes. - Notice is deemed to have been deposited in the post-office when deposited in any branch post-office or in any letter box under the control of the post-office department.
+Section 107.   Notice to subsequent party; time of. - Where a party receives notice of dishonor, he has, after the receipt of such notice, the same time for giving notice to antecedent parties that the holder has after the dishonor.
+Section 108.   Where notice must be sent. - Where a party has added an address to his signature, notice of dishonor must be sent to that address; but if he has not given such address, then the notice must be sent as follows:
+(a) Either to the post-office nearest to his place of residence or to the post-office where he is accustomed to receive his letters; or
+(b) If he live in one place, and have his place of business in another, notice may be sent to either place; or
+(c)   If he is sojourning in another place, notice may be sent to the place where he is so sojourning.
+But where the notice is actually received by the party within the time specified in this Act, it will be sufficient, though not sent in accordance with the requirements of this section.
+Section 109.   Waiver of notice. - Notice of dishonor may be waived, either before the time of giving notice has arrived or after the omission to give clue notice, and the waiver may be express or  implied.
+Section 110.   Whom affected by waiver. - Where the waiver is bodied in the instrument itself, it is binding upon all parties; but  where it is written above the signature of an indorser, it binds him  only.
+Section 111. Waiver of protest. - A waiver of protest, whether in the case of a foreign bill of exchange or other negotiable instrument, is deemed to be a waiver not only of a formal protest, but also of presentment and notice of dishonor.
+Section 112.   When notice is dispensed with. - Notice of dishonor is dispensed with when, after the exercise of reasonable diligence, it can not be given to or does not reach the parties sought to be charged.
+Section 113.   Delay in giving notice; how excused. - Delay in giving notice of dishonor is excused when the delay is caused by circumstances beyond the control of the holder, and not imputable to his default, misconduct, or negligence.  When the cause of delay ceases to operate, notice must be given with reasonable diligence.
+Section 114.   When notice need not be given to drawer. - Notice of dishonor is not required to be given to the drawer in either of the drawee following cases:
+(a)  Where the drawer and drawee are the same person.
+(b) When the drawee is a fictitious person or a person not having capacity to contract.
+(c)   When the drawer is the person to whom the instrument is presented for payment.
+(d)   Where the drawer has no right to expect or require that the drawee or acceptor will honor the instrument.
+(e) Where the drawer has countermanded payment.
+Section 115.   When notice need not be given to indorser. - Notice of dishonor is not required to be given to an indorser in either of the  following cases:
+(a) Where the drawee is a fictitious person or a person not having capacity to contract, and the indorser was aware of the fact at the time he indorsed the instrument;
+(b) Where the indorser is the person to whom the instrument is presented for payment;
+(c) Where the instrument was made or accepted for his accommodation.
+Section 116.   Notice  of nonpayment  where acceptance refused. - Where due notice ot dishonor by nonacceptance has been given, notice of a subsequent dishonor by nonpayment is not necessary, unless in the meantime the instrument has been accepted.
+Section 117.   Effect of omission to give notice of nonacceptance. - An omission to give.notice of dishonor by nonacceptance does not prejudice the rights of a holder in due course subsequent to the omission.
+Section 118. When protest need not be made; when must be made. -  Where any negotiable instrument has been dishonored it may be protested for nonacceptance or nonpayment, as the case may be; but protest is not required except in the case of foreign bills of exchange.
+CHAPTER VIII.
+DISCHARGE OF NEGOTIABLE INSTRUMENTS.
+Section 119. Instrument;  how  discharged.-A  negotiable instrument is discharged-
+(a) By payment in due course by or on behalf of the principal debtor;
+(b) By payment in due course by the party accommodated, where the instrument is made or accepted for accommodation;
+(c) By the intentional cancellation thereof by the holder;
+(d) By any other act which will discharge a simple contract for the payment of money;
+(e)   When the principal debtor becomes the holder of the instrument at or after maturity in his own right.
+Section 120.   When persons secondarily liable on, discharged. -A person secondarily liable on the instrument is discharged-
+(a) By any act which discharges the instrument;
+(b) By the intentional cancellation of his signature by the holder;
+(c) By the discharge of a prior party;
+(d) By a valid tender of payment made by a prior party;
+(c) By a release of the principal debtor, unless the holder's right of recourse against the party secondarily liable is expressly reserved;
+(f) By any agreement binding upon the holder to extend the time of payment, or to postpone the holder's right to enforce the instrument, unless made with the assent of the party secondarily liable, or unless the right of recourse against such party is expressly reserved.
+Section 121.   Eight of party who discharges instrument. -Where charging instrument is paid by a party secondarily liable thereon, it is not discharged; but the party so paying it is remitted to his former rights as regards all prior parties, and he may strike out his own and all subsequent indorsements, and again negotiate the instrument, except-
+(a) Where it is payable to the order of a third person, and has been paid by the drawer; and
+(b) Where it was made or accepted for accommodation, and has been paid by the party accommodated.
+Section 122.   Renunciation by holder. - The holder may expressly  renounce his rights against any party to the instrument before, at, or after its maturity. An absolute and unconditional renunciation of his rights against the principal debtor made at or after the maturity of the instrument discharges the instrument. But a renunciation does not affect the rights of a holder in due course without notice.   A renunciation must be in writing, unless the instrument is delivered up to the person primarily liable thereon.
+Section 123.   Cancellation; unintentional; burden of proof. - A cancellation made unintentionally, or under a mistake or without the authority of the holder, is inoperative; but where an instrument or any signature thereon appears to have been canceled the burden of proof lies on the party who alleges that the cancellation was made unintentionally, or under a mistake or without authority.
+Section 124.   Alteration of instrument; effect of. - Where a instrument is materially altered without the assent of all parties liable thereon, it is avoided, except as against a party who has himself made, authorized, or assented to the alteration, and subsequent indorsers.
+But when an instrument has been materially altered and is in the hands of a holder in due course, not a party to the alteration, he may enforce payment thereof according to its original tenor.
+Section 125.   What constitutes a material alteration. - Any alteration which changes-
+(a) The date;
+(b) The sum payable, either for principal or interest;
+(c) The time or place of payment;
+(d) The number or the relations of the parties;
+(e)   The medium or currency in which payment is to be made; Or which adds a place of payment where no place of payment is specified, or any other change or addition which alters the effect of the instrument in any respect, is a material alteration.
+TITLE II.
+BILLS   OF   EXCHANGE.
+CHAPTER IX.
+FORM AND INTERPRETATION.
+Section 126.  Bill of exchange defined.- A bill of exchange is an unconditional order in writing addressed by one person to another, signed by the person giving it, requiring the person to whom it is addressed to pay on demand or at a fixed or determinable future time a sum certain in money to order or to bearer.
+Section 127.  Bill not an assignment of funds in hands of drawee.- A bill of itself does not operate as an assignment of the funds in the hands of the drawee available for the payment thereof, and the drawee is not liable on the bill unless and until he accepts the same.
+Section 128. Bill addressed to more than one drawee.- A bill may be addressed to two or more drawees jointly, whether they are partners or not; but not to two or more drawees in the alternative or in succession.
+Section 129.  Inland and foreign bills of exchange.- An inland bill and foreign, of exchange is a bill which is, or on its face purports to be, both drawn and payable within the Philippine Islands.   Any other bill is a foreign bill.    Unless the contrary appears on the face of the bill, the holder may treat it as an inland bill.
+Section 130.   When bill may be treated as promissory note.- Where in a bill drawer and drawee are the same person, or where the drawee is a fictitious person, or a person not having capacity to contract, the holder may treat the instrument, at his option, either as a bill of exchange or a promissory note.
+Section 131.  Referee in case of need.- The drawer of a bill and any indorser may insert thereon the name of a person to whom the holder may resort in case of need; that is to say, in case the bill is dishonored by nonacceptance or nonpayment. Such person is called the referee in case of need. It is in the option of the holder to resort to the referee in case of need or not, as he may see fit.
+CHAPTER X.
+ACCEPTANCE.
+Section 132.  Acceptance; how made, and so forth.- The acceptance  of a bill is the signification by the drawee of his assent to the order of the drawer.    The acceptance must be in writing and signed by the drawee.   It must not express that the drawee will perform his promise by any other means than the payment of money.
+Section 133.  Holder entitled to acceptance on face of bill.- The holder of a bill presenting the same for acceptance may require that the acceptance be written on the bill, and, if such request is refused, may treat the bill as dishonored.
+Section 134.  Acceptance  by  separate instrument.- Where  an  acceptance is written on a paper other than the bill itself, it does not instrument-bind the acceptor except in favor of a person to whom it is shown and who, on the faith thereof, receives the bill for value.
+Section 135.  Promise to accept; when equivalent to acceptance.- An unconditional promise in writing to accept a bill before it is drawn is deemed an actual acceptance in favor of every person who, upon the faith thereof, receives the bill for value.
+Section 136.  Time allowed drawee to accept.-The drawee is allowed  twenty-four hours after presentment in which to decide whether or not he will accept the bill; but the acceptance, if given, dates as of the day of presentation.
+Section 137.  Liability  of  drawee  retaining  or destroying  bill.- Where a drawee to when a bill is delivered for acceptance destroys the same, or refuses within twenty-four hours after such delivery, or within such other period as the holder may allow, to return the bill accepted or nonaccepted to the holder, he will be deemed to have accepted the same.
+Section 138.  Acceptance of incomplete bill.-A bill may be accepted before it has been signed by the drawer, or while otherwise incomplete, or when it is overdue, or after it has been dishonored by a previous refusal to accept, or by nonpayment.   But when a bill payable after sight is dishonored by nonacceptance and the drawee subsequently accepts it, the holder, in the absence of any different agreement, is entitled to have the bill accepted as of the date of the first presentment.
+Section 139.  Kinds of acceptances.- An acceptance is either general or qualified.   A general acceptance assents without qualification to the order of the drawer.   A qualified acceptance in express terms varies the effect of the bill as drawn.
+Section 140.  What constitutes a general acceptance.- An acceptance to pay at a particular place is a general acceptance, unless it expressly states that the bill is to be paid there only and not elsewhere.
+Section 141.  Qualified acceptance.- An   acceptance is qualified which is-
+(a) Conditional; that is to say, which makes payment by the acceptor dependent on the fulfillment of a condition therein stated;
+(b) Partial; that is to say, an acceptance to pay part only of the amount for which the bill is drawn;
+(c) Local; that is to say, an acceptance to pay only at a particular place;
+(d) Qualified as to time;
+(e) The acceptance of some one or more of the drawees, but not of all.
+Section 142. Rights of parties as to qualified acceptance. - The holder may refuse to take a qualified acceptance, and if he does not obtain an unqualified acceptance, lie may treat the bill as dishonored by nonacceptance.   Where a qualified acceptance is taken, the drawer and indorsers are discharged from liability on the bill, unless they have expressly or impliedly authorized the holder to take a qualified acceptance, or subsequently assent thereto.   When the drawer or an indorser receives notice of a qualified acceptance, he must, within a reasonable time, express his dissent to the holder, or he will be deemed to have assented thereto.
+CHAPTER XL
+PRESENTMENT  TOR  ACCEPTANCE.
+Section 143.   When presentment for acceptance must be made. - Presentment for acceptance must be made-
+(a) Where the bill is payable after sight, or in any other case, where presentment for acceptance is necessary in order to fix the maturity of the instrument; or
+(b)  Where the bill expressly stipulates that it shall be presented for acceptance; or
+(c) Where the bill is drawn payable elsewhere than at the residence or place of business of the drawee.
+In no other case is presentment for acceptance necessary in order to render any party to the bill liable.
+Section 144.   When failure to present releases drawer and indorser. - Except as herein otherwise provided, the holder of a bill which is required by the next preceding section to be presented for acceptance must either present it for acceptance or negotiate it within a reasonable time.   If he fail to do so, the drawer and all indorsers are discharged.
+Section 145.   Presentment; how made. - Presentment for acceptance must be made by or on behalf of the holder at a reasonable hour, on a business day and before the bill is overdue, to the drawee or some person authorized to accept or refuse acceptance on his behalf; and
+(a) Where a bill is addressed to two or more drawees who are not partners, presentment must be made to them all, unless one has authority to accept or refuse acceptance for all, in which case presentment may be made to him only;
+(b) Where the drawee is dead, presentment may be made to his personal representative;
+(c) Where the drawee has been adjudged a bankrupt or an insolvent or has made an assignment for the benefit of creditors presentment may be made to him or to his trustee or assignee.
+Section 146.   On what days presentment may be made. - A bill may be presented for acceptance on any day on which negotiable instruments may be presented for payment under the provisions of sections seventy-two and eighty-five of this Act. When Saturday is not otherwise a holiday, presentment for acceptance may be made before twelve o'clock, noon, on that day.
+Section 147.   Presentment where time is insufficient. - Where the holder of a bill drawn payable elsewhere than at the place of business or the residence of the drawee has not time with the exercise of reasonable diligence to present the bill for acceptance before presenting it for payment on the day that it falls due, the delay caused by presenting the bill for acceptance before presenting it for payment is excused, and does not discharge the drawers and indorsers.
+Section 148.   Where presentment is excused. - Presentment for acceptance is excused, and a bill may be treated as dishonored by nonacceptanee, in either of the following cases:
+(a) Where the drawee is dead, or has absconded, or is a fictitious person or a person not having capacity to contract by bill.
+(b) Where, after the exercise of reasonable diligence, presentment can not be made.
+(c) Where, although presentment has been irregular, acceptance has been refused on some other ground.
+Section 149.   When dishonored by nonacceptanee. - A bill is dishonored by nonacceptanee-
+(a)   When  it is  duly  presented  for  acceptance  and  such  an acceptance as is prescribed by this Act is refused or can not be obtained; or
+(b)   When presentment for acceptance is excused, and the bill is not accepted.
+Section 150.   Duty of holder where bill not accepted. - Where a bill is duly presented for acceptance and is not accepted within the prescribed time, the person presenting it must treat the bill as dishonored by nonacceptanee or he loses the right of recourse against the drawer and indorsers.
+Section 151.   Rights of holder where bill not accepted. - When a bill is dishonored by nonacceptanee, an immediate right of recourse against the drawers and indorsers accrues to the holder and no presentment for payment is necessary.
+CHAPTER XII.
+PROTEST.
+Section 152.   In what cases protest necessary. - Where a foreign bill appearing on its face to be such is dishonored by nonaceeptance, it must be duly protested for nonacceptanee, and where such a bill which has not previously been dishonored by nonacceptanee is dishonored by nonpayment, it must be duly protested for nonpayment. If it is not so protested, the drawer and indorsers are discharged. Where a bill does not appear on its face to be a foreign bill, protest thereof in case of dishonor is unnecessary.
+Section 153.   Protest; how made. -The protest must be annexed to the bill, or must contain a copy thereof, and must be under the hand and seal of the notary making it, and must specify-
+(a)  The time and place of presentment;
+(b)  The fact that presentment was made and the manner thereof;
+(c)  The cause or reason for protesting the bill;
+(d) The demand made and the answer given, if any, or the fact that the drawee or acceptor could not be found.
+Section 154.   Protest; by whom made. - Protest may be made by-
+(a)  A notary public; or
+(b) By any respectable resident of the place where the bill is dishonored, in the presence of two or more credible witnesses.
+Section 155. Protest; when to be made.- When a bill is protested, such protest must be made on the day of its dishonor, unless delay is excused as herein provided.   When a bill has been duly noted, the protest may be subsequently extended as of the date of the noting.
+Section 156. Protest; where made. - A bill must be protested at the place where it is dishonored, except that when a bill drawn payable at the place of business or residence of some person other than the drawee has been dishonored by nonacceptance, it must be protested for nonpayment at the place where it is expressed to be payable, and no further presentment for payment to, or demand on, the drawee is necessary.
+Section 157.   Protest both for nonacceptance and nonpayment. - A bill which has been protested for nonacceptance may be subsequently protested for nonpayment.
+Section 158.   Protest  before  maturity where  acceptor insolvent. - Where the acceptor lias been adjudged a bankrupt or an insolvent, or has made an assignment for the benefit of creditors, before the bill matures, the holder may cause the bill to be protested for better security against the drawer and indorse.
+Section 159.    When protest  dispensed with. - Protest is  dispensed with by any circumstances which would dispense with notice of dishonor. Delay in noting or protesting is excused when delay is caused by circumstances beyond the control of the holder and not imputable to his default, misconduct, or negligence. When the cause of delay ceases to operate, the bill must be noted or protested with reasonable diligence.
+Section 160.   Protest where bill is lost, and so forth. - When a bill is lost or destroyed or is wrongly detained from the person entitled to hold it, protest may be made on a copy or written particulars thereof.
+CHAPTER XIII.
+ACCEPTANCE  FOR HONOR.
+Section 161.   When bill may be accepted for honor. - Where a bill of exchange has been protested for dishonor by nonacceptance or protested for better security, and is not overdue, any person not being a party already liable thereon may, with the consent of the holder, intervene and accept the bill supra protest for the honor of any party liable thereon, or for the honor of the person for whose account the bill is drawn. The acceptance for honor may be for part only of the sum for which the bill is drawn; and where there has been an acceptance for honor for one party, there may be a further acceptance by a different person for the honor of another party.
+Section 162.   Acceptance for honor; how made. - An acceptance for honor supra protest must be in writing, and indicate that it is an acceptance for honor, and must be signed by the acceptor for honor.
+Section 163.   When deemed to be an acceptance for honor of the drawer. - Where an acceptance for honor does not expressly state for whose honor it is made, it is deemed to be an acceptance for the honor of the drawer.
+Section 164.   Liability of the acceptor for honor. - The acceptor for honor is liable to the holder and to all parties to the bill subsequent to the party for whose honor he has accepted.
+Section 165.   Agreement of acceptor for honor. - The acceptor for honor, by such acceptance engages that he will on due presentment  pay the bill according to the terms of his acceptance, provided it shall not have been paid by the drawee, and provided also that it shall have been duly presented for payment and protested for nonpayment and notice of dishonor given to him.
+Section 166.   Maturity of bill payable after sight; accepted for  honor. - Where a bill payable after sight is accepted for honor, its maturity is calculated from the date of the noting for non-acceptance and not from the date of the acceptance for honor.
+Section 167.   Protest of bill accepted for honor, and so forth. - Where a dishonored bill has been accepted for honor supra protest or contains a reference in case of need, it must be protested for nonpayment before it is presented for payment to the acceptor for honor or referee in case of need.
+Section 168.   Presentment for payment to acceptor for honor, how made. - Presentment for payment to the acceptor for honor must paymen be made as follows:
+(a)   If it is to be presented in the place where the protest for nonpayment was made, it must be presented not later than the day following its maturity.
+(b)   If it is to be presented in some other place than the place where it was protested, then it must be forwarded within the time specified in section one hundred and four.
+Section 169.   When delay in making presentment is excused. - The provisions of section eighty-one apply where there is delay in making presentment to the acceptor for honor or referee in case of need.
+Section 170.   Dishonor of bill by acceptor for honor. -When the bill is dishonored by the acceptor for honor it must be protested for nonpayment by him.
+CHAPTER XIV.
+PAYMENT FOR HONOR.
+Section 171. Who may make payment for honor. - Where a bill has been protested for nonpayment, any person may intervene and pay it supra protest for the honor of any person liable thereon or for the honor of the person for whose account it was drawn.
+Section  172.   Payment for honor; how made. - The payment for honor supra protest in order to operate as such and not as a mere voluntary payment must be attested by a notarial act of honor which may be appended to the protest or form an extension to it.
+Section 173.   Declaration before payment for honor. - The notarial act of honor must be founded on a declaration made by the payer for honor or by his agent in that behalf declaring his intention to pay the bill for honor and for whose honor he pays.
+Section   174.   Preference of parties  offering to pay for honor. - Where two or more persons offer to pay a bill for the honor of different parties, the person whose payment will discharge most parties to the bill is to be given the preference.
+Section 175.   Effect on subsequent parties where bill is paid for honor. - Where a bill has been paid for honor, all parties subsequent to the party for whose honor it is paid are discharged, hut the payer for honor is subrogated for, and succeeds to, both the rights and duties of the holder as regards the party for whose honor he pays and all parties liable to the latter.
+Section 176.   Where holder refuses to receive payment supra protest. - Where the holder of a bill refuses to receive payment supra protest, he loses his right of recourse against any party who would have been discharged by such payment.
+Section 177.   Rights of payer for honor. - The payer for honor, on paying to the holder the amount of the bill and the notarial expenses incidental to its dishonor, is entitled to receive both the bill itself and the protest.
+CHAPTER XV.
+BILLS IN A SET.
+Section 178.   Bills in sets constitute one bill. - Where a bill is drawn in a set, each part of the set being numbered and containing a reference to the other parts, the whole of the parts constitutes one bill.
+Section 179.   Right of holders where different parts are negotiated. - Where two or more parts of a set are negotiated to different holders in due course, the holder whose title first accrues is as between such holders the true owner of the bill. But nothing in this section affects the rights of a person who in due course accepts or pays the part first presented to him.
+Section 180.   Liability of holder who indorses two or more parts of a set to different persons. - Where the holder of a set indorses two or more parts to different persons he is liable on every such part, and every indorser subsequent to him is liable on the part he has himself indorsed, as if such parts were separate bills.
+Section 181.   Acceptance of bills drawn in sets. - The acceptance may be written on any part and it must be written on one part only. If the drawee accepts more than one part, and such accepted parts are negotiated to different holders in due course, he is liable on every such part as if it were a separate bill.
+Section 182.   Payment by acceptor of bills drawn in sets. -When the acceptor of a bill drawn in a set pays it without requiring the part bearing his acceptance to be delivered up to him, and that part at maturity is outstanding in the hands of a holder in due course, he is liable to the holder thereon.
+Section 183.   Effect of discharging one of a set. -Except as herein otherwise provided, where any one part of a bill drawn in a set is discharged by payment or otherwise the whole bill is discharged.
+TITLE III.
+PROMISSORY NOTES AND CHECKS.
+CHAPTER XVI.
+Section 184.   Promissory note defined. - A negotiable promissory note within the meaning of this Act is an unconditional premise in writing made by one person to another, signed by the maker, engaging to pay on demand, or at a fixed or determinable future time, a sum certain in money to order or to bearer. Where a note is drawn to the maker's own order, it is not complete until indorsed by him.
+Section 185.   Chech defined. - A check is a bill of exchange drawn on a bank payable on demand.    Except as herein otherwise provided, the provisions of this Act applicable to a bill of exchange payable on demand apply to a check.
+Section 186. Within  what  time a check must  be presented. - A check must be presented for payment within a reasonable time after its issue or the drawer will be discharged from liability thereon to the extent of the loss caused by the delay.
+Section 187.   Certification of check; effect of. - Where a check is certified by the bank on which it is drawn, the certification is equivalent to an acceptance.
+Section 188.   Effect where the holder of check procures it to be certified. - Where the holder of a check procures it to be accepted or certified, the drawer and all indorsers are discharged from liability thereon.
+Section 189.   When check operates as an assignment. - A check of itself does not operate as an assignment of any part of the funds to the credit of the drawer with the bank, and the bank is not liable to the holder, unless and until it accepts or certifies the check.
+TITLE IV.
+GENERAL PROVISIONS.
+CHAPTER XVII.
+Section 190.   Short title. - This Act shall be known as the Negotiable Instruments Law.
+Section 191.   Definitions and meaning of terms. - In this Act, unless the context otherwise requires-
+""Acceptance" means an acceptance completed by delivery or notification;
+""Action" includes counterclaim and set-off;
+"Bank" includes any person or association of persons carrying on the business of banking, whether incorporated or not;
+""Bearer" means the person in possession of a bill or note which is payable to bearer ;
+""Bill" means bill of exchange, and "note" means negotiable promissory note;
+""Delivery" means transfer of possession, actual or constructive, from one person to another;
+"Holder" means the payee or indorsee of a bill or note, who is in possession of it, or the bearer thereof;
+""Indorsement" means an indorsement completed by delivery;
+"Instrument" means negotiable instrument;
+"Issue" means the first delivery of the instrument, complete in form, to a person who takes it as a holder;
+"Person" includes a body of persons, whether incorporated or not;
+"Value" means valuable consideration;
+"Written" includes printed, and "writing" includes print.
+Section 192.   Person primarily liable on instrument. - The person "primarily" liable on an instrument is the person who by the terms of the instrument is absolutely required to pay the same. All other parties are "secondarily" liable.
+Section 193.   Reasonable time, what constitutes. - In determining what is a "reasonable time" or an "unreasonable time," regard is to be had to the nature of the instrument, the usage of trade or business (if any) with respect to such instruments, and the facts of the particular case.
+Section 194.   Time, how computed; when last day falls on holiday. - Where the day, or the last day, for doing any act herein required or permitted to be done falls on Sunday or on a holiday, the act may be done on the next succeeding secular or business day.
+Section 195.    Application of Act. - The provisions of this Act do not apply to negotiable instruments made and delivered prior to the taking effect hereof.
+Section 196.   Cases not provided for in Act. - Any case not provided for in this Act shall be governed by the provisions of existing legislation, or in default thereof, by the rules of the law merchant.
+Section 197.   Repeals. - All Acts  and laws and parts thereof inconsistent with this Act are hereby repealed.
+Section 198.    Time when Act takes effect. -This Act shall take effect ninety days after its publication in the Official Gazette of the Philippine Islands shall have been completed.
+Enacted, February 3, 1911.
+The Lawphil Project - Arellano Law Foundation
+1aшphi1 /../images/back.gif" border=0 align=left>

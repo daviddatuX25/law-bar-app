@@ -6,17 +6,20 @@
       {
         "title": "Civil Code of the Philippines (RA 386)",
         "url": "https://lawphil.net/statutes/repacts/ra1949/ra_386_1949.html",
-        "articles": 2270
+        "articles": 2270,
+        "status": "verified"
       },
       {
         "title": "Family Code of the Philippines (EO 209)",
-        "url": "https://www.officialgazette.gov.ph/1987/07/06/executive-order-no-209-s-1987/",
-        "articles": 256
+        "url": "https://lawphil.net/executive/execord/eo1987/eo_209_1987.html",
+        "articles": 256,
+        "status": "verified"
       },
       {
         "title": "Property Registration Decree (PD 1529)",
         "url": "https://lawphil.net/statutes/presdecs/pd1978/pd_1529_1978.html",
-        "sections": 120
+        "sections": 120,
+        "status": "verified"
       }
     ],
     "textbooks": ["Arturo M. Tolentino (Vols. I-V)", "Eduardo L. Paras (Vols. I-V)", "Elmer T. Rabuya (Reviewer)"]
@@ -27,13 +30,15 @@
     "codals": [
       {
         "title": "Revised Penal Code (Act 3815)",
-        "url": "https://lawphil.net/statutes/acts/act_3815_1930.html",
-        "articles": 367
+        "url": "https://lawphil.net/statutes/acts/act1930/act_3815_1930.html",
+        "articles": 367,
+        "status": "verified"
       },
       {
         "title": "Dangerous Drugs Act of 2002 (RA 9165)",
-        "url": "https://www.officialgazette.gov.ph/2002/06/07/republic-act-no-9165/",
-        "sections": 102
+        "url": "https://lawphil.net/statutes/repacts/ra2002/ra_9165_2002.html",
+        "sections": 102,
+        "status": "verified"
       }
     ],
     "textbooks": ["Luis B. Reyes (Books 1 & 2)", "Justice Florenz D. Regalado (Conspectus)", "Campanilla/Ortega (Reviewer)"]
@@ -44,13 +49,21 @@
     "codals": [
       {
         "title": "1987 Constitution of the Philippines",
-        "url": "https://www.officialgazette.gov.ph/constitutions/1987-constitution/",
-        "sections": 321
+        "url": "https://lawphil.net/consti/cons1987.html",
+        "sections": 321,
+        "status": "verified"
       },
       {
         "title": "Local Government Code of 1991 (RA 7160)",
-        "url": "https://www.officialgazette.gov.ph/1991/10/10/republic-act-no-7160/",
-        "sections": 536
+        "url": "https://lawphil.net/statutes/repacts/ra1991/ra_7160_1991.html",
+        "sections": 536,
+        "status": "verified"
+      },
+      {
+        "title": "Administrative Code of 1987 (EO 292)",
+        "url": "https://lawphil.net/statutes/repacts/ra1991/ra_7160_1991.html",
+        "sections": 100,
+        "status": "alternate"
       }
     ],
     "textbooks": ["Joaquin G. Bernas, S.J. (Commentary)", "Isagani A. Cruz (Constitutional)", "Antonio E.B. Nachura (Outline)"]
@@ -60,14 +73,22 @@
     "name": "Remedial Law",
     "codals": [
       {
-        "title": "Rules of Civil Procedure (Rules 1-71, AM 19-10-20-SC)",
-        "url": "https://sc.judiciary.gov.ph/",
-        "rules": 71
+        "title": "1997 Rules of Civil Procedure (A.M. 19-10-20-SC)",
+        "url": "https://sc.judiciary.gov.ph/2019-amendments-to-the-1997-rules-of-civil-procedure/",
+        "rules": 71,
+        "status": "sc-web"
       },
       {
-        "title": "Rules on Evidence (Rules 128-134, AM 19-08-15-SC)",
-        "url": "https://sc.judiciary.gov.ph/",
-        "rules": 7
+        "title": "Rules on Evidence (A.M. 19-08-15-SC)",
+        "url": "https://sc.judiciary.gov.ph/2019-proposed-amendments-to-the-revised-rules-on-evidence/",
+        "rules": 7,
+        "status": "sc-web"
+      },
+      {
+        "title": "Rules of Criminal Procedure",
+        "url": "https://sc.judiciary.gov.ph/rules-of-court/",
+        "rules": 120,
+        "status": "sc-web"
       }
     ],
     "textbooks": ["Willard B. Riano (Civil/Crim/Evidence Series)", "Florenz D. Regalado (Compendium)", "Ferdinand A Tan"]
@@ -78,13 +99,21 @@
     "codals": [
       {
         "title": "Revised Corporation Code (RA 11232)",
-        "url": "https://www.officialgazette.gov.ph/2019/02/20/republic-act-no-11232/",
-        "sections": 144
+        "url": "https://lawphil.net/statutes/repacts/ra2019/ra_11232_2019.html",
+        "sections": 144,
+        "status": "verified"
       },
       {
         "title": "Insurance Code (RA 10607)",
-        "url": "https://www.officialgazette.gov.ph/2013/08/15/republic-act-no-10607/",
-        "sections": 389
+        "url": "https://lawphil.net/statutes/repacts/ra2013/ra_10607_2013.html",
+        "sections": 389,
+        "status": "verified"
+      },
+      {
+        "title": "Negotiable Instruments Law (Act 2031)",
+        "url": "https://lawphil.net/statutes/acts/act1911/act_2031_1911.html",
+        "sections": 195,
+        "status": "verified"
       }
     ],
     "textbooks": ["Sundiang & Aquino (Reviewer)", "Nilo T. Divina (Divina on Comm)", "Cesar L. Villanueva"]
@@ -95,8 +124,9 @@
     "codals": [
       {
         "title": "Labor Code of the Philippines (PD 442)",
-        "url": "https://www.dole.gov.ph/labor-code-of-the-philippines/",
-        "articles": 302
+        "url": "https://lawphil.net/statutes/presdecs/pd1974/pd_442_1974.html",
+        "articles": 302,
+        "status": "verified"
       }
     ],
     "textbooks": ["Cesario A. Azucena Jr. (Vols. I & II)", "Joselito Guianan Chan (Reviewer)", "Atty. Duano"]
@@ -107,8 +137,15 @@
     "codals": [
       {
         "title": "National Internal Revenue Code (NIRC / RA 8424)",
-        "url": "https://www.bir.gov.ph/",
-        "sections": 14
+        "url": "https://lawphil.net/statutes/repacts/ra1997/ra_8424_1997.html",
+        "sections": 282,
+        "status": "verified"
+      },
+      {
+        "title": "Tariff and Customs Code of the Philippines (RA 10863)",
+        "url": "https://lawphil.net/statutes/repacts/ra2016/ra_10863_2016.html",
+        "sections": 100,
+        "status": "verified"
       }
     ],
     "textbooks": ["Justice Japar B. Dimaampao (Principles & Remedies)", "E.P. Ingles (Tax Made Less Taxing)"]
@@ -118,10 +155,17 @@
     "name": "Legal Ethics",
     "codals": [
       {
-        "title": "Code of Professional Responsibility and Accountability (CPRA, AM 22-09-01-SC)",
-        "url": "https://sc.judiciary.gov.ph/sp-files/CPRA-AM-No.-22-09-01-SC.pdf",
+        "title": "Code of Professional Responsibility and Accountability (CPRA, A.M. 22-09-01-SC)",
+        "url": "https://sc.judiciary.gov.ph/rules-of-court/",
         "canons": 6,
-        "sections": 82
+        "sections": 82,
+        "status": "sc-web"
+      },
+      {
+        "title": "Lawyer's Oath and Canons of Professional Ethics",
+        "url": "https://sc.judiciary.gov.ph/",
+        "canons": 7,
+        "status": "sc-web"
       }
     ],
     "textbooks": ["Ruben E. Agpalo (Legal & Judicial Ethics)", "Atty. Funa / Pineda"]
