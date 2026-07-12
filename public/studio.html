@@ -93,6 +93,114 @@
         grid-template-columns: 1fr;
       }
     }
+
+    /* ALAC Question Editor */
+    .alac-editor-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 768px) {
+      .alac-editor-layout { grid-template-columns: 1fr; }
+    }
+    .alac-q-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 420px;
+      overflow-y: auto;
+    }
+    .alac-q-item {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--rule, #3a3a34);
+      border-radius: 6px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 13px;
+      transition: border-color 0.2s;
+    }
+    .alac-q-item:hover { border-color: var(--gold-deep); }
+    .alac-q-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .alac-q-text {
+      flex: 1;
+      font-style: italic;
+      line-height: 1.4;
+      color: var(--text, #e5e5db);
+    }
+    .alac-q-delete {
+      background: none;
+      border: 1px solid #c0392b;
+      color: #e74c3c;
+      border-radius: 4px;
+      padding: 2px 8px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 700;
+      flex-shrink: 0;
+      transition: background 0.15s;
+    }
+    .alac-q-delete:hover { background: rgba(231,76,60,0.15); }
+    .alac-q-cards {
+      font-size: 11px;
+      color: var(--gold, #d4af37);
+      opacity: 0.85;
+    }
+    .alac-card-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+    .alac-card-chip {
+      background: rgba(212, 175, 55, 0.1);
+      border: 1px solid rgba(212, 175, 55, 0.3);
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 11px;
+      color: var(--gold, #d4af37);
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .alac-card-chip.selected {
+      background: rgba(212, 175, 55, 0.25);
+      border-color: var(--gold-deep, #8b6914);
+    }
+    .alac-card-chip:hover { background: rgba(212,175,55,0.2); }
+    #alac-card-search {
+      width: 100%;
+      box-sizing: border-box;
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      padding: 7px 11px;
+      border: 1px solid var(--rule, #d4d4c8);
+      border-radius: 4px;
+      background: #fafaf7;
+      color: #3a3a34;
+      margin-bottom: 8px;
+    }
+    #alac-create-logs {
+      margin-top: 12px;
+      min-height: 36px;
+      font-size: 12px;
+    }
+    .alac-chips-list {
+      max-height: 180px;
+      overflow-y: auto;
+      border: 1px solid var(--rule, #444);
+      border-radius: 6px;
+      padding: 8px;
+      background: rgba(255,255,255,0.02);
+    }
   </style>
 </head>
 <body>
@@ -116,6 +224,7 @@
       <button class="studio-tab-btn active" data-tab="flashcards">Import Flashcards</button>
       <button class="studio-tab-btn" data-tab="sources">Import Sources</button>
       <button class="studio-tab-btn" data-tab="generator">AI Generator</button>
+      <button class="studio-tab-btn" data-tab="alac-editor">⚖️ ALAC Questions</button>
     </nav>
 
     <!-- ============================================= -->
@@ -240,6 +349,58 @@ Art. 3. Ignorance of the law excuses no one from compliance therewith..."></text
         </div>
       </div>
     </div>
+
+    <!-- ============================================= -->
+    <!-- Tab 4: ALAC Question Editor                   -->
+    <!-- ============================================= -->
+    <div class="studio-tab-panel" id="tab-alac-editor">
+      <div class="alac-editor-layout">
+
+        <!-- Left: Question List -->
+        <div class="pane-card" style="height: fit-content;">
+          <h3>ALAC Questions</h3>
+          <div class="pane-card-subtitle">Select a subject to view its disguised bar-exam questions.</div>
+          <div class="form-group" style="margin-bottom: 14px;">
+            <label for="alac-editor-subject" style="font-weight: 600; font-size: 13px; color: var(--gold-deep);">Subject:</label>
+            <select id="alac-editor-subject" class="select-box"></select>
+          </div>
+          <ul class="alac-q-list" id="alac-q-list">
+            <li style="color: #7a7e74; font-size: 13px; padding: 12px;">Select a subject to load questions.</li>
+          </ul>
+          <div id="alac-list-status" class="pane-card-subtitle" style="margin-top: 8px;"></div>
+        </div>
+
+        <!-- Right: Create / Edit Panel -->
+        <div class="pane-card">
+          <h3>Create New ALAC Question</h3>
+          <div class="pane-card-subtitle">Write a disguised bar-exam-style question and link the flashcards that answer it.</div>
+
+          <div class="source-import-form" style="margin-top: 12px;">
+            <div class="form-group">
+              <label for="alac-q-textarea" style="font-weight: 600; font-size: 13px; color: var(--gold-deep);">Question Text:</label>
+              <textarea id="alac-q-textarea" placeholder="e.g. Pedro sold the same parcel of land to Juan in 2019 and then again to Maria in 2022. Maria registered the deed while Juan did not. Who has the better right to the property? Explain your answer." style="min-height: 140px;"></textarea>
+            </div>
+
+            <div class="form-group">
+              <label style="font-weight: 600; font-size: 13px; color: var(--gold-deep); margin-bottom: 6px; display: block;">Link Flashcards <span style="font-weight: 400; font-size: 11px; opacity: 0.7;">(select one or more cards that this question tests)</span>:</label>
+              <input type="text" id="alac-card-search" placeholder="Search cards by provision or shape..." />
+              <div class="alac-chips-list" id="alac-card-chips"></div>
+              <div id="alac-chip-count" style="font-size: 11px; margin-top: 4px; color: var(--gold); opacity: 0.8;">0 cards selected</div>
+            </div>
+
+            <div class="action-row" style="margin-top: 4px;">
+              <button id="alac-q-submit" class="btn-premium btn-primary">Add Question</button>
+              <button id="alac-q-clear" class="btn-premium btn-secondary">Clear</button>
+            </div>
+            <div class="log-box" id="alac-create-logs" style="min-height: 40px;">
+              <span class="system">[Ready] Select a subject, write a question, and link flashcards.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
   <script>
@@ -301,6 +462,13 @@ Art. 3. Ignorance of the law excuses no one from compliance therewith..."></text
             const genSubSelect = document.getElementById('gen-subject-select');
             populateSubjectDropdown(genSubSelect);
             genSubSelect.dispatchEvent(new Event('change'));
+
+            // Tab 4: ALAC Editor subject select
+            const alacEditorSelect = document.getElementById('alac-editor-subject');
+            if (alacEditorSelect) {
+              populateSubjectDropdown(alacEditorSelect);
+              alacEditorSelect.dispatchEvent(new Event('change'));
+            }
           }
         })
         .catch(err => {
@@ -731,6 +899,196 @@ SOURCE: Civil Code Art. 1544`;
           genImportBtn.disabled = false;
         });
       });
+
+      // ====================================================================
+      // Tab 4: ALAC Question Editor
+      // ====================================================================
+      const alacEditorSubject = document.getElementById('alac-editor-subject');
+      const alacQList = document.getElementById('alac-q-list');
+      const alacListStatus = document.getElementById('alac-list-status');
+      const alacQTextarea = document.getElementById('alac-q-textarea');
+      const alacCardSearch = document.getElementById('alac-card-search');
+      const alacCardChips = document.getElementById('alac-card-chips');
+      const alacChipCount = document.getElementById('alac-chip-count');
+      const alacQSubmit = document.getElementById('alac-q-submit');
+      const alacQClear = document.getElementById('alac-q-clear');
+      const alacCreateLogs = document.getElementById('alac-create-logs');
+
+      let alacAllFlashcards = [];  // flashcards for the selected subject
+      let alacSelectedCardIds = new Set();
+
+      if (alacEditorSubject) {
+        alacEditorSubject.addEventListener('change', () => {
+          const subjectId = alacEditorSubject.value;
+          alacSelectedCardIds.clear();
+          alacAllFlashcards = [];
+          renderAlacChips('');
+          renderAlacQuestionList([]);
+          if (!subjectId) return;
+
+          // Load questions and flashcards in parallel
+          Promise.all([
+            fetch(`/api/subjects/${subjectId}/alac-questions`).then(r => r.json()),
+            fetch(`/api/subjects/${subjectId}/deck`).then(r => r.json())
+          ])
+            .then(([questions, deckData]) => {
+              alacAllFlashcards = deckData.flashcards || [];
+              renderAlacChips(alacCardSearch ? alacCardSearch.value : '');
+              renderAlacQuestionList(questions);
+            })
+            .catch(err => console.error('ALAC editor load error:', err));
+        });
+      }
+
+      if (alacCardSearch) {
+        alacCardSearch.addEventListener('input', () => {
+          renderAlacChips(alacCardSearch.value);
+        });
+      }
+
+      function renderAlacChips(query) {
+        if (!alacCardChips) return;
+        const q = (query || '').toLowerCase();
+        const filtered = alacAllFlashcards.filter(c =>
+          (c.back_provision || '').toLowerCase().includes(q) ||
+          (c.front_shape || '').toLowerCase().includes(q) ||
+          (c.id || '').toLowerCase().includes(q)
+        );
+        alacCardChips.innerHTML = '';
+        if (filtered.length === 0) {
+          alacCardChips.innerHTML = '<div style="font-size: 12px; opacity: 0.6; padding: 8px;">No flashcards found.</div>';
+          return;
+        }
+        filtered.forEach(card => {
+          const chip = document.createElement('div');
+          chip.className = 'alac-card-chip' + (alacSelectedCardIds.has(card.id) ? ' selected' : '');
+          chip.title = card.front_shape || '';
+          chip.textContent = card.back_provision || card.id;
+          chip.dataset.cardId = card.id;
+          chip.addEventListener('click', () => {
+            if (alacSelectedCardIds.has(card.id)) {
+              alacSelectedCardIds.delete(card.id);
+              chip.classList.remove('selected');
+            } else {
+              alacSelectedCardIds.add(card.id);
+              chip.classList.add('selected');
+            }
+            if (alacChipCount) alacChipCount.textContent = `${alacSelectedCardIds.size} card${alacSelectedCardIds.size !== 1 ? 's' : ''} selected`;
+          });
+          alacCardChips.appendChild(chip);
+        });
+        if (alacChipCount) alacChipCount.textContent = `${alacSelectedCardIds.size} card${alacSelectedCardIds.size !== 1 ? 's' : ''} selected`;
+      }
+
+      function renderAlacQuestionList(questions) {
+        if (!alacQList) return;
+        if (!questions || questions.length === 0) {
+          alacQList.innerHTML = '<li style="color: #7a7e74; font-size: 13px; padding: 12px;">No questions yet. Create one on the right →</li>';
+          if (alacListStatus) alacListStatus.textContent = '';
+          return;
+        }
+        alacQList.innerHTML = '';
+        questions.forEach(q => {
+          const li = document.createElement('li');
+          li.className = 'alac-q-item';
+
+          const header = document.createElement('div');
+          header.className = 'alac-q-item-header';
+
+          const textEl = document.createElement('div');
+          textEl.className = 'alac-q-text';
+          textEl.textContent = q.question_text;
+
+          const delBtn = document.createElement('button');
+          delBtn.className = 'alac-q-delete';
+          delBtn.textContent = 'Delete';
+          delBtn.addEventListener('click', () => {
+            if (!confirm(`Delete this question?\n"${q.question_text.substring(0, 80)}..."\nThis cannot be undone.`)) return;
+            fetch(`/api/alac-questions/${q.id}`, { method: 'DELETE' })
+              .then(r => r.json())
+              .then(() => {
+                li.remove();
+                if (alacListStatus) alacListStatus.textContent = 'Question deleted.';
+                if (alacQList.children.length === 0) {
+                  alacQList.innerHTML = '<li style="color: #7a7e74; font-size: 13px; padding: 12px;">No questions yet. Create one on the right →</li>';
+                }
+              })
+              .catch(() => { if (alacListStatus) alacListStatus.textContent = 'Delete failed.'; });
+          });
+
+          header.appendChild(textEl);
+          header.appendChild(delBtn);
+
+          const cardsEl = document.createElement('div');
+          cardsEl.className = 'alac-q-cards';
+          if (q.linked_cards && q.linked_cards.length > 0) {
+            cardsEl.textContent = `🔗 Tests: ${q.linked_cards.map(c => c.back_provision).join(', ')}`;
+          } else {
+            cardsEl.textContent = '(no linked cards)';
+          }
+
+          li.appendChild(header);
+          li.appendChild(cardsEl);
+          alacQList.appendChild(li);
+        });
+        if (alacListStatus) alacListStatus.textContent = `${questions.length} question${questions.length !== 1 ? 's' : ''} loaded.`;
+      }
+
+      if (alacQSubmit) {
+        alacQSubmit.addEventListener('click', () => {
+          const subjectId = alacEditorSubject ? alacEditorSubject.value : '';
+          const questionText = alacQTextarea ? alacQTextarea.value.trim() : '';
+          const cardIds = [...alacSelectedCardIds];
+
+          if (!subjectId) {
+            alacCreateLogs.innerHTML = '<span class="err"><strong>Error:</strong> Please select a subject.</span>';
+            return;
+          }
+          if (!questionText || questionText.length < 20) {
+            alacCreateLogs.innerHTML = '<span class="err"><strong>Error:</strong> Question text must be at least 20 characters.</span>';
+            return;
+          }
+          if (cardIds.length === 0) {
+            alacCreateLogs.innerHTML = '<span class="err"><strong>Error:</strong> Please link at least one flashcard.</span>';
+            return;
+          }
+
+          alacCreateLogs.innerHTML = '<span class="system">[Network] Saving question...</span>';
+          alacQSubmit.disabled = true;
+
+          fetch('/api/alac-questions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ subjectId, questionText, flashcardIds: cardIds })
+          })
+            .then(r => { if (!r.ok) return r.json().then(e => { throw e; }); return r.json(); })
+            .then(res => {
+              alacCreateLogs.innerHTML = `<span class="ok"><strong>Question Added!</strong> Linked to ${cardIds.length} flashcard${cardIds.length !== 1 ? 's' : ''}.</span>`;
+              if (alacQTextarea) alacQTextarea.value = '';
+              alacSelectedCardIds.clear();
+              renderAlacChips(alacCardSearch ? alacCardSearch.value : '');
+              // Refresh list
+              fetch(`/api/subjects/${subjectId}/alac-questions`)
+                .then(r => r.json())
+                .then(qs => renderAlacQuestionList(qs))
+                .catch(() => {});
+              alacQSubmit.disabled = false;
+            })
+            .catch(err => {
+              alacCreateLogs.innerHTML = `<span class="err"><strong>Save Failed:</strong> ${escapeHtml(err.error || err.message || 'Unknown error')}</span>`;
+              alacQSubmit.disabled = false;
+            });
+        });
+      }
+
+      if (alacQClear) {
+        alacQClear.addEventListener('click', () => {
+          if (alacQTextarea) alacQTextarea.value = '';
+          alacSelectedCardIds.clear();
+          renderAlacChips(alacCardSearch ? alacCardSearch.value : '');
+          alacCreateLogs.innerHTML = '<span class="system">[Cleared]</span>';
+        });
+      }
 
       // ====================================================================
       // Helpers
