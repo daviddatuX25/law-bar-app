@@ -36,6 +36,11 @@ document.addEventListener('DOMContentLoaded', () => {
           opt.textContent = sub.name;
           dropdown.appendChild(opt);
         });
+        // Auto-select first subject
+        if (subjects.length > 0) {
+          dropdown.value = subjects[0].id;
+          dropdown.dispatchEvent(new Event('change'));
+        }
       })
       .catch(err => {
         console.error('Error loading subjects:', err);
@@ -251,6 +256,11 @@ document.addEventListener('DOMContentLoaded', () => {
           opt.textContent = sub.name;
           studyDropdown.appendChild(opt);
         });
+        // Auto-select first subject
+        if (subjects.length > 0) {
+          studyDropdown.value = subjects[0].id;
+          studyDropdown.dispatchEvent(new Event('change'));
+        }
       })
       .catch(err => {
         console.error('Error loading subjects:', err);
@@ -606,6 +616,11 @@ document.addEventListener('DOMContentLoaded', () => {
           opt.textContent = sub.name;
           alacSubjectDropdown.appendChild(opt);
         });
+        // Auto-select first subject
+        if (subjects.length > 0) {
+          alacSubjectDropdown.value = subjects[0].id;
+          alacSubjectDropdown.dispatchEvent(new Event('change'));
+        }
       })
       .catch(err => {
         console.error('Error loading subjects for ALAC:', err);
@@ -663,6 +678,11 @@ document.addEventListener('DOMContentLoaded', () => {
       // Hide answer key
       if (alacAnswerKey) alacAnswerKey.classList.remove('revealed');
       if (alacRevealBtn) alacRevealBtn.textContent = '🔑 Reveal Answer Key';
+      // Reset evaluation panel
+      resetEvalPanel();
+      // Reset layout to 2-column
+      const alacLayout = document.getElementById('alac-layout');
+      if (alacLayout) alacLayout.classList.remove('alac-layout-3col');
 
       if (alacFlashcards.length === 0) {
         if (factPanel) factPanel.textContent = 'Select a subject above to load a question.';
@@ -673,10 +693,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (keyEl) keyEl.textContent = '';
         if (keyElsEl) keyElsEl.innerHTML = '';
         if (keyConfEl) keyConfEl.textContent = '';
+        alacCurrentCard = null;
+        updateEvalButton();
         return;
       }
 
       const card = alacFlashcards[alacIndex];
+      alacCurrentCard = card;  // Store for evaluation
       if (factPanel) factPanel.textContent = card.front_shape;
       if (alacProgressEl) alacProgressEl.textContent = `Question ${alacIndex + 1} of ${alacFlashcards.length}`;
 
@@ -694,8 +717,331 @@ document.addEventListener('DOMContentLoaded', () => {
           ? `Common Confusion: ${card.back_confusion}`
           : '';
       }
+      updateEvalButton();
+    }
+
+    let alacCurrentCard = null;  // Track current card for evaluation
+    let alacMode = 'segmented';  // 'segmented' | 'freeform'
+
+    // ==========================================================================
+    // Mode Toggle: Segmented ↔ Freeform
+    // ==========================================================================
+    const alacModeToggle = document.getElementById('alac-mode-toggle');
+    const alacSegmentedSections = document.getElementById('alac-segmented-sections');
+    const alacFreeformSection = document.getElementById('alac-freeform-section');
+
+    if (alacModeToggle) {
+      alacModeToggle.addEventListener('click', () => {
+        alacMode = alacMode === 'segmented' ? 'freeform' : 'segmented';
+        alacModeToggle.setAttribute('data-mode', alacMode);
+
+        if (alacMode === 'freeform') {
+          alacSegmentedSections.style.display = 'none';
+          alacFreeformSection.style.display = 'block';
+        } else {
+          alacSegmentedSections.style.display = 'block';
+          alacFreeformSection.style.display = 'none';
+        }
+
+        updateEvalButton();
+      });
+    }
+
+    // ==========================================================================
+    // ALAC Evaluation Logic
+    // ==========================================================================
+    const alacEvaluateBtn = document.getElementById('alac-evaluate-btn');
+    const alacEvalPanel = document.getElementById('alac-eval-panel');
+
+    function updateEvalButton() {
+      if (!alacEvaluateBtn) return;
+      let hasContent = false;
+      if (alacMode === 'freeform') {
+        const freeform = document.getElementById('alac-freeform-text')?.value?.trim() || '';
+        hasContent = freeform.length > 0;
+      } else {
+        const answer = document.getElementById('alac-answer-text')?.value?.trim() || '';
+        const law = document.getElementById('alac-law-text')?.value?.trim() || '';
+        const app = document.getElementById('alac-application-text')?.value?.trim() || '';
+        hasContent = answer.length > 0 || law.length > 0 || app.length > 0;
+      }
+      alacEvaluateBtn.disabled = !hasContent || !alacCurrentCard;
+    }
+
+    // Watch textareas for content changes → enable/disable evaluate button
+    ['alac-answer-text', 'alac-law-text', 'alac-application-text', 'alac-conclusion-text', 'alac-freeform-text'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('input', updateEvalButton);
+    });
+
+    function resetEvalPanel() {
+      if (!alacEvalPanel) return;
+      alacEvalPanel.classList.remove('active');
+      alacEvalPanel.innerHTML = `
+        <div class="eval-placeholder" id="eval-placeholder">
+          <div class="eval-placeholder-icon">🧠</div>
+          <div>Write your ALAC answer in the middle panel,<br>then click <strong>Evaluate My Answer</strong>.</div>
+          <div style="font-size: 12px; opacity: 0.6; margin-top: 4px;">AI evaluation compares your answer against<br>the model answer key below.</div>
+        </div>`;
+    }
+
+    function showEvalLoading() {
+      if (!alacEvalPanel) return;
+      alacEvalPanel.classList.add('active');
+      alacEvalPanel.innerHTML = `
+        <div class="eval-loading">
+          <div class="eval-spinner"></div>
+          <div class="eval-loading-text">Evaluating your answer...</div>
+          <div style="font-size: 12px; color: #7a7e74;">This usually takes 5–10 seconds</div>
+        </div>`;
+      // Switch to 3-column layout
+      const alacLayout = document.getElementById('alac-layout');
+      if (alacLayout) alacLayout.classList.add('alac-layout-3col');
+    }
+
+    function showEvalError(message, retryable) {
+      if (!alacEvalPanel) return;
+      alacEvalPanel.classList.add('active');
+      alacEvalPanel.innerHTML = `
+        <div class="eval-error-state">
+          <div class="eval-placeholder-icon">⚠️</div>
+          <div style="font-size: 14px; font-weight: 600;">${escapeHtmlEval(message)}</div>
+          ${retryable ? '<button class="eval-retry-btn" onclick="document.getElementById(\'alac-evaluate-btn\').click()">Try Again</button>' : ''}
+          <div style="font-size: 12px; opacity: 0.6;">You can still use Reveal Answer Key below to self-assess.</div>
+        </div>`;
+    }
+
+    function renderEvalResult(data) {
+      if (!alacEvalPanel) return;
+      alacEvalPanel.classList.add('active');
+
+      const scores = data.scores || {};
+      const feedback = data.feedback || {};
+      const criticalErrors = data.critical_errors || [];
+      const confusionTrap = data.confusion_trap || {};
+      const modelAnswer = data.model_answer || {};
+      const grade = data.grade || 'NEEDS WORK';
+      const meta = data.meta || {};
+
+      // Score dot helpers
+      const maxScores = { answer: 1, law: 3, application: 4, conclusion: 1, clarity: 1 };
+      function scoreDots(label, score, max) {
+        let dots = '';
+        for (let i = 0; i < max; i++) {
+          dots += `<div class="eval-score-dot${i < score ? ' filled' : ''}"></div>`;
+        }
+        return `
+          <div class="eval-score-row">
+            <span class="eval-score-label">${label}</span>
+            <div class="eval-score-dots">${dots}</div>
+            <span class="eval-score-value">${score}/${max}</span>
+          </div>`;
+      }
+
+      const gradeClass = grade === 'PASS' ? 'pass' : grade === 'FAIL' ? 'fail' : 'needs-work';
+
+      // Build feedback accordion items
+      const feedbackSections = [
+        { key: 'answer', label: 'Answer (A)', score: scores.answer, max: 1 },
+        { key: 'law', label: 'Law (L)', score: scores.law, max: 3 },
+        { key: 'application', label: 'Application (App)', score: scores.application, max: 4 },
+        { key: 'conclusion', label: 'Conclusion (C)', score: scores.conclusion, max: 1 },
+        { key: 'overall', label: 'Overall Assessment', score: null, max: null },
+      ];
+
+      let feedbackHtml = '<div class="eval-feedback-list">';
+      feedbackSections.forEach((sec, idx) => {
+        const text = feedback[sec.key] || '';
+        if (!text) return;
+        const isOpen = idx === 0; // First one open by default
+        feedbackHtml += `
+          <div class="eval-feedback-item${isOpen ? ' open' : ''}" onclick="this.classList.toggle('open')">
+            <div class="eval-feedback-header">
+              <span>${sec.label}</span>
+              <span style="display:flex;align-items:center;gap:8px;">
+                ${sec.score !== null ? `<span class="eval-feedback-score">${sec.score}/${sec.max}</span>` : ''}
+                <span class="eval-feedback-arrow">▶</span>
+              </span>
+            </div>
+            <div class="eval-feedback-body">${escapeHtmlEval(text)}</div>
+          </div>`;
+      });
+      feedbackHtml += '</div>';
+
+      // Critical errors
+      let criticalHtml = '';
+      if (criticalErrors.length > 0) {
+        criticalHtml = `
+          <div class="eval-critical-errors">
+            <h4>⚠️ Critical Issues</h4>
+            <ul>${criticalErrors.map(e => `<li>${escapeHtmlEval(e)}</li>`).join('')}</ul>
+          </div>`;
+      }
+
+      // Confusion trap
+      let confusionHtml = '';
+      if (confusionTrap.triggered) {
+        confusionHtml = `
+          <div class="eval-confusion-trap">
+            <h4>⚠️ Common Confusion Detected</h4>
+            <p>${escapeHtmlEval(confusionTrap.explanation || '')}</p>
+          </div>`;
+      }
+
+      // Model answer
+      let modelHtml = `
+        <div class="eval-model-answer" onclick="this.classList.toggle('open')">
+          <div class="eval-model-answer-header">
+            <span>📝 Model Answer</span>
+            <span class="eval-feedback-arrow" style="font-size:10px;color:var(--green-deep);">▶</span>
+          </div>
+          <div class="eval-model-answer-body">
+            <div class="eval-model-answer-body-inner">
+              <div class="eval-model-section"><strong>A — Answer</strong><p>${escapeHtmlEval(modelAnswer.answer || '')}</p></div>
+              <div class="eval-model-section"><strong>L — Law</strong><p>${escapeHtmlEval(modelAnswer.law || '')}</p></div>
+              <div class="eval-model-section"><strong>A — Application</strong><p>${escapeHtmlEval(modelAnswer.application || '')}</p></div>
+              <div class="eval-model-section"><strong>C — Conclusion</strong><p>${escapeHtmlEval(modelAnswer.conclusion || '')}</p></div>
+            </div>
+          </div>
+        </div>`;
+
+      // Meta line
+      let metaHtml = '';
+      if (meta.model && meta.model !== 'mock') {
+        metaHtml = `<div style="font-size:11px;color:#7a7e74;text-align:center;margin-top:4px;">Evaluated by ${meta.model} · ${meta.tokens_used || 0} tokens · ${meta.latency_ms ? (meta.latency_ms / 1000).toFixed(1) + 's' : ''}</div>`;
+      } else if (meta.mock) {
+        metaHtml = `<div style="font-size:11px;color:#7a7e74;text-align:center;margin-top:4px;">⚡ Mock evaluation mode (AI gateway not configured)</div>`;
+      }
+
+      alacEvalPanel.innerHTML = `
+        <div style="display:flex;align-items:center;justify-content:space-between;">
+          <h3>📊 Evaluation</h3>
+          <span class="eval-grade-badge ${gradeClass}">${grade}</span>
+        </div>
+        <div class="eval-score-summary">
+          <h4>Score Breakdown</h4>
+          ${scoreDots('Answer', scores.answer || 0, 1)}
+          ${scoreDots('Law', scores.law || 0, 3)}
+          ${scoreDots('Application', scores.application || 0, 4)}
+          ${scoreDots('Conclusion', scores.conclusion || 0, 1)}
+          ${scoreDots('Clarity', scores.clarity || 0, 1)}
+          <div class="eval-score-total">
+            <span style="font-weight:700;">Total</span>
+            <span class="eval-score-value">${scores.total || 0}/10</span>
+          </div>
+        </div>
+        ${criticalHtml}
+        ${confusionHtml}
+        ${feedbackHtml}
+        ${modelHtml}
+        ${metaHtml}
+      `;
+
+      // Switch to 3-column layout
+      const alacLayout = document.getElementById('alac-layout');
+      if (alacLayout) alacLayout.classList.add('alac-layout-3col');
+    }
+
+    function escapeHtmlEval(str) {
+      if (!str) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    if (alacEvaluateBtn) {
+      alacEvaluateBtn.addEventListener('click', async () => {
+        if (!alacCurrentCard) return;
+
+        const factPattern = alacCurrentCard.front_shape || '';
+        const provision = alacCurrentCard.back_provision || '';
+        const elements = alacCurrentCard.back_elements || [];
+        const confusion = alacCurrentCard.back_confusion || '';
+
+        // Build request body based on mode
+        let body;
+        if (alacMode === 'freeform') {
+          const freeform = document.getElementById('alac-freeform-text')?.value?.trim() || '';
+          body = {
+            mode: 'freeform',
+            factPattern,
+            provision,
+            elements,
+            confusion,
+            freeform,
+          };
+        } else {
+          const answer = document.getElementById('alac-answer-text')?.value?.trim() || '';
+          const law = document.getElementById('alac-law-text')?.value?.trim() || '';
+          const application = document.getElementById('alac-application-text')?.value?.trim() || '';
+          const conclusion = document.getElementById('alac-conclusion-text')?.value?.trim() || '';
+          body = {
+            mode: 'segmented',
+            factPattern,
+            provision,
+            elements,
+            confusion,
+            answer,
+            law,
+            application,
+            conclusion,
+          };
+        }
+
+        // Show loading
+        alacEvaluateBtn.disabled = true;
+        alacEvaluateBtn.classList.add('loading');
+        alacEvaluateBtn.textContent = '⏳ Evaluating...';
+        showEvalLoading();
+
+        try {
+          const response = await fetch('/api/alac/evaluate', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body),
+          });
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.message || 'Evaluation failed');
+          }
+
+          renderEvalResult(data);
+        } catch (err) {
+          console.error('ALAC evaluation error:', err);
+          const isRetryable = err.message && !err.message.includes('not configured');
+          showEvalError(
+            err.message === 'Failed to fetch'
+              ? 'Cannot reach the evaluation service. The server may be offline.'
+              : (err.message || 'Evaluation failed'),
+            isRetryable
+          );
+        } finally {
+          alacEvaluateBtn.disabled = false;
+          alacEvaluateBtn.classList.remove('loading');
+          alacEvaluateBtn.textContent = '🔄 Re-evaluate';
+        }
+      });
     }
 
     renderAlacCard();
   }
 });
+
+// ==========================================================================
+// Global: Mark current page's nav link as active
+// ==========================================================================
+(function () {
+  const currentFile = window.location.pathname.split('/').pop() || 'index.html';
+  document.querySelectorAll('.nav-links a').forEach(link => {
+    const href = link.getAttribute('href');
+    if (href === currentFile || (currentFile === '' && href === 'index.html')) {
+      link.classList.add('active');
+    }
+  });
+})();
+
