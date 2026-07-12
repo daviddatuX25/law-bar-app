@@ -273,12 +273,31 @@ h1 em {
 }
 
 .funnel-tier.open .tier-body {
-  max-height: 6000px;
+  max-height: 60vh;
+  overflow-y: auto;
   opacity: 1;
   margin-top: 16px;
   border-top: 1px dashed var(--rule);
   padding-top: 18px;
+  padding-right: 8px; /* avoid scrollbar overlap */
 }
+
+/* Custom scrollbar for open tier body */
+.funnel-tier.open .tier-body::-webkit-scrollbar {
+  width: 6px;
+}
+.funnel-tier.open .tier-body::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.02);
+  border-radius: 4px;
+}
+.funnel-tier.open .tier-body::-webkit-scrollbar-thumb {
+  background: var(--rule);
+  border-radius: 4px;
+}
+.funnel-tier.open .tier-body::-webkit-scrollbar-thumb:hover {
+  background: var(--gold);
+}
+
 
 /* Dynamic Data Items */
 .items-list {

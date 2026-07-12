@@ -803,13 +803,100 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!alacEvalPanel) return;
       alacEvalPanel.classList.add('active');
       alacEvalPanel.innerHTML = `
-        <div class="eval-error-state">
-          <div class="eval-placeholder-icon">⚠️</div>
-          <div style="font-size: 14px; font-weight: 600;">${escapeHtmlEval(message)}</div>
-          ${retryable ? '<button class="eval-retry-btn" onclick="document.getElementById(\'alac-evaluate-btn\').click()">Try Again</button>' : ''}
-          <div style="font-size: 12px; opacity: 0.6;">You can still use Reveal Answer Key below to self-assess.</div>
+        <div class="eval-error-state" style="text-align: center; padding: 24px 16px;">
+          <div class="eval-placeholder-icon" style="margin-bottom: 8px;">⚠️</div>
+          <div style="font-size: 14px; font-weight: 600; margin-bottom: 12px; color: var(--red);">${escapeHtmlEval(message)}</div>
+          <div style="display: flex; flex-direction: column; gap: 10px; align-items: center; width: 100%;">
+            ${retryable ? '<button class="eval-retry-btn" style="width: 100%; max-width: 240px;" onclick="document.getElementById(\'alac-evaluate-btn\').click()">Try Again</button>' : ''}
+            <button class="btn-premium" style="width: 100%; max-width: 240px; justify-content: center;" onclick="window.copyAlacPromptToClipboard()">📋 Copy Prompt & Answer</button>
+          </div>
+          <div style="font-size: 12px; opacity: 0.7; margin-top: 16px; line-height: 1.5;">
+            LiteLLM rate-limited or offline? Copy the formatted prompt and paste it directly into <strong>Claude or ChatGPT</strong> for instant evaluation!
+          </div>
         </div>`;
     }
+
+    // Exported globally so onclick handlers can reach it
+    window.copyAlacPromptToClipboard = function () {
+      if (!alacCurrentCard) {
+        alert('Please choose a subject and load a fact pattern first.');
+        return;
+      }
+
+      const factPattern = alacCurrentCard.front_shape || '';
+      const provision = alacCurrentCard.back_provision || '';
+      const elements = (alacCurrentCard.back_elements || []).map((el, i) => `${i + 1}. ${el}`).join('\n');
+      const confusion = alacCurrentCard.back_confusion || 'None';
+
+      let studentAnswer = '';
+      if (alacMode === 'freeform') {
+        studentAnswer = document.getElementById('alac-freeform-text')?.value?.trim() || '';
+      } else {
+        const answer = document.getElementById('alac-answer-text')?.value?.trim() || '';
+        const law = document.getElementById('alac-law-text')?.value?.trim() || '';
+        const application = document.getElementById('alac-application-text')?.value?.trim() || '';
+        const conclusion = document.getElementById('alac-conclusion-text')?.value?.trim() || '';
+
+        studentAnswer = `[ANSWER / CONCLUSION POINT]
+${answer}
+
+[APPLICABLE LAW]
+${law}
+
+[APPLICATION OF LAW TO FACTS]
+${application}
+
+[CONCLUSION]
+${conclusion}`;
+      }
+
+      if (!studentAnswer) {
+        alert('Please write your answer in the text boxes before copying.');
+        return;
+      }
+
+      const promptText = `Please act as an official Bar Examiner and evaluate my Philippine Bar Exam essay answer. I have formatted my response according to the ALAC (Answer, Law, Application, Conclusion) framework.
+
+--- CONTEXT & REFERENCE ANSWER KEY ---
+FACT PATTERN:
+${factPattern}
+
+CORRECT LEGAL PROVISION:
+${provision}
+
+REQUIRED ELEMENTS CHECKSLIST:
+${elements}
+
+COMMON CONFUSION / MISTAKE TO DETECT:
+${confusion}
+
+--- STUDENT'S WRITTEN ANSWER ---
+${studentAnswer}
+
+--- EVALUATION CRITERIA ---
+Please score my answer strictly out of 10 points based on this rubric:
+1. ANSWER (direct / categorical response): 1 point
+2. LAW (citation and inclusion of necessary elements): 3 points
+3. APPLICATION (applying legal elements to the specific facts): 4 points
+4. CONCLUSION (logical conclusion based on application): 1 point
+5. CLARITY & PROFESSIONAL LEGAL STYLE: 1 point
+
+--- RESPONSE FORMAT ---
+Please format your response clearly:
+1. Overall Grade: (PASS / FAIL / NEEDS WORK) and score (X/10)
+2. Breakdown: Provide a short paragraph of feedback for each of the ALAC sections (A, L, A, C) detailing what was correct, missing, or needs improvement.
+3. Common Confusion Trap: Mention whether I fell into the specified confusion trap.`;
+
+      navigator.clipboard.writeText(promptText)
+        .then(() => {
+          alert('Copied to clipboard! You can now paste this directly into Claude, ChatGPT, or Gemini.');
+        })
+        .catch(err => {
+          console.error('Clipboard copy failed: ', err);
+          alert('Could not copy automatically. Please select and copy your text manually.');
+        });
+    };
+
 
     function renderEvalResult(data) {
       if (!alacEvalPanel) return;
