@@ -318,6 +318,39 @@ function startServer(db, port = process.env.PORT || 3005) {
     }
   });
 
+  app.get('/api/subjects/:id/alac-questions', (req, res) => {
+    try {
+      const questions = db.getAlacQuestions(req.params.id);
+      res.json(questions);
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.post('/api/alac-questions', (req, res) => {
+    try {
+      const { id, subject_id, question_text, linked_flashcard_ids } = req.body;
+      if (!subject_id || !question_text) {
+        return res.status(400).json({ error: 'Missing subject_id or question_text' });
+      }
+      const qId = id || `alac-${subject_id}-${Date.now()}`;
+      db.createAlacQuestion({ id: qId, subject_id, question_text, linked_flashcard_ids });
+      res.json({ success: true, id: qId });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+  app.delete('/api/alac-questions/:id', (req, res) => {
+    try {
+      db.deleteAlacQuestion(req.params.id);
+      res.json({ success: true });
+    } catch (err) {
+      res.status(500).json({ error: err.message });
+    }
+  });
+
+
   const server = app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
   });

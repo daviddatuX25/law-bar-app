@@ -300,6 +300,49 @@ SOURCE: Restatement § 3
     assert.ok(data.markdown.includes('CARD'));
   });
 
+  await t.test('ALAC Questions API lifecycle', async () => {
+    // 1. Create a question
+    const resCreate = await fetch('http://localhost:3001/api/alac-questions', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        id: 'alac-q-api-1',
+        subject_id: 'subject-1',
+        question_text: 'A disguised scenario testing Fee Simple.',
+        linked_flashcard_ids: ['imported-card-1']
+      })
+    });
+    assert.strictEqual(resCreate.statusCode || resCreate.status, 200);
+    const createBody = await resCreate.json();
+    assert.strictEqual(createBody.success, true);
+    assert.strictEqual(createBody.id, 'alac-q-api-1');
+
+    // 2. Fetch questions
+    const resGet = await fetch('http://localhost:3001/api/subjects/subject-1/alac-questions');
+    assert.strictEqual(resGet.statusCode || resGet.status, 200);
+    const getBody = await resGet.json();
+    assert.ok(Array.isArray(getBody));
+    const createdQ = getBody.find(q => q.id === 'alac-q-api-1');
+    assert.ok(createdQ);
+    assert.strictEqual(createdQ.question_text, 'A disguised scenario testing Fee Simple.');
+    assert.strictEqual(createdQ.linked_cards.length, 1);
+    assert.strictEqual(createdQ.linked_cards[0].id, 'imported-card-1');
+
+    // 3. Delete the question
+    const resDel = await fetch('http://localhost:3001/api/alac-questions/alac-q-api-1', {
+      method: 'DELETE'
+    });
+    assert.strictEqual(resDel.statusCode || resDel.status, 200);
+    const delBody = await resDel.json();
+    assert.strictEqual(delBody.success, true);
+
+    // 4. Verify deletion
+    const resGetAfter = await fetch('http://localhost:3001/api/subjects/subject-1/alac-questions');
+    const getBodyAfter = await resGetAfter.json();
+    assert.ok(!getBodyAfter.some(q => q.id === 'alac-q-api-1'));
+  });
+
   // Clean up server
   await new Promise((resolve) => server.close(resolve));
 });
+
