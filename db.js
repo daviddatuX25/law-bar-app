@@ -310,7 +310,11 @@ class DbAdapter {
           VALUES (?, ?)
         `);
         for (const fcId of linked_flashcard_ids) {
-          insertLink.run(id, fcId);
+          try {
+            insertLink.run(id, fcId);
+          } catch (linkErr) {
+            console.warn(`[db] Warning: Could not link flashcard ${fcId} to question ${id}:`, linkErr.message);
+          }
         }
       }
       this.db.exec('COMMIT');

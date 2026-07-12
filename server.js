@@ -330,9 +330,22 @@ function startServer(db, port = process.env.PORT || 3005) {
     }
   });
 
-  app.get('/api/subjects/:id/alac-questions', (req, res) => {
+  app.get('/api/subjects/:id/alac-questions', async (req, res) => {
     try {
-      const questions = db.getAlacQuestions(req.params.id);
+      let questions = db.getAlacQuestions(req.params.id);
+
+      // Self-healing: if no questions exist at all in the database, seed them now
+      const existing = db.db.prepare("SELECT COUNT(*) as count FROM alac_questions").get();
+      if (!existing || existing.count === 0) {
+        console.log('[server] No ALAC questions found in database. Seeding default questions on-the-fly...');
+        const { seedAlacQuestions } = require('./scripts/seed-alac-questions');
+        await seedAlacQuestions(db).catch(err => {
+          console.error('[server] Error during on-the-fly seeding:', err.message);
+        });
+        // Query again after seeding
+        questions = db.getAlacQuestions(req.params.id);
+      }
+
       res.json(questions);
     } catch (err) {
       res.status(500).json({ error: err.message });
