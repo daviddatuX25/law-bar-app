@@ -1,0 +1,21 @@
+# Build artifacts
+node_modules/
+npm-debug.log*
+
+# Local environment — secrets must go in Dokploy's Environment tab
+.env
+
+# Raw pipeline source files — large, not needed at runtime
+pipeline/sources/
+pipeline/*.html
+pipeline/*.txt
+
+# Seeding/import scripts — not needed at runtime
+scripts/
+tests/
+
+# Misc
+*.log
+.DS_Store
+docs/
+prompts/
