@@ -298,7 +298,9 @@ Art. 3. Ignorance of the law excuses no one from compliance therewith..."></text
             populateSubjectDropdown(document.getElementById('source-subject-select'));
 
             // Tab 3: AI Generator subject select
-            populateSubjectDropdown(document.getElementById('gen-subject-select'));
+            const genSubSelect = document.getElementById('gen-subject-select');
+            populateSubjectDropdown(genSubSelect);
+            genSubSelect.dispatchEvent(new Event('change'));
           }
         })
         .catch(err => {
