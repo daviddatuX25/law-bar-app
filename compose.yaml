@@ -12,6 +12,10 @@ services:
       - DATABASE_PATH=/app/data/bar_exam.db
       - LLM_GATEWAY_URL=${LLM_GATEWAY_URL}
       - LLM_GATEWAY_KEY=${LLM_GATEWAY_KEY}
+      - LLM_MODEL=deepseek-v4-flash
+      - LLM_FALLBACK_MODEL=deepseek-v4-flash
+      - LLM_MAX_TOKENS=8000
+      - LLM_TEMPERATURE=0.3
 
 volumes:
   law-bar-db:
